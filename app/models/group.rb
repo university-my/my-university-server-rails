@@ -93,7 +93,7 @@ class Group < ApplicationRecord
       pairName = object['NAME_PAIR']
       nameString = object['ABBR_DISC']
       reason = object['REASON']
-      type = object['NAME_STUD']
+      kind = object['NAME_STUD']
 
       # Save new record
       record = Record.new
@@ -102,8 +102,25 @@ class Group < ApplicationRecord
       record.pair_name = pairName
       record.name = nameString
       record.reason = reason
-      record.type = type
+      record.kind = kind
+
+      # Association with group
       record.group_id = id
+
+      # Association with auditorium
+      auditoriumID = object['KOD_AUD']
+      unless auditoriumID.strip.empty?
+        auditorium = Auditorium.find_by(server_id: auditoriumID.to_i)
+        record.auditorium = auditorium
+      end
+
+      # Association with teacher
+      teacherID = object['KOD_FIO']
+      unless teacherID.strip.empty?
+        teacher = Teacher.find_by(server_id: auditoriumID.to_i)
+        record.teacher = teacher
+      end
+
       record.save
     end
   end

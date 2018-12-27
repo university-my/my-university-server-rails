@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_171006) do
     t.string "name"
     t.string "pair_name"
     t.string "reason"
-    t.string "type"
+    t.string "kind"
     t.string "time"
     t.integer "auditorium_id"
     t.integer "group_id"

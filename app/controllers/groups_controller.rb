@@ -20,14 +20,10 @@ class GroupsController < ApplicationController
       needToUpdate = true
     end
 
-    # TODO: Fix associations
-
-    # p @group.records
-
     # Check by records
-    # if @group.records.length == 0
-    #   needToUpdate = true
-    # end
+    if @group.records.length == 0
+      needToUpdate = true
+    end
 
     if needToUpdate
       # Delete old records
@@ -36,7 +32,6 @@ class GroupsController < ApplicationController
       # Import new
       @group.importRecords
     end
-
   end
 
   private
