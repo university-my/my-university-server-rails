@@ -1,21 +1,20 @@
 require 'net/http'
 require 'json'
 
-class Auditorium < ApplicationRecord
-  self.table_name = "auditoriums"
+class Teacher < ApplicationRecord
 
   # Field validations
   validates :name, presence: true, allow_blank: false
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
   # Import for SumDU
-  # # bin/rails runner 'Auditorium.importSumDU'
+  # bin/rails runner 'Teacher.importSumDU'
   def self.importSumDU
-
-    logger.info "Start import SumDU auditoriums"
+    
+    logger.info "Start import SumDU techers"
 
     # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums")
+    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getTeachers")
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
@@ -40,17 +39,17 @@ class Auditorium < ApplicationRecord
     json = JSON.parse(response.body)
 
     # Delete before save
-    Auditorium.destroy_all
+    Teacher.destroy_all
 
     for object in json do
       serverID = Integer(object[0])
-      auditoriumName = object[1]
+      teacherName = object[1]
 
-      # Save new auditorium
-      auditorium = Auditorium.new
-      auditorium.server_id = serverID
-      auditorium.name = auditoriumName
-      auditorium.save
+      # Save new teacher
+      teacher = Teacher.new
+      teacher.server_id = serverID
+      teacher.name = teacherName
+      teacher.save
     end
   end
 end
