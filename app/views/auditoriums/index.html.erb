@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Auditoriums</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @auditoriums.each do |auditorium| %>
+      <tr>
+        <td><%= auditorium.name %></td>
+        <td><%= link_to 'Show', auditorium %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
