@@ -10,6 +10,33 @@ class GroupsController < ApplicationController
   # GET /groups/1
   # GET /groups/1.json
   def show
+    # Check if need to update records
+    needToUpdate = false
+    oneHour = (60 * 60)
+
+    # TODO: Fix this checks
+    # Check by date
+    if Time.now.to_datetime >= (@group.updated_at + oneHour)
+      needToUpdate = true
+    end
+
+    # TODO: Fix associations
+
+    # p @group.records
+
+    # Check by records
+    # if @group.records.length == 0
+    #   needToUpdate = true
+    # end
+
+    if needToUpdate
+      # Delete old records
+      @group.records.destroy_all
+
+      # Import new
+      @group.importRecords
+    end
+
   end
 
   private
@@ -17,4 +44,4 @@ class GroupsController < ApplicationController
     def set_group
       @group = Group.find(params[:id])
     end
-end
+  end

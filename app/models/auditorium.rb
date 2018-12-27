@@ -8,6 +8,9 @@ class Auditorium < ApplicationRecord
   validates :name, presence: true, allow_blank: false
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
+  # Associations
+  has_many :records
+
   # Import for SumDU
   # # bin/rails runner 'Auditorium.importSumDU'
   def self.importSumDU
