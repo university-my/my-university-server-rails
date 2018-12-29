@@ -11,26 +11,15 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
     # Check if need to update records
-    needToUpdate = false
-    oneHour = (60 * 60)
+    if @group.needToUpdateRecords
 
-    # TODO: Fix this checks
-    # Check by date
-    if Time.now.to_datetime >= (@group.updated_at + oneHour)
-      needToUpdate = true
-    end
-
-    # Check by records
-    if @group.records.length == 0
-      needToUpdate = true
-    end
-
-    if needToUpdate
       # Delete old records
       @group.records.destroy_all
 
       # Import new
       @group.importRecords
+
+      redirect_to request.url, notice: "Records has been updated!"
     end
   end
 

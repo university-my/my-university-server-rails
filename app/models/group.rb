@@ -4,7 +4,7 @@ require 'json'
 class Group < ApplicationRecord
 
   # Field validations
-  validates :name, presence: true, allow_blank: false
+  validates :name, presence: true
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
   # Associations
@@ -87,6 +87,7 @@ class Group < ApplicationRecord
 
     # Save records
     for object in json do
+
       # Get data from JSON
       dateString = object['DATE_REG']
       time = object['TIME_PAIR']
@@ -95,34 +96,84 @@ class Group < ApplicationRecord
       reason = object['REASON']
       kind = object['NAME_STUD']
 
-      # Save new record
-      record = Record.new
-      record.start_date = dateString.to_datetime
-      record.time = time
-      record.pair_name = pairName
-      record.name = nameString
-      record.reason = reason
-      record.kind = kind
+      # Auditorium
+      kodAud = object['KOD_AUD']
 
-      # Association with group
-      record.group_id = id
+      # Teacher
+      kodFio = object['KOD_FIO']
 
-      # Association with auditorium
-      auditoriumID = object['KOD_AUD']
-      unless auditoriumID.strip.empty?
-        auditorium = Auditorium.find_by(server_id: auditoriumID.to_i)
-        record.auditorium = auditorium
+      begin
+        # Convert to int before find request
+        auditoriumID = kodAud.to_i
+        auditorium = Auditorium.find_by(server_id: auditoriumID)
+
+        teacherID = kodFio.to_i
+        teacher = Teacher.find_by(server_id: teacherID)
+
+        startDate = dateString.to_datetime
+
+        conditions = {}
+        conditions[:start_date] = startDate
+        conditions[:name] = nameString
+        conditions[:pair_name] = pairName
+        conditions[:kind] = kind
+        conditions[:time] = time
+        conditions[:group] = self
+
+        unless auditorium.nil?
+          conditions[:auditorium] = auditorium
+        end
+
+        unless teacher.nil?
+          conditions[:teacher] = teacher
+        end
+
+        # Try to find existing record first
+        record = Record.where(conditions).first
+
+        if record.nil?
+           # Save new record
+           record = Record.new
+           record.start_date = startDate
+           record.time = time
+           record.pair_name = pairName
+           record.name = nameString
+           record.reason = reason
+           record.kind = kind
+
+           # Associations
+           record.auditorium = auditorium
+           record.group_id = id
+           record.teacher = teacher
+
+           unless record.save
+           # Go to the next iteration if record can't be saved
+           logger.error(record.errors.full_messages)
+           next
+           end
+         end
+        
+      rescue Exception => e
+        logger.error(e)
+        next
       end
-
-      # Association with teacher
-      teacherID = object['KOD_FIO']
-      unless teacherID.strip.empty?
-        teacher = Teacher.find_by(server_id: auditoriumID.to_i)
-        record.teacher = teacher
-      end
-
-      record.save
     end
+  end
+
+  def needToUpdateRecords
+    needToUpdate = false
+
+    # Check by date
+    if DateTime.current >= (updated_at + 1.hour)
+      needToUpdate = true
+    end
+
+    # Check by records
+    if records.empty?
+      needToUpdate = true
+    end
+
+    return needToUpdate
   end
 
 end

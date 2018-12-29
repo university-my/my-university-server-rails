@@ -10,6 +10,17 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums/1
   # GET /auditoriums/1.json
   def show
+    # Check if need to update records
+    if @auditorium.needToUpdateRecords
+
+      # Delete old records
+      @auditorium.records.destroy_all
+
+      # Import new
+      @auditorium.importRecords
+
+      redirect_to request.url, notice: "Records has been updated!"
+    end
   end
 
   private
