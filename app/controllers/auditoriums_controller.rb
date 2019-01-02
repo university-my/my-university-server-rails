@@ -27,5 +27,7 @@ class AuditoriumsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_auditorium
       @auditorium = Auditorium.find(params[:id])
+      @records = Record.where(auditorium: @auditorium).order(:start_date).order(:pair_name)
+      @records_days = @records.group_by { |t| t.start_date }
     end
 end

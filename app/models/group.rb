@@ -56,9 +56,10 @@ class Group < ApplicationRecord
     end
   end
 
+  # Import records for current Group
   def importRecords
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
-    query = "&id_grp=#{server_id}&id_fio=0&id_aud=0"
+    query = "&id_grp=#{server_id}"
 
     # Init URI
     uri = URI(url + query)
@@ -158,18 +159,20 @@ class Group < ApplicationRecord
         next
       end
     end
+
+    # Update `updated_at` date of Group
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
   end
 
+  # Check if need to update records in the Group
   def needToUpdateRecords
     needToUpdate = false
 
     # Check by date
     if DateTime.current >= (updated_at + 1.hour)
-      needToUpdate = true
-    end
-
-    # Check by records
-    if records.empty?
       needToUpdate = true
     end
 

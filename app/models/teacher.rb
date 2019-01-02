@@ -173,6 +173,12 @@ def importRecords
         next
       end
     end
+
+    # Update `updated_at` date of Teacher
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
   end
 
 end

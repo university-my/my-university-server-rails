@@ -174,6 +174,12 @@ class Auditorium < ApplicationRecord
         next
       end
     end
-  end
 
+    # Update `updated_at` date of Auditorium
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
+
+  end
 end
