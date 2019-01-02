@@ -1,0 +1,52 @@
+<table>
+
+  <thead>
+    <tr>
+      <th>Pair</th>
+      <th>Time</th>
+      <th>Name</th>
+      <th>Kind</th>
+      <th>Auditorium</th>
+      <th>Teacher</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @records_days.each do |day, records| %>
+
+    <tr><th colspan="6"><%= day.strftime("%A, %e %B %Y") %></th></tr>
+
+    <% for record in records %>
+    <tr>
+      <td><%= record.pair_name %></td>
+      <td><%= record.time %></td>
+      <td><%= record.name %></td>
+      <td><%= record.kind %></td>
+
+      <% if record.auditorium.nil? == false %>
+      <td>
+        <%= link_to(record.auditorium) do %>
+        <%= record.auditorium.name %>
+        <% end %>
+      </td>  
+      <% else %>
+      <td></td>
+      <% end %>
+
+      <% if record.teacher.nil? == false %>
+      <td>
+        <%= link_to(record.teacher) do %>
+        <%= record.teacher.name %>
+        <% end %>
+      </td>
+      <% else %>
+      <td></td>
+      <% end %>
+
+    </tr>
+    <% end %>
+
+    <% end %>
+  </tbody>
+
+</table>
