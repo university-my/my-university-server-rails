@@ -65,11 +65,6 @@ class Auditorium < ApplicationRecord
       needToUpdate = true
     end
 
-    # Check by records
-    if records.empty?
-      needToUpdate = true
-    end
-
     return needToUpdate
   end
 
@@ -101,6 +96,12 @@ class Auditorium < ApplicationRecord
 
     # Parse JSON
     json = JSON.parse(response.body)
+
+    # Update `updated_at` date of Auditorium
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
 
     # Save records
     for object in json do
@@ -174,12 +175,5 @@ class Auditorium < ApplicationRecord
         next
       end
     end
-
-    # Update `updated_at` date of Auditorium
-    touch(:updated_at)
-    unless save
-      logger.error(errors.full_messages)
-    end
-
   end
 end

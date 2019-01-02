@@ -1,10 +1,7 @@
-<%= link_to 'All auditoriums', auditoriums_path %>
-
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @auditorium.name %>
+  <h1><%= @auditorium.name %></h1>
 </p>
 
 <%= render "records/show", records: @records %>

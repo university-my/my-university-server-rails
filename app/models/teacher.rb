@@ -64,11 +64,6 @@ class Teacher < ApplicationRecord
       needToUpdate = true
     end
 
-    # Check by records
-    if records.empty?
-      needToUpdate = true
-    end
-
     return needToUpdate
   end
 

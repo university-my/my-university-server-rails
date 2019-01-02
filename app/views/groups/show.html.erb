@@ -1,10 +1,9 @@
-<%= link_to 'All groups', groups_path %>
-
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @group.name %>
+  <h1><%= @group.name %></h1>
 </p>
 
 <%= render "records/show", records: @records %>
+
+<br>

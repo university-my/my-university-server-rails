@@ -1,10 +1,7 @@
-<%= link_to 'All teahcers', teachers_path %>
-
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @teacher.name %>
+  <h1><%= @teacher.name %></h1>
 </p>
 
 <%= render "records/show", records: @records %>
