@@ -10,6 +10,7 @@ class Auditorium < ApplicationRecord
 
   # Associations
   has_many :records
+  belongs_to :university, optional: true
 
   # Import for SumDU
   # # bin/rails runner 'Auditorium.importSumDU'
@@ -42,6 +43,8 @@ class Auditorium < ApplicationRecord
     # Parse JSON
     json = JSON.parse(response.body)
 
+    university = University.find_by(name: "SumDU")
+
     # Delete before save
     Auditorium.destroy_all
 
@@ -53,6 +56,7 @@ class Auditorium < ApplicationRecord
       auditorium = Auditorium.new
       auditorium.server_id = serverID
       auditorium.name = auditoriumName
+      auditorium.university = university
       auditorium.save
     end
   end

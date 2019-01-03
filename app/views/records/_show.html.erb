@@ -26,7 +26,7 @@
 
       <% if record.auditorium.nil? == false %>
       <td>
-        <%= link_to(record.auditorium) do %>
+        <%= link_to(university_auditorium_url(university.url, record.auditorium.id)) do %>
         <%= record.auditorium.name %>
         <% end %>
       </td>  
@@ -36,7 +36,7 @@
 
       <% if record.teacher.nil? == false %>
       <td>
-        <%= link_to(record.teacher) do %>
+        <%= link_to(university_teacher_url(university.url, record.teacher.id)) do %>
         <%= record.teacher.name %>
         <% end %>
       </td>
@@ -56,8 +56,8 @@
 <hr>
 <table>
   <tr>
-    <td><%= link_to 'Groups', groups_path %></td>
-    <td><%= link_to 'Teachers', teachers_path %></td>
-    <td><%= link_to 'Auditoriums', auditoriums_path %></td>
+    <td><%= link_to 'Groups', university_groups_url %></td>
+    <td><%= link_to 'Teachers', university_teachers_url %></td>
+    <td><%= link_to 'Auditoriums', university_auditoriums_url %></td>
   </tr>
 </table>

@@ -4,6 +4,8 @@ class CreateTeachers < ActiveRecord::Migration[5.2]
       t.string :name
       t.integer :server_id
 
+      t.belongs_to :university, index: true, null: true
+
       t.timestamps
     end
   end

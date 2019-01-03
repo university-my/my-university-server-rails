@@ -9,6 +9,7 @@ class Group < ApplicationRecord
 
   # Associations
   has_many :records
+  belongs_to :university, optional: true
 
   # Import for SumDU
   # bin/rails runner 'Group.importSumDU'
@@ -44,6 +45,8 @@ class Group < ApplicationRecord
     # Delete before save
     Group.destroy_all
 
+    university = University.find_by(name: "SumDU")
+
     for object in json do
       serverID = Integer(object[0])
       groupName = object[1]
@@ -52,6 +55,7 @@ class Group < ApplicationRecord
       group = Group.new
       group.server_id = serverID
       group.name = groupName
+      group.university = university
       group.save
     end
   end

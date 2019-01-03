@@ -9,6 +9,7 @@ class Teacher < ApplicationRecord
 
   # Associations
   has_many :records
+  belongs_to :university, optional: true
 
   # Import for SumDU
   # bin/rails runner 'Teacher.importSumDU'
@@ -41,6 +42,8 @@ class Teacher < ApplicationRecord
     # Parse JSON
     json = JSON.parse(response.body)
 
+    university = University.find_by(name: "SumDU")
+
     # Delete before save
     Teacher.destroy_all
 
@@ -52,6 +55,7 @@ class Teacher < ApplicationRecord
       teacher = Teacher.new
       teacher.server_id = serverID
       teacher.name = teacherName
+      teacher.university = university
       teacher.save
     end
   end
