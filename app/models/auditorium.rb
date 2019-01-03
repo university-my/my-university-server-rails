@@ -9,7 +9,7 @@ class Auditorium < ApplicationRecord
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
   # Associations
-  has_many :records
+  has_many :records, dependent: :nullify
   belongs_to :university, optional: true
 
   # Import for SumDU
@@ -125,11 +125,19 @@ class Auditorium < ApplicationRecord
       nameGroup = object['NAME_GROUP']
 
       begin
+        # Split groups into array
+        groupNames = nameGroup.split(',')
+
+        stripedNames = Array.new
+        for groupName in groupNames do
+          stripedNames.push(groupName.strip)
+        end
+
         # Convert to int before find request
         teacherID = kodFio.to_i
         teacher = Teacher.where(server_id: teacherID).first
 
-        group = Group.where(name: nameGroup).first
+        groups = Group.where(name: stripedNames)
 
         startDate = dateString.to_datetime
 
@@ -141,16 +149,18 @@ class Auditorium < ApplicationRecord
         conditions[:time] = time
         conditions[:auditorium] = self
 
+        records = Record.joins(:groups).where(conditions)
+
         unless teacher.nil?
-          conditions[:teacher] = teacher
+          records.where(teacher: teacher)
         end
 
-        unless group.nil?
-          conditions[:group] = group
+        unless groups.nil?
+          records.group(group: groups)
         end
 
         # Try to find existing record first
-        record = Record.where(conditions).first
+        record = records.first
 
         if record.nil?
            # Save new record
@@ -164,7 +174,7 @@ class Auditorium < ApplicationRecord
 
            # Associations
            record.auditorium = self
-           record.group = group
+           record.groups = groups
            record.teacher = teacher
 
            unless record.save

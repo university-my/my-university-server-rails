@@ -10,7 +10,6 @@ class CreateRecords < ActiveRecord::Migration[5.2]
       t.string :time, null: true
 
       t.belongs_to :auditorium, index: true, null: true
-      t.belongs_to :group, index: true, null: true
       t.belongs_to :teacher, index: true, null: true
 
       t.timestamps

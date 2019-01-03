@@ -8,7 +8,7 @@ class Group < ApplicationRecord
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
   # Associations
-  has_many :records
+  has_and_belongs_to_many :records, optional: true, dependent: :nullify
   belongs_to :university, optional: true
 
   # Import for SumDU

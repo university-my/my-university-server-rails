@@ -8,7 +8,7 @@ class Teacher < ApplicationRecord
   validates :server_id, presence: true, numericality: { greater_than: 0 }, uniqueness: true
 
   # Associations
-  has_many :records
+  has_many :records, dependent: :nullify
   belongs_to :university, optional: true
 
   # Import for SumDU

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_02_195521) do
+ActiveRecord::Schema.define(version: 2019_01_03_182636) do
 
   create_table "auditoriums", force: :cascade do |t|
     t.string "name"
@@ -30,6 +30,13 @@ ActiveRecord::Schema.define(version: 2019_01_02_195521) do
     t.index ["university_id"], name: "index_groups_on_university_id"
   end
 
+  create_table "groups_records", id: false, force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "record_id"
+    t.index ["group_id"], name: "index_groups_records_on_group_id"
+    t.index ["record_id"], name: "index_groups_records_on_record_id"
+  end
+
   create_table "records", force: :cascade do |t|
     t.datetime "start_date"
     t.string "name"
@@ -38,12 +45,10 @@ ActiveRecord::Schema.define(version: 2019_01_02_195521) do
     t.string "kind"
     t.string "time"
     t.integer "auditorium_id"
-    t.integer "group_id"
     t.integer "teacher_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["auditorium_id"], name: "index_records_on_auditorium_id"
-    t.index ["group_id"], name: "index_records_on_group_id"
     t.index ["teacher_id"], name: "index_records_on_teacher_id"
   end
 
