@@ -73,6 +73,11 @@ class Teacher < ApplicationRecord
     end
   end
 
+  # bin/rails runner 'Teacher.resetUpdateDate'
+  def self.resetUpdateDate
+    Teacher.update_all(updated_at: DateTime.current - 2.hour)
+  end
+
 def importRecords
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_fio=#{server_id}"
@@ -101,6 +106,9 @@ def importRecords
 
     # Parse JSON
     json = JSON.parse(response.body)
+
+    # Delete old records
+    Record.where('teacher_id': id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -147,22 +155,8 @@ def importRecords
         conditions[:time] = time
         conditions[:teacher] = self
 
-        records = Record.joins(:groups).where(conditions
-
-        unless auditorium.nil?
-          conditions[:auditorium] = auditorium
-        end
-
-        unless groups.nil?
-
-          # TODO: Fix this!
-
-          records.group(group: groups)
-          # conditions[:group] = groups
-        end
-
         # Try to find existing record first
-        record = records.first
+        record = Record.find_by(conditions)
 
         if record.nil?
            # Save new record

@@ -74,6 +74,11 @@ class Auditorium < ApplicationRecord
     end
   end
 
+  # bin/rails runner 'Auditorium.resetUpdateDate'
+  def self.resetUpdateDate
+    Auditorium.update_all(updated_at: DateTime.current - 2.hour)
+  end
+
   # Import records for current Auditorium
   def importRecords
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
@@ -103,6 +108,9 @@ class Auditorium < ApplicationRecord
 
     # Parse JSON
     json = JSON.parse(response.body)
+
+    # Delete old records
+    Record.where('auditorium_id': id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -149,21 +157,8 @@ class Auditorium < ApplicationRecord
         conditions[:time] = time
         conditions[:auditorium] = self
 
-        records = Record.joins(:groups).where(conditions)
-
-        unless teacher.nil?
-          records.where(teacher: teacher)
-        end
-
-        unless groups.nil?
-
-          # TODO: Fix this!
-          
-          records.group(group: groups)
-        end
-
         # Try to find existing record first
-        record = records.first
+        record = Record.find_by(conditions)
 
         if record.nil?
            # Save new record

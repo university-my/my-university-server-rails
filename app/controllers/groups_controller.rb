@@ -14,9 +14,6 @@ class GroupsController < ApplicationController
     # Check if need to update records
     if @group.needToUpdateRecords
 
-      # Delete old records
-      @group.records.destroy_all
-
       # Import new
       @group.importRecords
 
@@ -28,7 +25,7 @@ class GroupsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_group
       @group = Group.find(params[:id])
-      @records = Record.where(group: @group).order(:start_date).order(:pair_name)
+      @records = Record.joins(:groups).where('groups.id': @group.id).order(:start_date).order(:pair_name)
       @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
     end

@@ -14,9 +14,6 @@ class AuditoriumsController < ApplicationController
     # Check if need to update records
     if @auditorium.needToUpdateRecords
 
-      # Delete old records
-      @auditorium.records.destroy_all
-
       # Import new
       @auditorium.importRecords
 

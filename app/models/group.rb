@@ -73,6 +73,11 @@ class Group < ApplicationRecord
     end
   end
 
+  # bin/rails runner 'Group.resetUpdateDate'
+  def self.resetUpdateDate
+    Group.update_all(updated_at: DateTime.current - 2.hour)
+  end
+
   # Import records for current Group
   def importRecords
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
@@ -102,6 +107,9 @@ class Group < ApplicationRecord
 
     # Parse JSON
     json = JSON.parse(response.body)
+
+    # Delete old records
+    Record.joins(:groups).where('groups.id': id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -141,18 +149,9 @@ class Group < ApplicationRecord
         conditions[:pair_name] = pairName
         conditions[:kind] = kind
         conditions[:time] = time
-        conditions[:group] = self
-
-        unless auditorium.nil?
-          conditions[:auditorium] = auditorium
-        end
-
-        unless teacher.nil?
-          conditions[:teacher] = teacher
-        end
 
         # Try to find existing record first
-        record = Record.where(conditions).first
+        record = Record.joins(:groups).where('groups.id': id).first
 
         if record.nil?
            # Save new record
@@ -166,7 +165,7 @@ class Group < ApplicationRecord
 
            # Associations
            record.auditorium = auditorium
-           record.group_id = id
+           record.groups = [self]
            record.teacher = teacher
 
            unless record.save

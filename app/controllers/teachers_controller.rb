@@ -14,9 +14,6 @@ class TeachersController < ApplicationController
     # Check if need to update records
     if @teacher.needToUpdateRecords
 
-      # Delete old records
-      @teacher.records.destroy_all
-
       # Import new
       @teacher.importRecords
 
