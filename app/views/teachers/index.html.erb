@@ -14,7 +14,7 @@
     <% @teachers.each do |teacher| %>
       <tr>
         <td><%= teacher.name %></td>
-        <td><%= link_to 'Show', university_teacher_url(teacher.university.url, teacher.id) %></td>
+        <td><%= link_to 'Show', university_teacher_url(@university.url, teacher.id) %></td>
       </tr>
     <% end %>
   </tbody>

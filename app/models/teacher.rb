@@ -14,8 +14,6 @@ class Teacher < ApplicationRecord
   # Import for SumDU
   # bin/rails runner 'Teacher.importSumDU'
   def self.importSumDU
-    
-    logger.info "Start import SumDU techers"
 
     # Init URI
     uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getTeachers")
@@ -42,33 +40,37 @@ class Teacher < ApplicationRecord
     # Parse JSON
     json = JSON.parse(response.body)
 
+    # This groups for SumDU
     university = University.find_by(name: "SumDU")
 
     # Delete before save
     Teacher.destroy_all
 
     for object in json do
-      serverID = Integer(object[0])
-      teacherName = object[1]
 
-      # Save new teacher
-      teacher = Teacher.new
-      teacher.server_id = serverID
-      teacher.name = teacherName
-      teacher.university = university
-      teacher.save
+      begin
+        # Convert to int before save
+        serverID = Integer(object[0])
+        teacherName = object[1]
+
+        # Save new teacher
+        teacher = Teacher.new
+        teacher.server_id = serverID
+        teacher.name = teacherName
+        teacher.university = university
+
+        unless teacher.save
+           # Go to the next iteration if can't be saved
+           logger.error(teacher.errors.full_messages)
+           next
+         end
+
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
+
     end
-  end
-
-  def needToUpdateRecords
-    needToUpdate = false
-
-    # Check by date
-    if DateTime.current >= (updated_at + 1.hour)
-      needToUpdate = true
-    end
-
-    return needToUpdate
   end
 
 def importRecords
@@ -118,14 +120,25 @@ def importRecords
       nameGroup = object['NAME_GROUP']
 
       begin
+        # Split groups into array
+        groupNames = nameGroup.split(',')
+
+        # Groups
+        stripedNames = Array.new
+        for groupName in groupNames do
+          stripedNames.push(groupName.strip)
+        end
+        groups = Group.where(name: stripedNames)
+
+        # Auditorium
         # Convert to int before find request
         auditoriumID = kodAud.to_i
         auditorium = Auditorium.where(server_id: auditoriumID).first
 
-        group = Group.where(name: nameGroup).first
-
+        # Pair start date
         startDate = dateString.to_datetime
 
+        # Conditions for find existing pair
         conditions = {}
         conditions[:start_date] = startDate
         conditions[:name] = nameString
@@ -134,16 +147,22 @@ def importRecords
         conditions[:time] = time
         conditions[:teacher] = self
 
+        records = Record.joins(:groups).where(conditions
+
         unless auditorium.nil?
           conditions[:auditorium] = auditorium
         end
 
-        unless group.nil?
-          conditions[:group] = group
+        unless groups.nil?
+
+          # TODO: Fix this!
+
+          records.group(group: groups)
+          # conditions[:group] = groups
         end
 
         # Try to find existing record first
-        record = Record.where(conditions).first
+        record = records.first
 
         if record.nil?
            # Save new record
@@ -157,7 +176,7 @@ def importRecords
 
            # Associations
            record.auditorium = auditorium
-           record.group = group
+           record.groups = groups
            record.teacher = self
 
            unless record.save
@@ -178,6 +197,18 @@ def importRecords
     unless save
       logger.error(errors.full_messages)
     end
+  end
+
+  # Check if need to update records in the Teacher
+  def needToUpdateRecords
+    needToUpdate = false
+
+    # Check by date
+    if DateTime.current >= (updated_at + 1.hour)
+      needToUpdate = true
+    end
+
+    return needToUpdate
   end
 
 end

@@ -5,6 +5,7 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums.json
   def index
     @auditoriums = Auditorium.all
+    @university = University.find_by(url: params[:university_url])
   end
 
   # GET /auditoriums/1
@@ -19,7 +20,7 @@ class AuditoriumsController < ApplicationController
       # Import new
       @auditorium.importRecords
 
-      redirect_to request.url, notice: "Records has been updated!"
+      redirect_to request.url
     end
   end
 

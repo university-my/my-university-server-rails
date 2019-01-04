@@ -5,6 +5,7 @@ class TeachersController < ApplicationController
   # GET /teachers.json
   def index
     @teachers = Teacher.all
+    @university = University.find_by(url: params[:university_url])
   end
 
   # GET /teachers/1
@@ -19,7 +20,7 @@ class TeachersController < ApplicationController
       # Import new
       @teacher.importRecords
 
-      redirect_to request.url, notice: "Records has been updated!"
+      redirect_to request.url
     end
   end
 

@@ -16,8 +16,6 @@ class Auditorium < ApplicationRecord
   # # bin/rails runner 'Auditorium.importSumDU'
   def self.importSumDU
 
-    logger.info "Start import SumDU auditoriums"
-
     # Init URI
     uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums")
     if uri.nil?
@@ -43,35 +41,40 @@ class Auditorium < ApplicationRecord
     # Parse JSON
     json = JSON.parse(response.body)
 
-    university = University.find_by(name: "SumDU")
-
     # Delete before save
     Auditorium.destroy_all
 
+    # This groups for SumDU
+    university = University.find_by(name: "SumDU")
+
     for object in json do
-      serverID = Integer(object[0])
-      auditoriumName = object[1]
 
-      # Save new auditorium
-      auditorium = Auditorium.new
-      auditorium.server_id = serverID
-      auditorium.name = auditoriumName
-      auditorium.university = university
-      auditorium.save
+      begin
+        # Convert to int before save
+        serverID = Integer(object[0])
+        auditoriumName = object[1]
+
+        # Save new auditorium
+        auditorium = Auditorium.new
+        auditorium.server_id = serverID
+        auditorium.name = auditoriumName
+        auditorium.university = university
+
+        unless auditorium.save
+           # Go to the next iteration if can't be saved
+           logger.error(auditorium.errors.full_messages)
+           next
+         end
+        
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
+
     end
   end
 
-  def needToUpdateRecords
-    needToUpdate = false
-
-    # Check by date
-    if DateTime.current >= (updated_at + 1.hour)
-      needToUpdate = true
-    end
-
-    return needToUpdate
-  end
-
+  # Import records for current Auditorium
   def importRecords
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_aud=#{server_id}"
@@ -101,12 +104,6 @@ class Auditorium < ApplicationRecord
     # Parse JSON
     json = JSON.parse(response.body)
 
-    # Update `updated_at` date of Auditorium
-    touch(:updated_at)
-    unless save
-      logger.error(errors.full_messages)
-    end
-
     # Save records
     for object in json do
 
@@ -128,19 +125,22 @@ class Auditorium < ApplicationRecord
         # Split groups into array
         groupNames = nameGroup.split(',')
 
+        # Groups
         stripedNames = Array.new
         for groupName in groupNames do
           stripedNames.push(groupName.strip)
         end
+        groups = Group.where(name: stripedNames)
 
+        # Auditorium
         # Convert to int before find request
         teacherID = kodFio.to_i
         teacher = Teacher.where(server_id: teacherID).first
 
-        groups = Group.where(name: stripedNames)
-
+        # Pair start date
         startDate = dateString.to_datetime
 
+        # Conditions for find existing pair
         conditions = {}
         conditions[:start_date] = startDate
         conditions[:name] = nameString
@@ -156,6 +156,9 @@ class Auditorium < ApplicationRecord
         end
 
         unless groups.nil?
+
+          # TODO: Fix this!
+          
           records.group(group: groups)
         end
 
@@ -189,5 +192,24 @@ class Auditorium < ApplicationRecord
         next
       end
     end
+
+    # Update `updated_at` date of Auditorium
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
   end
+
+   # Check if need to update records in the Auditorium
+  def needToUpdateRecords
+    needToUpdate = false
+
+    # Check by date
+    if DateTime.current >= (updated_at + 1.hour)
+      needToUpdate = true
+    end
+
+    return needToUpdate
+  end
+
 end

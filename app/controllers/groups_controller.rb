@@ -5,6 +5,7 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     @groups = Group.all
+    @university = University.find_by(url: params[:university_url])
   end
 
   # GET /groups/1
@@ -19,7 +20,7 @@ class GroupsController < ApplicationController
       # Import new
       @group.importRecords
 
-      redirect_to request.url, notice: "Records has been updated!"
+      redirect_to request.url
     end
   end
 

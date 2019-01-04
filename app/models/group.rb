@@ -3,7 +3,7 @@ require 'json'
 
 class Group < ApplicationRecord
 
-  # Field validations
+  # Fields validations
   validates :name, presence: true
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
 
@@ -14,8 +14,6 @@ class Group < ApplicationRecord
   # Import for SumDU
   # bin/rails runner 'Group.importSumDU'
   def self.importSumDU
-
-    logger.info "Start import SumDU groups"
 
     # Init URI
     uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getGroups")
@@ -45,18 +43,33 @@ class Group < ApplicationRecord
     # Delete before save
     Group.destroy_all
 
+    # This groups for SumDU
     university = University.find_by(name: "SumDU")
 
     for object in json do
-      serverID = Integer(object[0])
-      groupName = object[1]
 
-      # Save new group
-      group = Group.new
-      group.server_id = serverID
-      group.name = groupName
-      group.university = university
-      group.save
+      begin
+        # Convert to int before save
+        serverID = Integer(object[0])
+        groupName = object[1]
+
+        # Save new group
+        group = Group.new
+        group.server_id = serverID
+        group.name = groupName
+        group.university = university
+        
+        unless group.save
+           # Go to the next iteration if can't be saved
+           logger.error(group.errors.full_messages)
+           next
+         end
+
+       rescue Exception => e
+        logger.error(e)
+        next
+      end
+
     end
   end
 
@@ -109,14 +122,19 @@ class Group < ApplicationRecord
 
       begin
         # Convert to int before find request
+
+        # Auditorium
         auditoriumID = kodAud.to_i
         auditorium = Auditorium.find_by(server_id: auditoriumID)
 
+        # Teacher
         teacherID = kodFio.to_i
         teacher = Teacher.find_by(server_id: teacherID)
 
+        # Pair start date
         startDate = dateString.to_datetime
 
+        # Conditions for find existing pair
         conditions = {}
         conditions[:start_date] = startDate
         conditions[:name] = nameString
@@ -155,14 +173,14 @@ class Group < ApplicationRecord
            # Go to the next iteration if record can't be saved
            logger.error(record.errors.full_messages)
            next
-           end
          end
-        
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
+       end
+
+     rescue Exception => e
+      logger.error(e)
+      next
     end
+  end
 
     # Update `updated_at` date of Group
     touch(:updated_at)

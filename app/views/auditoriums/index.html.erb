@@ -16,7 +16,7 @@
       <tr>
         <td><%= auditorium.id %></td>
         <td><%= auditorium.name %></td>
-        <td><%= link_to 'Show', university_auditorium_url(auditorium.university.url, auditorium.id) %></td>
+        <td><%= link_to 'Show', university_auditorium_url(@university.url, auditorium.id) %></td>
       </tr>
     <% end %>
   </tbody>
