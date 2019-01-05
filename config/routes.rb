@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  resources :universities, param: :url do
+  get 'homepage/home'
+  get "/", to: "homepage#home", as: "root"
+
+  resources :universities, only: [:index, :show], param: :url do
     resources :teachers, only: [:index, :show]
     resources :auditoriums, only: [:index, :show]
     resources :groups, only: [:index, :show]
