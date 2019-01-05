@@ -1,9 +1,25 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @university.name %>
+  <strong>Назва:</strong>
+  <%= @university.full_name %>
 </p>
 
-<%= link_to 'Edit', edit_university_path(@university) %> |
-<%= link_to 'Back', universities_path %>
+<table>
+  <tbody>
+      <tr>
+        <td>Аудиторії (кількість: <%= @university.auditorium.count %>)</td>
+        <td><%= link_to 'Показати', university_auditoriums_url(@university.url) %></td>
+      </tr>
+      <tr>
+        <td>Групи (кількість: <%= @university.groups.count %>)</td>
+        <td><%= link_to 'Показати', university_groups_url(@university.url) %></td>
+      </tr>
+      <tr>
+        <td>Викладачі (кількість: <%= @university.teachers.count %>)</td>
+        <td><%= link_to 'Показати', university_teachers_url(@university.url) %></td>
+      </tr>
+  </tbody>
+</table>
+
+<%= link_to 'Назад', universities_path %>

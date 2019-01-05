@@ -2,14 +2,12 @@
 <hr>
 <p id="notice"><%= notice %></p>
 
-<h1>Groups</h1>
+<h1><%= @university.short_name %> - Групи</h1>
 
 <table>
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Server ID</th>
-      <th>Name</th>
+      <th>Назва</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,10 +15,8 @@
   <tbody>
     <% @groups.each do |group| %>
       <tr>
-        <td><%= group.id %></td>
-        <td><%= group.server_id %></td>
         <td><%= group.name %></td>
-        <td><%= link_to 'Show', university_group_url(@university.url, group.id) %></td>
+        <td><%= link_to 'Показати', university_group_url(@university.url, group.id) %></td>
       </tr>
     <% end %>
   </tbody>

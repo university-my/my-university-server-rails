@@ -6,6 +6,7 @@ class GroupsController < ApplicationController
   def index
     @groups = Group.all
     @university = University.find_by(url: params[:university_url])
+    @title = @university.short_name + ' - Групи'
   end
 
   # GET /groups/1
@@ -28,5 +29,6 @@ class GroupsController < ApplicationController
       @records = Record.joins(:groups).where('groups.id': @group.id).order(:start_date).order(:pair_name)
       @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
+      @title = @university.short_name + ' - ' + @group.name
     end
   end

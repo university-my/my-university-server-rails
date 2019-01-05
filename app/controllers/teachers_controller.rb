@@ -6,6 +6,7 @@ class TeachersController < ApplicationController
   def index
     @teachers = Teacher.all
     @university = University.find_by(url: params[:university_url])
+    @title = @university.short_name + ' - Викладачі'
   end
 
   # GET /teachers/1
@@ -28,5 +29,6 @@ class TeachersController < ApplicationController
       @records = Record.where(teacher: @teacher).order(:start_date).order(:pair_name)
       @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
+      @title = @university.short_name + ' - ' + @teacher.name
     end
   end

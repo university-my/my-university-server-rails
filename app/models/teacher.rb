@@ -41,7 +41,7 @@ class Teacher < ApplicationRecord
     json = JSON.parse(response.body)
 
     # This groups for SumDU
-    university = University.find_by(name: "SumDU")
+    university = University.find_by(url: "sumdu")
 
     # Delete before save
     Teacher.destroy_all

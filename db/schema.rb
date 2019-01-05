@@ -62,7 +62,8 @@ ActiveRecord::Schema.define(version: 2019_01_03_182636) do
   end
 
   create_table "universities", force: :cascade do |t|
-    t.string "name"
+    t.string "short_name"
+    t.string "full_name"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

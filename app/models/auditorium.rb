@@ -45,7 +45,7 @@ class Auditorium < ApplicationRecord
     Auditorium.destroy_all
 
     # This groups for SumDU
-    university = University.find_by(name: "SumDU")
+    university = University.find_by(url: "sumdu")
 
     for object in json do
 

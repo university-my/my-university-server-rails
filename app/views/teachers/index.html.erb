@@ -2,12 +2,12 @@
 <hr>
 <p id="notice"><%= notice %></p>
 
-<h1>Teachers</h1>
+<h1><%= @university.short_name %> - Викладачі</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Імя</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,7 +16,7 @@
     <% @teachers.each do |teacher| %>
       <tr>
         <td><%= teacher.name %></td>
-        <td><%= link_to 'Show', university_teacher_url(@university.url, teacher.id) %></td>
+        <td><%= link_to 'Показати', university_teacher_url(@university.url, teacher.id) %></td>
       </tr>
     <% end %>
   </tbody>

@@ -6,6 +6,7 @@ class AuditoriumsController < ApplicationController
   def index
     @auditoriums = Auditorium.all
     @university = University.find_by(url: params[:university_url])
+    @title = @university.short_name + ' - Аудиторії'
   end
 
   # GET /auditoriums/1
@@ -28,5 +29,6 @@ class AuditoriumsController < ApplicationController
       @records = Record.where(auditorium: @auditorium).order(:start_date).order(:pair_name)
       @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
+      @title = @university.short_name + ' - ' + @auditorium.name
     end
 end

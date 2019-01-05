@@ -1,11 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Universities</h1>
+<h1>Університети</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Назва</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -13,15 +13,11 @@
   <tbody>
     <% @universities.each do |university| %>
       <tr>
-        <td><%= university.name %></td>
-        <td><%= link_to 'Show', university_path(university.url) %></td>
-        <td><%= link_to 'Edit', edit_university_path(university) %></td>
-        <td><%= link_to 'Destroy', university, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= university.full_name %></td>
+        <td><%= link_to 'Показати', university_path(university.url) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New University', new_university_path %>

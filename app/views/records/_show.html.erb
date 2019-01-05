@@ -3,13 +3,10 @@
 
   <thead>
     <tr>
-      <th>Pair</th>
-      <th>Time</th>
-      <th>Name</th>
-      <th>Kind</th>
-      <th>Auditorium</th>
-      <th>Teacher</th>
-      <th>Group</th>
+      <th>Пара/Час</th>
+      <th>Назва/Тип/Аудиторія</th>
+      <th>Викладач</th>
+      <th>Група</th>
     </tr>
   </thead>
 
@@ -20,20 +17,15 @@
 
     <% for record in records %>
     <tr>
-      <td><%= record.pair_name %></td>
-      <td><%= record.time %></td>
-      <td><%= record.name %></td>
-      <td><%= record.kind %></td>
-
-      <% if record.auditorium.nil? == false %>
-      <td>
+      <td align="center"><%= record.pair_name %><br><%= record.time %></td>
+      <td align="center"><%= record.name %><br><%= record.kind %><br>
+        <% if record.auditorium.nil? == false %>
         <%= link_to(university_auditorium_url(university.url, record.auditorium.id)) do %>
         <%= record.auditorium.name %>
         <% end %>
-      </td>  
-      <% else %>
-      <td></td>
-      <% end %>
+        <% else %>
+        <% end %>
+      </td>
 
       <% if record.teacher.nil? == false %>
       <td>
