@@ -1,1 +1,1 @@
-json.partial! "auditoriums/auditorium", auditorium: @auditorium
+json.partial! "auditoriums/auditorium_detailed", auditorium: @auditorium

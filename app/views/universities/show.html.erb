@@ -1,25 +1,24 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Назва:</strong>
-  <%= @university.full_name %>
+  <h3><%= @university.full_name %></h3>
 </p>
 
 <table>
   <tbody>
       <tr>
-        <td>Аудиторії (кількість: <%= @university.auditorium.count %>)</td>
+        <td>Аудиторії (<%= @university.auditorium.count %>)</td>
         <td><%= link_to 'Показати', university_auditoriums_url(@university.url) %></td>
       </tr>
       <tr>
-        <td>Групи (кількість: <%= @university.groups.count %>)</td>
+        <td>Групи (<%= @university.groups.count %>)</td>
         <td><%= link_to 'Показати', university_groups_url(@university.url) %></td>
       </tr>
       <tr>
-        <td>Викладачі (кількість: <%= @university.teachers.count %>)</td>
+        <td>Викладачі (<%= @university.teachers.count %>)</td>
         <td><%= link_to 'Показати', university_teachers_url(@university.url) %></td>
       </tr>
   </tbody>
 </table>
 
-<%= link_to 'Назад', universities_path %>
+<%= link_to 'Всі навчальні заклади', universities_path %>

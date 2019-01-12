@@ -10,15 +10,20 @@
 </head>
 
 <body>
-  <%= yield %>
-</body>
-<footer>
-  <hr>
-  <div>
-    <div>
-      <p>© 2019 <a href="https://voevodin-yura.com/ua/">Yura Voevodin</a></p>
-      <p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
-    </div>
+  <div class="container">
+    <div class="row"><p></p></div>
+    <%= yield %>
+    <footer>
+      <div class="row">
+        <hr>
+        <div class="u-pull-left">
+          <p>© 2019 <a href="https://voevodin-yura.com/ua/">Yura Voevodin</a></p>
+        </div>
+        <div class="u-pull-right">
+          <p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
+        </div>
+      </div>
+    </footer>
   </div>
-</footer>
+</body>
 </html>

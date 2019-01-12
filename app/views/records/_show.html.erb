@@ -1,4 +1,3 @@
-<hr>
 <table>
 
   <thead>
@@ -13,7 +12,7 @@
   <tbody>
     <% @records_days.each do |day, records| %>
 
-    <tr><th colspan="6"><%= day.strftime("%A, %e %B %Y") %></th></tr>
+    <tr><th colspan="6"><%= l day, format: "%A, %e %B %Y" %></th></tr>
 
     <% for record in records %>
     <tr>
@@ -60,6 +59,4 @@
 
 </table>
 
-<br>
-<hr>
 <%= render "records/links" %>
