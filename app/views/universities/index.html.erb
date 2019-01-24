@@ -1,15 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Університети</h1>
+<h1 class="display-4">Університети</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Назва</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
+<table class="table">
   <tbody>
     <% @universities.each do |university| %>
       <tr>
@@ -19,4 +12,3 @@
     <% end %>
   </tbody>
 </table>
-<a href="/">На головну</a>

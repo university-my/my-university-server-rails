@@ -1,23 +1,13 @@
-<table>
-
-  <thead>
-    <tr>
-      <th>Пара/Час</th>
-      <th>Назва/Тип/Аудиторія</th>
-      <th>Викладач</th>
-      <th>Група</th>
-    </tr>
-  </thead>
-
+<table class="table table-bordered">
   <tbody>
     <% @records_days.each do |day, records| %>
 
-    <tr><th colspan="6"><%= l day, format: "%A, %e %B %Y" %></th></tr>
+    <tr><th colspan="6" scope="row"><%= l day, format: "%A, %e %B %Y" %></th></tr>
 
     <% for record in records %>
     <tr>
-      <td align="center"><%= record.pair_name %><br><%= record.time %></td>
-      <td align="center"><%= record.name %><br><%= record.kind %><br>
+      <td scope="row"><%= record.pair_name %><br><%= record.time %></td>
+      <td><%= record.name %><br><%= record.kind %><br>
         <% if record.auditorium.nil? == false %>
         <%= link_to(university_auditorium_url(university.url, record.auditorium.id)) do %>
         <%= record.auditorium.name %>

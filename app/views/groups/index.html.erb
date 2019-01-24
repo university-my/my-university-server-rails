@@ -1,16 +1,10 @@
 <%= render "records/links" %>
+
 <p id="notice"><%= notice %></p>
 
-<h1><%= @university.short_name %> - Групи</h1>
+<h1 class="display-4"><%= @university.short_name %> - Групи</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Назва</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
+<table class="table table-striped">
   <tbody>
     <% @groups.each do |group| %>
       <tr>
@@ -21,5 +15,4 @@
   </tbody>
 </table>
 
-<br>
 <%= render "records/links" %>

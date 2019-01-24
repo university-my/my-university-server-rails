@@ -9,21 +9,23 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 </head>
 
-<body>
+<body class="py-4">
   <div class="container">
-    <div class="row"><p></p></div>
     <%= yield %>
-    <footer>
+
+    <hr>
+
+    <footer class="container">
       <div class="row">
-        <hr>
-        <div class="u-pull-left">
+        <div class="col-sm">
           <p>© 2019 <a href="https://voevodin-yura.com/ua/">Yura Voevodin</a></p>
         </div>
-        <div class="u-pull-right">
+        <div class="col-sm" style="text-align: right;">
           <p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
         </div>
-      </div>
+      </div> 
     </footer>
   </div>
+</div>
 </body>
 </html>
