@@ -1,5 +1,5 @@
 class HomepageController < ApplicationController
   def home
-    @title = "Мій Універ - Розклад занять"
+    @title = "Мій Університет - Розклад занять"
   end
 end

@@ -5,7 +5,7 @@ class UniversitiesController < ApplicationController
   # GET /universities.json
   def index
     @universities = University.all
-    @title = 'Мій Універ - Університети'
+    @title = 'Мій Університет - Університети'
   end
 
   # GET /universities/1
@@ -17,6 +17,6 @@ class UniversitiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_university
       @university = University.find_by(url: params[:url])
-      @title = 'Мій Універ - ' + @university.full_name
+      @title = 'Мій Університет - ' + @university.full_name
     end
 end
