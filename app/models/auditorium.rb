@@ -115,6 +115,9 @@ class Auditorium < ApplicationRecord
     # Save records
     for object in json do
 
+      p '---'
+      p object
+
       # Get data from JSON
       dateString = object['DATE_REG']
       time = object['TIME_PAIR']
