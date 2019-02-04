@@ -151,7 +151,7 @@ class Group < ApplicationRecord
         conditions[:time] = time
 
         # Try to find existing record first
-        record = Record.joins(:groups).where('groups.id': id).first
+        record = Record.joins(:groups).where('groups.id': id).find_by(conditions)
 
         if record.nil?
            # Save new record
