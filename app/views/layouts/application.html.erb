@@ -1,40 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="ua">
 <head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133300904-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-133300904-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
 
-    gtag('config', 'UA-133300904-1');
-  </script>
-  <title><%= @title %></title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
+		gtag('config', 'UA-133300904-1');
+		</script>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+		<title><%= @title %></title>
+		<%= csrf_meta_tags %>
+		<%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-</head>
+		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+	</head>
 
-<body class="py-4">
-  <div class="container">
-    <%= yield %>
-    <hr>
-    <footer class="container">
-      <div class="row">
-        <div class="col-sm">
-          <p>© 2019 <a href="https://voevodin-yura.com/ua/">Юра Воєводін</a></p>
-        </div>
-        <div class="col">
-          <p> Додаток для iPhone - <a  href="https://itunes.apple.com/ua/app/university-schedule/id1440425058">Мій Університет</a></p>
-        </div>
-        <div class="col-sm" style="text-align: right;">
-          <p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
-        </div>
-      </div> 
-    </footer>
-  </div>
-</body>
-</html>
+	<body class="py-4">
+		<div class="container">
+			<%= yield %>
+			<hr>
+			<footer class="container">
+				<div class="row">
+					<div class="col-sm">
+						<p>© 2019 <a href="https://voevodin-yura.com/ua/">Юра Воєводін</a></p>
+					</div>
+					<div class="col">
+						<p> Додаток для iPhone - <a  href="https://itunes.apple.com/ua/app/university-schedule/id1440425058">Мій Університет</a></p>
+					</div>
+					<div class="col-sm" style="text-align: right;">
+						<p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
+					</div>
+				</div> 
+			</footer>
+		</div>
+	</body>
+	</html>
