@@ -60,12 +60,12 @@ class Group < ApplicationRecord
         group.university = university
         
         unless group.save
-           # Go to the next iteration if can't be saved
-           logger.error(group.errors.full_messages)
-           next
-         end
+          # Go to the next iteration if can't be saved
+          logger.error(group.errors.full_messages)
+          next
+        end
 
-       rescue Exception => e
+      rescue Exception => e
         logger.error(e)
         next
       end
@@ -147,39 +147,68 @@ class Group < ApplicationRecord
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
+        conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
 
         # Try to find existing record first
-        record = Record.joins(:groups).where('groups.id': id).find_by(conditions)
+        record = Record.find_by(conditions)
 
         if record.nil?
-           # Save new record
-           record = Record.new
-           record.start_date = startDate
-           record.time = time
-           record.pair_name = pairName
-           record.name = nameString
-           record.reason = reason
-           record.kind = kind
+          # Save new record
+          record = Record.new
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
 
-           # Associations
-           record.auditorium = auditorium
-           record.groups = [self]
-           record.teacher = teacher
+          # Associations
+          record.auditorium = auditorium
+          record.teacher = teacher
+          
+          # Push only unique groups
+          unless record.groups.include?(self)
+             record.groups << self
+          end
 
-           unless record.save
-           # Go to the next iteration if record can't be saved
-           logger.error(record.errors.full_messages)
-           next
-         end
-       end
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+          
+        else
+          # Update record
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
 
-     rescue Exception => e
-      logger.error(e)
-      next
+          # Associations
+          record.auditorium = auditorium
+          record.teacher = teacher
+          
+          # Push only unique groups
+          unless record.groups.include?(self)
+             record.groups << self
+          end
+
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+        end
+
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
     end
-  end
 
     # Update `updated_at` date of Group
     touch(:updated_at)

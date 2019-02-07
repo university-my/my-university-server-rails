@@ -61,10 +61,10 @@ class Auditorium < ApplicationRecord
         auditorium.university = university
 
         unless auditorium.save
-           # Go to the next iteration if can't be saved
-           logger.error(auditorium.errors.full_messages)
-           next
-         end
+          # Go to the next iteration if can't be saved
+          logger.error(auditorium.errors.full_messages)
+          next
+        end
         
       rescue Exception => e
         logger.error(e)
@@ -115,9 +115,6 @@ class Auditorium < ApplicationRecord
     # Save records
     for object in json do
 
-      p '---'
-      p object
-
       # Get data from JSON
       dateString = object['DATE_REG']
       time = object['TIME_PAIR']
@@ -156,34 +153,67 @@ class Auditorium < ApplicationRecord
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
+        conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
-        conditions[:auditorium] = self
 
         # Try to find existing record first
         record = Record.find_by(conditions)
 
         if record.nil?
-           # Save new record
-           record = Record.new
-           record.start_date = startDate
-           record.time = time
-           record.pair_name = pairName
-           record.name = nameString
-           record.reason = reason
-           record.kind = kind
+          # Save new record
+          record = Record.new
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
 
-           # Associations
-           record.auditorium = self
-           record.groups = groups
-           record.teacher = teacher
+          # Associations
+          record.auditorium = self
+          record.teacher = teacher
+          
+          # Push only unique groups
+          for group in groups do
+            unless record.groups.include?(group)
+               record.groups << group
+            end
+          end
 
-           unless record.save
-           # Go to the next iteration if record can't be saved
-           logger.error(record.errors.full_messages)
-           next
-           end
-         end
+          # Try to save record
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+          
+        else
+          # Update record
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
+
+          # Associations
+          record.auditorium = self
+          record.teacher = teacher
+          
+          # Push only unique groups
+          for group in groups do
+            unless record.groups.include?(group)
+               record.groups << group
+            end
+          end
+
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+        end
         
       rescue Exception => e
         logger.error(e)
@@ -198,7 +228,7 @@ class Auditorium < ApplicationRecord
     end
   end
 
-   # Check if need to update records in the Auditorium
+  # Check if need to update records in the Auditorium
   def needToUpdateRecords
     needToUpdate = false
 
