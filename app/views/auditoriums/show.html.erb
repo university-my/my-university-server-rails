@@ -1,7 +1,8 @@
+<%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
 
 <p>
-  <h1 class="display-4"><%= @auditorium.name %></h1>
+	<h1><%= @auditorium.name %></h1>(Аудиторія)
 </p>
 
 <%= render "records/show", records: @records, university: @university %>

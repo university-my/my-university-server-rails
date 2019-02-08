@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+	<%= link_to(university_url(url: 'sumdu'), class: "navbar-brand") do %>
+	<%= @university.short_name %>
+	<% end %>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<%= link_to 'Аудиторії', university_auditoriums_url, class: "nav-link" %>
+			</li>
+			<li class="nav-item">
+				<%= link_to 'Викладачі', university_teachers_url, class: "nav-link" %>
+			</li>
+			<li class="nav-item">
+				<%= link_to 'Групи', university_groups_url, class: "nav-link" %>
+			</li>
+		</ul>
+	</div>
+</nav>

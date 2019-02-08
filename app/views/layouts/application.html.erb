@@ -12,7 +12,7 @@
 		</script>
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 		<title><%= @title %></title>
 		<%= csrf_meta_tags %>
@@ -22,9 +22,10 @@
 		<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 	</head>
 
-	<body class="py-4">
-		<div class="container">
+	<body class="bg-light">
+		<main class="container" role="main">
 			<%= yield %>
+			
 			<hr>
 			<footer class="container">
 				<div class="row">
@@ -39,6 +40,7 @@
 					</div>
 				</div> 
 			</footer>
-		</div>
+		</main>
+		
 	</body>
 	</html>
