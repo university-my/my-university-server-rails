@@ -81,6 +81,12 @@ class Auditorium < ApplicationRecord
 
   # Import records for current Auditorium
   def importRecords
+    # Update `updated_at` date of Auditorium
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
+    
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_aud=#{server_id}"
 
@@ -220,12 +226,6 @@ class Auditorium < ApplicationRecord
         next
       end
     end
-
-    # Update `updated_at` date of Auditorium
-    touch(:updated_at)
-    unless save
-      logger.error(errors.full_messages)
-    end
   end
 
   # Check if need to update records in the Auditorium
@@ -239,5 +239,4 @@ class Auditorium < ApplicationRecord
 
     return needToUpdate
   end
-
 end

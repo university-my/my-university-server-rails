@@ -80,6 +80,12 @@ class Group < ApplicationRecord
 
   # Import records for current Group
   def importRecords
+    # Update `updated_at` date of Group
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
+    
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_grp=#{server_id}"
 
@@ -208,12 +214,6 @@ class Group < ApplicationRecord
         logger.error(e)
         next
       end
-    end
-
-    # Update `updated_at` date of Group
-    touch(:updated_at)
-    unless save
-      logger.error(errors.full_messages)
     end
   end
 

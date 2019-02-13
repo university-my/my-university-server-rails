@@ -79,6 +79,12 @@ class Teacher < ApplicationRecord
   end
 
   def importRecords
+    # Update `updated_at` date of Teacher
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
+    
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_fio=#{server_id}"
 
@@ -215,12 +221,6 @@ class Teacher < ApplicationRecord
         logger.error(e)
         next
       end
-    end
-
-    # Update `updated_at` date of Teacher
-    touch(:updated_at)
-    unless save
-      logger.error(errors.full_messages)
     end
   end
 
