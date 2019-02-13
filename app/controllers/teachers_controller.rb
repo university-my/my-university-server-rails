@@ -26,7 +26,7 @@ class TeachersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_teacher
       @teacher = Teacher.find(params[:id])
-      @records = Record.where(teacher: @teacher).order(:start_date).order(:pair_name)
+      @records = Record.where(teacher: @teacher).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
       @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
       @title = @university.short_name + ' - ' + @teacher.name
