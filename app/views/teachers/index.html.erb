@@ -2,15 +2,19 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Викладачі</h1>
+<main class="container custom-padding-top" role="main">
 
-<table class="table table-striped">
-	<tbody>
-		<% @teachers.each do |teacher| %>
-		<tr>
-			<td><%= teacher.name %></td>
-			<td><%= link_to 'Показати', university_teacher_url(@university.url, teacher.id) %></td>
-		</tr>
-		<% end %>
-	</tbody>
-</table>
+	<h1>Викладачі</h1>
+
+	<table class="table table-striped">
+		<tbody>
+			<% @teachers.each do |teacher| %>
+			<tr>
+				<td><%= teacher.name %></td>
+				<td><%= link_to 'Показати', university_teacher_url(@university.url, teacher.id) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</main>
+<%= render "layouts/footer" %>

@@ -13,34 +13,13 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
+		
 		<title><%= @title %></title>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
-
+		
 		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 		<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 	</head>
-
-	<body class="bg-light">
-		<main class="container" role="main">
-			<%= yield %>
-			
-			<hr>
-			<footer class="container">
-				<div class="row">
-					<div class="col-sm">
-						<p>© 2019 <a href="https://voevodin-yura.com/ua/">Юра Воєводін</a></p>
-					</div>
-					<div class="col">
-						<p> Додаток для iPhone - <a  href="https://itunes.apple.com/ua/app/university-schedule/id1440425058">Мій Університет</a></p>
-					</div>
-					<div class="col-sm" style="text-align: right;">
-						<p><a href="mailto:voevodin-yura@icloud.com">Повідомити про помилку</a></p>
-					</div>
-				</div> 
-			</footer>
-		</main>
-		
-	</body>
+	<body class="bg-light"><%= yield %></body>
 	</html>

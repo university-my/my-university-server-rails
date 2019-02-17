@@ -1,9 +1,10 @@
+<%= render "layouts/header" %>
+
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Всі навчальні заклади', universities_path %>
-
+<main class="container" role="main">
 <p>
-  <h3 class="display-4"><%= @university.full_name %></h3>
+  <h1 class="display-5"><%= @university.full_name %></h3>
 </p>
 
 <table class="table">
@@ -22,3 +23,5 @@
       </tr>
   </tbody>
 </table>
+</main>
+<%= render "layouts/footer" %>

@@ -16,3 +16,8 @@
 
  /*Custom bootstrap variables must be set or imported *before* bootstrap.*/
 @import "bootstrap";
+
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
+.custom-padding-top {
+  padding-top: 3.5rem;
+}

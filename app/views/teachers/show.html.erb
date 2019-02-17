@@ -1,8 +1,11 @@
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <h1><%= @teacher.name %></h1>
-</p>
+<main class="container custom-padding-top" role="main">
+	<p>
+		<h1><%= @teacher.name %></h1>
+	</p>
 
-<%= render "records/show", records: @records, university: @university %>
+	<%= render "records/show", records: @records, university: @university %>
+</main>
+<%= render "layouts/footer" %>

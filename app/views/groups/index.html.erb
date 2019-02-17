@@ -2,15 +2,19 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Групи</h1>
+<main class="container custom-padding-top" role="main">
 
-<table class="table table-striped">
-  <tbody>
-    <% @groups.each do |group| %>
-      <tr>
-        <td><%= group.name %></td>
-        <td><%= link_to 'Показати', university_group_url(@university.url, group.id) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+	<h1>Групи</h1>
+
+	<table class="table table-striped">
+		<tbody>
+			<% @groups.each do |group| %>
+			<tr>
+				<td><%= group.name %></td>
+				<td><%= link_to 'Показати', university_group_url(@university.url, group.id) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</main>
+<%= render "layouts/footer" %>
