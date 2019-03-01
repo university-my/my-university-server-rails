@@ -4,9 +4,27 @@ Rails.application.routes.draw do
   get "/", to: "homepage#home", as: "root"
 
   resources :universities, only: [:index, :show], param: :url do
-    resources :teachers, only: [:index, :show]
-    resources :auditoriums, only: [:index, :show]
-    resources :groups, only: [:index, :show]
+    
+    # Teachers
+    resources :teachers, only: [:index, :show], param: :id do
+      member do
+          get :records
+        end
+    end
+    
+    # Auditoriums
+    resources :auditoriums, only: [:index, :show], param: :id do
+      member do
+          get :records
+        end
+    end
+    
+    # Groups
+    resources :groups, only: [:index, :show], param: :id do
+      member do
+          get :records
+        end
+    end
   end
   
   match "/404", :to => "errors#not_found", :via => :all

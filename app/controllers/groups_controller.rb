@@ -12,13 +12,25 @@ class GroupsController < ApplicationController
   # GET /groups/1
   # GET /groups/1.json
   def show
+  end
+  
+  def records
+    @group = Group.find(params[:id])
+    @university = University.find_by(url: params[:university_url])
     # Check if need to update records
     if @group.needToUpdateRecords
 
       # Import new
       @group.importRecords
-
-      redirect_to request.url
+    end
+    
+    @records = Record.joins(:groups).where('groups.id': @group.id).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
+    @records_days = @records.group_by { |t| t.start_date }
+    
+    if @records.empty?
+      render :partial => "records/empty"
+    else
+      render :partial => "records/show", :locals => {:records => @records, :university =>  @university}
     end
   end
 
@@ -26,8 +38,6 @@ class GroupsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_group
       @group = Group.find(params[:id])
-      @records = Record.joins(:groups).where('groups.id': @group.id).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
-      @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
       @title = @university.short_name + ' - ' + @group.name
     end

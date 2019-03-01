@@ -12,13 +12,25 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums/1
   # GET /auditoriums/1.json
   def show
+  end
+  
+  def records
+    @auditorium = Auditorium.find(params[:id])
+    @university = University.find_by(url: params[:university_url])
     # Check if need to update records
     if @auditorium.needToUpdateRecords
 
       # Import new
       @auditorium.importRecords
-
-      redirect_to request.url
+    end
+    
+    @records = Record.where(auditorium: @auditorium).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
+    @records_days = @records.group_by { |t| t.start_date }
+    
+    if @records.empty?
+      render :partial => "records/empty"
+    else
+      render :partial => "records/show", :locals => {:records => @records, :university =>  @university}
     end
   end
 
@@ -26,8 +38,6 @@ class AuditoriumsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_auditorium
       @auditorium = Auditorium.find(params[:id])
-      @records = Record.where(auditorium: @auditorium).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
-      @records_days = @records.group_by { |t| t.start_date }
       @university = University.find_by(url: params[:university_url])
       @title = @university.short_name + ' - ' + @auditorium.name
     end
