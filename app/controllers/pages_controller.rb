@@ -1,5 +1,20 @@
 class PagesController < ApplicationController
 
+  def about
+    @title = "Мій Університет - Про сервіс"
+      render "pages/about"
+  end
+
+  def contacts
+    @title = "Мій Університет - Контакти"
+      render "pages/contacts"
+  end
+
+  def cooperation
+    @title = "Мій Університет - Співпраця"
+      render "pages/cooperation"
+  end
+
   def privacy_policy
     @title = "My University - Pricavy Policy"
       render "pages/privacy-policy"

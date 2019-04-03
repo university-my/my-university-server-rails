@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   get "/", to: "homepage#home", as: "root"
 
   # Pages
+  get "/about", to: "pages#about"
+  get "/cooperation", to: "pages#cooperation"
+  get "/contacts", to: "pages#contacts"
   get "/privacy-policy", to: "pages#privacy_policy"
   get "/terms-of-service", to: "pages#terms_of_service"
 
