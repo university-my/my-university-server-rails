@@ -1,14 +1,22 @@
+<%= render "layouts/header" %>
+
 <p id="notice"><%= notice %></p>
 
-<h1 class="display-4">Університети</h1>
+<main class="container" role="main">
 
-<table class="table">
-  <tbody>
-    <% @universities.each do |university| %>
+  <p>
+    <h1 class="display-4">Університети</h1>  
+  </p>
+
+  <table class="table">
+    <tbody>
+      <% @universities.each do |university| %>
       <tr>
         <td><%= university.full_name %></td>
         <td><%= link_to 'Показати', university_path(university.url) %></td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      <% end %>
+    </tbody>
+  </table>
+</main>
+<%= render "layouts/footer" %>

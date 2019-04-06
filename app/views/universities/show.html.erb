@@ -3,25 +3,27 @@
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-<p>
-  <h1 class="display-5"><%= @university.full_name %></h3>
-</p>
+  <p>
+    <h1 class="display-5"><%= @university.full_name %></h3>
+    </p>
 
-<table class="table">
-  <tbody>
-      <tr>
-        <td>Аудиторії (<%= @university.auditorium.count %>)</td>
-        <td><%= link_to 'Показати', university_auditoriums_url(@university.url) %></td>
-      </tr>
-      <tr>
-        <td>Групи (<%= @university.groups.count %>)</td>
-        <td><%= link_to 'Показати', university_groups_url(@university.url) %></td>
-      </tr>
-      <tr>
-        <td>Викладачі (<%= @university.teachers.count %>)</td>
-        <td><%= link_to 'Показати', university_teachers_url(@university.url) %></td>
-      </tr>
-  </tbody>
-</table>
-</main>
-<%= render "layouts/footer" %>
+    <table class="table">
+      <tbody>
+        <% if @university.url != "kpi" %>
+        <tr>
+          <td>Аудиторії (<%= @university.auditorium.count %>)</td>
+          <td><%= link_to 'Показати', university_auditoriums_url(@university.url) %></td>
+        </tr>
+        <tr>
+          <% end %>
+          <td>Групи (<%= @university.groups.count %>)</td>
+          <td><%= link_to 'Показати', university_groups_url(@university.url) %></td>
+        </tr>
+        <tr>
+          <td>Викладачі (<%= @university.teachers.count %>)</td>
+          <td><%= link_to 'Показати', university_teachers_url(@university.url) %></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+  <%= render "layouts/footer" %>

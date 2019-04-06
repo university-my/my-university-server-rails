@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-	<%= link_to(university_url(url: 'sumdu'), class: "navbar-brand") do %>
+	<%= link_to(university_url(url: @university.url), class: "navbar-brand") do %>
 	<%= @university.short_name %>
 	<% end %>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,9 +7,11 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 		<ul class="navbar-nav mr-auto">
+			<% if @university.url != "kpi" %>
 			<li class="nav-item">
 				<%= link_to 'Аудиторії', university_auditoriums_url, class: "nav-link" %>
 			</li>
+			<% end %>
 			<li class="nav-item">
 				<%= link_to 'Викладачі', university_teachers_url, class: "nav-link" %>
 			</li>
