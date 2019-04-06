@@ -1,4 +1,4 @@
-json.group do
+json.auditorium do
   json.extract! auditorium, :id, :name  
 end
 

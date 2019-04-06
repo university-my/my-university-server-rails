@@ -1,4 +1,4 @@
-json.group do
+json.teacher do
   json.extract! teacher, :id, :name  
 end
 
