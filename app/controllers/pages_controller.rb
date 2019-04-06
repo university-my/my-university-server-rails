@@ -16,7 +16,7 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
-    @title = "My University - Pricavy Policy"
+    @title = "My University - Privacy Policy"
       render "pages/privacy-policy"
   end
 
