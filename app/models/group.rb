@@ -202,6 +202,121 @@ class Group < ApplicationRecord
 
   # Import records for current Group
   def importRecords
+    if university.url == "sumdu"
+      importRecordsForSumDU  
+    end
+
+    if university.url == "kpi"
+      importRecordsForKPI
+    end
+  end
+
+  def importRecordsForKPI
+    # Update `updated_at` date of Group
+    touch(:updated_at)
+    unless save
+      logger.error(errors.full_messages)
+    end
+
+    url = "https://api.rozklad.org.ua/v2/groups/#{server_id}/lessons"
+    # Init URI
+    uri = URI(url)
+
+    if uri.nil?
+      # Add error
+      error_message = "Invalid URI"
+      self.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Perform request
+    response = Net::HTTP.get_response(uri)
+    if response.code != '200'
+      # Add error
+      error_message = "Server responded with code #{response.code} for GET #{uri}"
+      self.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Parse JSON
+    json = JSON.parse(response.body)
+    data = json["data"]
+
+    # Delete old records
+    Record.joins(:groups).where('groups.id': id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
+
+    # Save records
+    for object in data do
+
+      # Get data from JSON
+      time = object['time_start']
+      pairName = object['lesson_number']
+      nameString = object['lesson_full_name']
+      kind = object['lesson_type']
+
+      begin
+        # Convert to int before find request
+
+        # Conditions for find existing pair
+        conditions = {}
+        conditions[:name] = nameString
+        conditions[:pair_name] = pairName
+        conditions[:kind] = kind
+        conditions[:time] = time
+
+        # Try to find existing record first
+        record = Record.find_by(conditions)
+
+        if record.nil?
+          # Save new record
+          record = Record.new
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.kind = kind
+          
+          # Push only unique groups
+          unless record.groups.include?(self)
+             record.groups << self
+          end
+
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+          
+        else
+          # Update record
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.kind = kind
+          
+          # Push only unique groups
+          unless record.groups.include?(self)
+             record.groups << self
+          end
+
+          unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+        end
+
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
+    end
+  end
+
+  def importRecordsForSumDU
     # Update `updated_at` date of Group
     touch(:updated_at)
     unless save

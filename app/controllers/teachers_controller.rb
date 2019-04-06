@@ -4,8 +4,8 @@ class TeachersController < ApplicationController
   # GET /teachers
   # GET /teachers.json
   def index
-    @teachers = Teacher.all
     @university = University.find_by(url: params[:university_url])
+    @teachers = Teacher.where(university_id: @university.id).all
     @title = @university.short_name + ' - Викладачі'
   end
 

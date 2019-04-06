@@ -4,8 +4,8 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all
     @university = University.find_by(url: params[:university_url])
+    @groups = Group.where(university_id: @university.id).all
     @title = @university.short_name + ' - Групи'
   end
 
