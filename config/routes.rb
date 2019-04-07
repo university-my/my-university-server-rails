@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "/contacts", to: "pages#contacts"
   get "/privacy-policy", to: "pages#privacy_policy"
   get "/terms-of-service", to: "pages#terms_of_service"
+  get "/zno-2019", to: "pages#zno2019"
 
   resources :universities, only: [:index, :show], param: :url do
     

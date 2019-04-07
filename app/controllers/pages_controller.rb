@@ -24,4 +24,9 @@ class PagesController < ApplicationController
     @title = "My University - Terms of Service"
       render "pages/terms-of-service"
   end
+
+  def zno2019
+    @title = "Мій Університет - ЗНО 2019"
+      render "pages/zno2019"
+  end
 end
