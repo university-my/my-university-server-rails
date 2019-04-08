@@ -257,9 +257,12 @@ class Group < ApplicationRecord
       pairName = object['lesson_number']
       nameString = object['lesson_full_name']
       kind = object['lesson_type']
+      dayNumber = object['day_number']
+      lessonWeek = object['lesson_week']
 
       begin
         # Convert to int before find request
+        UniversitiesHelper.getDate(time, dayNumber, lessonWeek)
 
         # Conditions for find existing pair
         conditions = {}
@@ -281,10 +284,10 @@ class Group < ApplicationRecord
           
           # Push only unique groups
           unless record.groups.include?(self)
-             record.groups << self
-          end
+           record.groups << self
+         end
 
-          unless record.save
+         unless record.save
             # Go to the next iteration if record can't be saved
             logger.error(record.errors.full_messages)
             next
@@ -299,10 +302,10 @@ class Group < ApplicationRecord
           
           # Push only unique groups
           unless record.groups.include?(self)
-             record.groups << self
-          end
+           record.groups << self
+         end
 
-          unless record.save
+         unless record.save
             # Go to the next iteration if record can't be saved
             logger.error(record.errors.full_messages)
             next
@@ -413,10 +416,10 @@ class Group < ApplicationRecord
           
           # Push only unique groups
           unless record.groups.include?(self)
-             record.groups << self
-          end
+           record.groups << self
+         end
 
-          unless record.save
+         unless record.save
             # Go to the next iteration if record can't be saved
             logger.error(record.errors.full_messages)
             next
@@ -437,10 +440,10 @@ class Group < ApplicationRecord
           
           # Push only unique groups
           unless record.groups.include?(self)
-             record.groups << self
-          end
+           record.groups << self
+         end
 
-          unless record.save
+         unless record.save
             # Go to the next iteration if record can't be saved
             logger.error(record.errors.full_messages)
             next
