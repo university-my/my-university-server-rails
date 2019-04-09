@@ -1,6 +1,118 @@
 module KPIHelper
 
   #
+  # Import records for group from KPI API
+  #
+
+  def self.importRecordsForGroup(group)
+    # Update `updated_at` date of Group
+    group.touch(:updated_at)
+    unless group.save
+      logger.error(errors.full_messages)
+    end
+
+    url = "https://api.rozklad.org.ua/v2/groups/#{server_id}/lessons"
+    # Init URI
+    uri = URI(url)
+
+    if uri.nil?
+      # Add error
+      error_message = "Invalid URI"
+      self.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Perform request
+    response = Net::HTTP.get_response(uri)
+    if response.code != '200'
+      # Add error
+      error_message = "Server responded with code #{response.code} for GET #{uri}"
+      self.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Parse JSON
+    json = JSON.parse(response.body)
+    data = json["data"]
+
+    # Delete old records
+    Record.joins(:groups).where('groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
+
+    # Save records
+    for object in data do
+
+      # Get data from JSON
+      time = object['time_start']
+      pairName = object['lesson_number']
+      nameString = object['lesson_full_name']
+      kind = object['lesson_type']
+      dayNumber = object['day_number']
+      lessonWeek = object['lesson_week']
+
+      begin
+        # Convert to int before find request
+        UniversitiesHelper.getDate(time, dayNumber, lessonWeek)
+
+        # Conditions for find existing pair
+        conditions = {}
+        conditions[:name] = nameString
+        conditions[:pair_name] = pairName
+        conditions[:kind] = kind
+        conditions[:time] = time
+
+        # Try to find existing record first
+        record = Record.find_by(conditions)
+
+        if record.nil?
+          # Save new record
+          record = Record.new
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.kind = kind
+          
+          # Push only unique groups
+          unless record.groups.include?(group)
+           record.groups << group
+         end
+
+         unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+          
+        else
+          # Update record
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.kind = kind
+          
+          # Push only unique groups
+          unless record.groups.include?(group)
+           record.groups << group
+         end
+
+         unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+        end
+
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
+    end
+  end
+
+  #
   # Import groups from KPI API
   #
 
