@@ -11,195 +11,14 @@ class Teacher < ApplicationRecord
   has_many :records, dependent: :nullify
   belongs_to :university, optional: true
 
-  # Make request to API for get total count of all teachers
-  def self.getTeachersCountForKPI
-    # Init URI
-    uri = URI("https://api.rozklad.org.ua/v2/teachers")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    totalCount = json["meta"]["total_count"]
-    teachersTotalCount = Integer(totalCount)
-
-    return teachersTotalCount
-  end
-
-  # Make request with offset parameter and parse JSON
-  def self.getTeachersForKPI(offset)
-     # Init URI
-     uri = URI("https://api.rozklad.org.ua/v2/teachers/?filter={%27limit%27:100,%27offset%27:#{offset}}")
-     if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-     # Perform request
-     response = Net::HTTP.get_response(uri)
-     if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    return json
-  end
-
-  def self.saveTeachersFrom(json)
-
-    data = json["data"]
-
-    # This groups for SumDU
-    university = University.find_by(url: "kpi")
-    
-    for object in data do
-
-      begin
-
-        # Convert before save
-        serverID = Integer(object["teacher_id"])
-        teacherName = String(object["teacher_name"])
-
-        # Save new teacher
-        teacher = Teacher.new
-        teacher.server_id = serverID
-        teacher.name = teacherName
-        teacher.university = university
-
-        unless teacher.save
-          # Go to the next iteration if can't be saved
-          logger.error(teacher.errors.full_messages)
-          next
-        end
-
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
-
-    end
-  end
-
-  # Import for KPI
-  # bin/rails runner 'Teacher.importKPI'
-  def self.importKPI
-    teachersTotalCount = getTeachersCountForKPI
-
-    # This teachers for KPI
-    university = University.find_by(url: "kpi")
-
-    # Delete before save
-    Teacher.where(university_id: university.id).destroy_all
-
-    offset = 0
-
-    while offset < teachersTotalCount
-      # Get json with teachers from API
-      json = getTeachersForKPI(offset)
-
-      # Save to database
-      saveTeachersFrom(json)
-
-      offset += 100
-    end
-  end
-
-  # Import for SumDU
-  # bin/rails runner 'Teacher.importSumDU'
-  def self.importSumDU
-
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getTeachers")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    # This teachers for SumDU
-    university = University.find_by(url: "sumdu")
-
-    # Delete before save
-    Teacher.where(university_id: university.id).destroy_all
-
-    for object in json do
-
-      begin
-        # Convert to int before save
-        serverID = Integer(object[0])
-        teacherName = object[1]
-
-        # Save new teacher
-        teacher = Teacher.new
-        teacher.server_id = serverID
-        teacher.name = teacherName
-        teacher.university = university
-
-        unless teacher.save
-          # Go to the next iteration if can't be saved
-          logger.error(teacher.errors.full_messages)
-          next
-        end
-
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
-
-    end
-  end
 
   # bin/rails runner 'Teacher.resetUpdateDate'
   def self.resetUpdateDate
     Teacher.update_all(updated_at: DateTime.current - 2.hour)
   end
 
+
+  # Import records for teacher for SumDU
   def importRecords
     # Update `updated_at` date of Teacher
     touch(:updated_at)
@@ -345,6 +164,7 @@ class Teacher < ApplicationRecord
       end
     end
   end
+  
 
   # Check if need to update records in the Teacher
   def needToUpdateRecords

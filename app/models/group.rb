@@ -11,205 +11,23 @@ class Group < ApplicationRecord
   has_and_belongs_to_many :records, optional: true, dependent: :nullify
   belongs_to :university, optional: true
 
-  # Make request to API for get total count of all groups
-  def self.getGroupsCountForKPI
-    # Init URI
-    uri = URI("https://api.rozklad.org.ua/v2/groups")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    totalCount = json["meta"]["total_count"]
-    teachersTotalCount = Integer(totalCount)
-
-    return teachersTotalCount
-  end
-
-  # Make request with offset parameter and parse JSON
-  def self.getGroupsForKPI(offset)
-     # Init URI
-     uri = URI("https://api.rozklad.org.ua/v2/groups/?filter={%27limit%27:100,%27offset%27:#{offset}}")
-     if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-     # Perform request
-     response = Net::HTTP.get_response(uri)
-     if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    return json
-  end
-
-  def self.saveGroupsFrom(json)
-
-    data = json["data"]
-
-    # This groups for SumDU
-    university = University.find_by(url: "kpi")
-    
-    for object in data do
-
-      begin
-
-        # Convert before save
-        serverID = Integer(object["group_id"])
-        groupName = String(object["group_full_name"])
-
-        # Save new group
-        group = Group.new
-        group.server_id = serverID
-        group.name = groupName
-        group.university = university
-
-        unless group.save
-          # Go to the next iteration if can't be saved
-          logger.error(group.errors.full_messages)
-          next
-        end
-
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
-
-    end
-  end
-
-  # Import for KPI
-  # bin/rails runner 'Group.importKPI'
-  def self.importKPI
-    groupsTotalCount = getGroupsCountForKPI
-
-    # This groups for KPI
-    university = University.find_by(url: "kpi")
-
-    # Delete before save
-    Group.where(university_id: university.id).destroy_all
-
-    offset = 0
-
-    while offset < groupsTotalCount
-      # Get json with groups from API
-      json = getGroupsForKPI(offset)
-
-      # Save to database
-      saveGroupsFrom(json)
-
-      offset += 100
-    end
-  end
-
-  # Import for SumDU
-  # bin/rails runner 'Group.importSumDU'
-  def self.importSumDU
-
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getGroups")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    # This groups for SumDU
-    university = University.find_by(url: "sumdu")
-
-    # Delete before save
-    Group.where(university_id: university.id).destroy_all
-
-    for object in json do
-
-      begin
-        # Convert to int before save
-        serverID = Integer(object[0])
-        groupName = object[1]
-
-        # Save new group
-        group = Group.new
-        group.server_id = serverID
-        group.name = groupName
-        group.university = university
-        
-        unless group.save
-          # Go to the next iteration if can't be saved
-          logger.error(group.errors.full_messages)
-          next
-        end
-
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
-
-    end
-  end
-
   # bin/rails runner 'Group.resetUpdateDate'
   def self.resetUpdateDate
     Group.update_all(updated_at: DateTime.current - 2.hour)
   end
 
+
   # Import records for current Group
   def importRecords
     if university.url == "sumdu"
-      importRecordsForSumDU  
+      importRecordsForSumDU
     end
 
     if university.url == "kpi"
       importRecordsForKPI
     end
   end
+
 
   def importRecordsForKPI
     # Update `updated_at` date of Group
@@ -318,6 +136,7 @@ class Group < ApplicationRecord
       end
     end
   end
+
 
   def importRecordsForSumDU
     # Update `updated_at` date of Group
@@ -456,6 +275,7 @@ class Group < ApplicationRecord
       end
     end
   end
+
 
   # Check if need to update records in the Group
   def needToUpdateRecords

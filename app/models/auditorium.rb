@@ -12,72 +12,12 @@ class Auditorium < ApplicationRecord
   has_many :records, dependent: :nullify
   belongs_to :university, optional: true
 
-  # Import for SumDU
-  # # bin/rails runner 'Auditorium.importSumDU'
-  def self.importSumDU
-
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
-      # Log invalid URI
-      logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    # Delete before save
-    Auditorium.destroy_all
-
-    # This groups for SumDU
-    university = University.find_by(url: "sumdu")
-
-    for object in json do
-
-      begin
-        # Convert to int before save
-        serverID = Integer(object[0])
-        auditoriumName = object[1]
-
-        # Save new auditorium
-        auditorium = Auditorium.new
-        auditorium.server_id = serverID
-        auditorium.name = auditoriumName
-        auditorium.university = university
-
-        unless auditorium.save
-          # Go to the next iteration if can't be saved
-          logger.error(auditorium.errors.full_messages)
-          next
-        end
-        
-      rescue Exception => e
-        logger.error(e)
-        next
-      end
-
-    end
-  end
 
   # bin/rails runner 'Auditorium.resetUpdateDate'
   def self.resetUpdateDate
     Auditorium.update_all(updated_at: DateTime.current - 2.hour)
   end
+
 
   # Import records for current Auditorium
   def importRecords
@@ -227,6 +167,7 @@ class Auditorium < ApplicationRecord
       end
     end
   end
+  
 
   # Check if need to update records in the Auditorium
   def needToUpdateRecords
