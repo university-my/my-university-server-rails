@@ -1,4 +1,4 @@
-module KpiHelper
+module KpiHelper  
 
   #
   # Import records for group from KPI API
@@ -53,11 +53,23 @@ module KpiHelper
       pairName = object['lesson_number']
       nameString = object['lesson_full_name']
       kind = object['lesson_type']
+      reason = object['lesson_room']
       dayNumber = object['day_number'].to_i
       lessonWeek = object['lesson_week'].to_i
 
+      # Teahcer
+      teachers = object['teachers']
+
       begin
         # Convert to int before find request
+
+        # Teacher
+        teacher = nil
+        if teacherHash = teachers.first
+          teacherID = teacherHash['teacher_id'].to_i
+          teacher = Teacher.find_by(server_id: teacherID)
+        end
+
         startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
 
         # Conditions for find existing pair
@@ -65,6 +77,7 @@ module KpiHelper
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
+        conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
 
@@ -78,7 +91,11 @@ module KpiHelper
           record.time = time
           record.pair_name = pairName
           record.name = nameString
+          record.reason = reason
           record.kind = kind
+
+          # Associations
+          record.teacher = teacher
           
           # Push only unique groups
           unless record.groups.include?(group)
@@ -97,7 +114,11 @@ module KpiHelper
           record.time = time
           record.pair_name = pairName
           record.name = nameString
+          record.reason = reason
           record.kind = kind
+
+          # Associations
+          record.teacher = teacher
           
           # Push only unique groups
           unless record.groups.include?(group)
@@ -117,6 +138,151 @@ module KpiHelper
       end
     end
   end
+
+  #
+  # Import records for teacher from KPI API
+  #
+
+  def self.importRecordsForTeacher(teacher)
+    # Get current week from API
+    currentWeek = getCurrentWeek
+
+    # Update `updated_at` date of Teacher
+    teacher.touch(:updated_at)
+    unless teacher.save
+      logger.error(errors.full_messages)
+    end
+    
+    url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
+
+    # Init URI
+    uri = URI(url)
+    if uri.nil?
+      # Add error
+      error_message = "Invalid URI"
+      teacher.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Perform request
+    response = Net::HTTP.get_response(uri)
+    if response.code != '200'
+      # Add error
+      error_message = "Server responded with code #{response.code} for GET #{uri}"
+      teacher.errors.add(:base, error_message)
+      # Log invalid URI
+      logger.error(error_message)
+      return
+    end
+
+    # Parse JSON
+    json = JSON.parse(response.body)
+    data = json["data"]
+
+    # Delete old records
+    Record.where('teacher_id': teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
+
+    # Save records
+    for object in data do
+
+      # Get data from JSON
+      time = object['time_start']
+      pairName = object['lesson_number']
+      nameString = object['lesson_full_name']
+      kind = object['lesson_type']
+      reason = object['lesson_room']
+      dayNumber = object['day_number'].to_i
+      lessonWeek = object['lesson_week'].to_i
+
+      # Groups
+      groups = object['groups']
+
+      begin
+        # Group
+        groupIDs = Array.new
+        for group in groups do
+          if id = group['group_id'].to_i
+            groupIDs.push(id)
+          end
+        end
+        groups = Group.where(server_id: groupIDs)
+
+        # Pair start date
+        startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
+
+        # Conditions for find existing pair
+        conditions = {}
+        conditions[:start_date] = startDate
+        conditions[:name] = nameString
+        conditions[:pair_name] = pairName
+        conditions[:reason] = reason
+        conditions[:kind] = kind
+        conditions[:time] = time
+        conditions[:teacher_id] = teacher.id
+
+        # Try to find existing record first
+        record = Record.find_by(conditions)
+
+        if record.nil?
+          # Save new record
+          record = Record.new
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
+
+          # Associations
+          record.teacher = teacher
+          
+          # Push only unique groups
+          for group in groups do
+            unless record.groups.include?(group)
+             record.groups << group
+           end
+         end
+
+         unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+
+        else
+          record.start_date = startDate
+          record.time = time
+          record.pair_name = pairName
+          record.name = nameString
+          record.reason = reason
+          record.kind = kind
+
+          # Associations
+          record.teacher = teacher
+          
+          # Push only unique groups
+          for group in groups do
+            unless record.groups.include?(group)
+             record.groups << group
+           end
+         end
+
+         unless record.save
+            # Go to the next iteration if record can't be saved
+            logger.error(record.errors.full_messages)
+            next
+          end
+        end
+        
+      rescue Exception => e
+        logger.error(e)
+        next
+      end
+    end
+  end
+
 
   #
   # Import groups from KPI API

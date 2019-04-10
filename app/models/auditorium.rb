@@ -21,7 +21,9 @@ class Auditorium < ApplicationRecord
 
   # Import records for current Auditorium
   def importRecords
-    SumduHelper.importRecordsForAuditorium(self)
+    if university.url == "sumdu"
+      SumduHelper.importRecordsForAuditorium(self)
+    end
   end
   
 

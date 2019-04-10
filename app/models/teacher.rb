@@ -20,7 +20,13 @@ class Teacher < ApplicationRecord
 
   # Import records for teacher for SumDU
   def importRecords
-    SumduHelper.importRecordsForTeacher(self)
+    if university.url == "sumdu"
+      SumduHelper.importRecordsForTeacher(self)
+    end
+
+    if university.url == "kpi"
+      KpiHelper.importRecordsForTeacher(self)
+    end
   end
   
 
