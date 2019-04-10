@@ -20,11 +20,11 @@ class Group < ApplicationRecord
   # Import records for current Group
   def importRecords
     if university.url == "sumdu"
-      SumDUHelper.importRecordsForGroup(self)
+      SumduHelper.importRecordsForGroup(self)
     end
 
     if university.url == "kpi"
-      KPIHelper.importRecordsForGroup(self)
+      KpiHelper.importRecordsForGroup(self)
     end
   end
 

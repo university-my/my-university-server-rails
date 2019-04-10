@@ -1,26 +1,29 @@
-module KPIHelper
+module KpiHelper
 
   #
   # Import records for group from KPI API
   #
 
   def self.importRecordsForGroup(group)
+    # Get current week from API
+    currentWeek = getCurrentWeek
+
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     unless group.save
-      logger.error(errors.full_messages)
+      Rails.logger.error(errors.full_messages)
     end
 
-    url = "https://api.rozklad.org.ua/v2/groups/#{server_id}/lessons"
+    url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
     # Init URI
     uri = URI(url)
 
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
+      group.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -29,9 +32,9 @@ module KPIHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
+      group.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -50,15 +53,16 @@ module KPIHelper
       pairName = object['lesson_number']
       nameString = object['lesson_full_name']
       kind = object['lesson_type']
-      dayNumber = object['day_number']
-      lessonWeek = object['lesson_week']
+      dayNumber = object['day_number'].to_i
+      lessonWeek = object['lesson_week'].to_i
 
       begin
         # Convert to int before find request
-        UniversitiesHelper.getDate(time, dayNumber, lessonWeek)
+        startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
         conditions[:kind] = kind
@@ -70,6 +74,7 @@ module KPIHelper
         if record.nil?
           # Save new record
           record = Record.new
+          record.start_date = startDate
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -82,12 +87,13 @@ module KPIHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
           
         else
           # Update record
+          record.start_date = startDate
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -100,13 +106,13 @@ module KPIHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -116,9 +122,9 @@ module KPIHelper
   # Import groups from KPI API
   #
 
-  # bin/rails runner 'KPIHelper.importGroups'
+  # bin/rails runner 'KpiHelper.importGroups'
   def self.importGroups
-    groupsTotalCount = KPIHelper.getGroupsCount
+    groupsTotalCount = KpiHelper.getGroupsCount
 
     # This groups for KPI
     university = University.find_by(url: "kpi")
@@ -130,10 +136,10 @@ module KPIHelper
 
     while offset < groupsTotalCount
       # Get json with groups from API
-      json = KPIHelper.getGroups(offset)
+      json = KpiHelper.getGroups(offset)
 
       # Save to database
-      KPIHelper.saveGroupsFrom(json)
+      KpiHelper.saveGroupsFrom(json)
 
       offset += 100
     end
@@ -147,9 +153,8 @@ module KPIHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -158,9 +163,8 @@ module KPIHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -181,9 +185,8 @@ module KPIHelper
      if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -192,9 +195,8 @@ module KPIHelper
      if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -228,12 +230,12 @@ module KPIHelper
 
         unless group.save
           # Go to the next iteration if can't be saved
-          logger.error(group.errors.full_messages)
+          Rails.logger.error(group.errors.full_messages)
           next
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -250,9 +252,8 @@ module KPIHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -261,9 +262,8 @@ module KPIHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -274,14 +274,41 @@ module KPIHelper
     return week
   end
 
+  def self.getDate(currentWeek, timeStart, dayNumber, lessonWeek)
+    # Params for generate date
+    recordDate = Date.current
+
+    if currentWeek == lessonWeek
+      # Current week
+      currentWeekDay = Date.current.wday
+
+      # Calculate pair date
+      dayShift = 0
+      if currentWeekDay > dayNumber
+        dayShift = currentWeekDay - dayNumber
+        recordDate = recordDate - dayShift.days
+
+      elsif currentWeekDay < dayNumber
+        dayShift = dayNumber - currentWeekDay 
+        recordDate = recordDate + dayShift.days
+      end
+    else
+      # Next week
+      recordDate = recordDate.next_week.beginning_of_week
+      dayShift = dayNumber - 1
+      recordDate = recordDate + dayShift.days
+    end
+    return recordDate
+  end
+
   #
   # Import teachers from KPI API
   #
 
   # Import from KPI
-  # bin/rails runner 'KPIHelper.importTeachers'
+  # bin/rails runner 'KpiHelper.importTeachers'
   def self.importTeachers
-    teachersTotalCount = KPIHelper.getTeachersCount
+    teachersTotalCount = KpiHelper.getTeachersCount
 
     # This teachers for KPI
     university = University.find_by(url: "kpi")
@@ -293,10 +320,10 @@ module KPIHelper
 
     while offset < teachersTotalCount
       # Get json with teachers from API
-      json = KPIHelper.getTeachers(offset)
+      json = KpiHelper.getTeachers(offset)
 
       # Save to database
-      KPIHelper.saveTeachersFrom(json)
+      KpiHelper.saveTeachersFrom(json)
 
       offset += 100
     end
@@ -310,9 +337,8 @@ module KPIHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -321,9 +347,8 @@ module KPIHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -344,9 +369,8 @@ module KPIHelper
      if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -355,9 +379,8 @@ module KPIHelper
      if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -392,12 +415,12 @@ module KPIHelper
 
         unless teacher.save
           # Go to the next iteration if can't be saved
-          logger.error(teacher.errors.full_messages)
+          Rails.logger.error(teacher.errors.full_messages)
           next
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
 

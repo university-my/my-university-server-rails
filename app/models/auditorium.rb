@@ -21,7 +21,7 @@ class Auditorium < ApplicationRecord
 
   # Import records for current Auditorium
   def importRecords
-    SumDUHelper.importRecordsForAuditorium(self)
+    SumduHelper.importRecordsForAuditorium(self)
   end
   
 

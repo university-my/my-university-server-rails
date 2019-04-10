@@ -1,4 +1,4 @@
-module SumDUHelper
+module SumduHelper
 
   #
   # Import records for auditorium from SumDU API
@@ -12,14 +12,14 @@ module SumDUHelper
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
-    query = "&id_aud=#{server_id}"
+    query = "&id_aud=#{auditorium.server_id}"
 
     # Init URI
     uri = URI(url + query)
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
+      auditorium.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -30,7 +30,7 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
+      auditorium.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -164,14 +164,14 @@ module SumDUHelper
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
-    query = "&id_grp=#{server_id}"
+    query = "&id_grp=#{group.server_id}"
 
     # Init URI
     uri = URI(url + query)
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
+      group.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -182,7 +182,7 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
+      group.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -306,14 +306,14 @@ module SumDUHelper
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
-    query = "&id_fio=#{server_id}"
+    query = "&id_fio=#{teacher.server_id}"
 
     # Init URI
     uri = URI(url + query)
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
+      teacher.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -324,7 +324,7 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
+      teacher.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -448,7 +448,7 @@ module SumDUHelper
   # Import auditorums from SumDU API
   #
 
-  # # bin/rails runner 'SumDUHelper.importAuditoriums'
+  # # bin/rails runner 'SumduHelper.importAuditoriums'
   def self.importAuditoriums
 
     # Init URI
@@ -456,7 +456,6 @@ module SumDUHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -467,7 +466,6 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -512,7 +510,7 @@ module SumDUHelper
   # Import groups from SumDU API
   #
 
-  # bin/rails runner 'SumDUHelper.importGroups'
+  # bin/rails runner 'SumduHelper.importGroups'
   def self.importGroups
 
     # Init URI
@@ -520,7 +518,6 @@ module SumDUHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -531,7 +528,6 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -577,7 +573,7 @@ module SumDUHelper
   #
 
   # Import from SumDU
-  # bin/rails runner 'SumDUHelper.importTeachers'
+  # bin/rails runner 'SumduHelper.importTeachers'
   def self.importTeachers
 
     # Init URI
@@ -585,7 +581,6 @@ module SumDUHelper
     if uri.nil?
       # Add error
       error_message = "Invalid URI"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return
@@ -596,7 +591,6 @@ module SumDUHelper
     if response.code != '200'
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
-      self.errors.add(:base, error_message)
       # Log invalid URI
       logger.error(error_message)
       return

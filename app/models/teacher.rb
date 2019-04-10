@@ -20,7 +20,7 @@ class Teacher < ApplicationRecord
 
   # Import records for teacher for SumDU
   def importRecords
-    SumDUHelper.importRecordsForTeacher(self)
+    SumduHelper.importRecordsForTeacher(self)
   end
   
 
