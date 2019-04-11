@@ -12,7 +12,7 @@
     <tbody>
       <% @universities.each do |university| %>
       <tr>
-        <td><%= university.full_name %></td>
+        <td><span class="font-weight-normal"><%= university.full_name %></span> <span class="font-weight-light">(<%= university.short_name %>)</span></td>
         <td><%= link_to 'Показати', university_path(university.url) %></td>
       </tr>
       <% end %>

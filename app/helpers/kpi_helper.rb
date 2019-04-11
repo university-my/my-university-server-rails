@@ -160,7 +160,7 @@ module KpiHelper
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
     unless teacher.save
-      logger.error(errors.full_messages)
+      Rails.logger.error(errors.full_messages)
     end
     
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
@@ -172,7 +172,7 @@ module KpiHelper
       error_message = "Invalid URI"
       teacher.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -183,7 +183,7 @@ module KpiHelper
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       teacher.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -264,7 +264,7 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
 
@@ -288,13 +288,13 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end

@@ -11,7 +11,7 @@ module SumduHelper
     # Update `updated_at` date of Auditorium
     auditorium.touch(:updated_at)
     unless auditorium.save
-      logger.error(errors.full_messages)
+      Rails.logger.error(errors.full_messages)
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
@@ -24,7 +24,7 @@ module SumduHelper
       error_message = "Invalid URI"
       auditorium.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -35,7 +35,7 @@ module SumduHelper
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       auditorium.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -117,7 +117,7 @@ module SumduHelper
           # Try to save record
           unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
           
@@ -143,13 +143,13 @@ module SumduHelper
 
           unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -163,7 +163,7 @@ module SumduHelper
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     unless group.save
-      logger.error(errors.full_messages)
+      Rails.logger.error(errors.full_messages)
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
@@ -176,7 +176,7 @@ module SumduHelper
       error_message = "Invalid URI"
       group.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -187,7 +187,7 @@ module SumduHelper
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       group.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -261,7 +261,7 @@ module SumduHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
           
@@ -285,13 +285,13 @@ module SumduHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -305,7 +305,7 @@ module SumduHelper
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
     unless teacher.save
-      logger.error(errors.full_messages)
+      Rails.logger.error(errors.full_messages)
     end
     
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
@@ -318,7 +318,7 @@ module SumduHelper
       error_message = "Invalid URI"
       teacher.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -329,7 +329,7 @@ module SumduHelper
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       teacher.errors.add(:base, error_message)
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -410,7 +410,7 @@ module SumduHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
 
@@ -435,13 +435,13 @@ module SumduHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            logger.error(record.errors.full_messages)
+            Rails.logger.error(record.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -460,7 +460,7 @@ module SumduHelper
       # Add error
       error_message = "Invalid URI"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -470,7 +470,7 @@ module SumduHelper
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -498,12 +498,12 @@ module SumduHelper
 
         unless auditorium.save
           # Go to the next iteration if can't be saved
-          logger.error(auditorium.errors.full_messages)
+          Rails.logger.error(auditorium.errors.full_messages)
           next
         end
         
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -522,7 +522,7 @@ module SumduHelper
       # Add error
       error_message = "Invalid URI"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -532,7 +532,7 @@ module SumduHelper
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -560,12 +560,12 @@ module SumduHelper
         
         unless group.save
           # Go to the next iteration if can't be saved
-          logger.error(group.errors.full_messages)
+          Rails.logger.error(group.errors.full_messages)
           next
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end
@@ -585,7 +585,7 @@ module SumduHelper
       # Add error
       error_message = "Invalid URI"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -595,7 +595,7 @@ module SumduHelper
       # Add error
       error_message = "Server responded with code #{response.code} for GET #{uri}"
       # Log invalid URI
-      logger.error(error_message)
+      Rails.logger.error(error_message)
       return
     end
 
@@ -623,12 +623,12 @@ module SumduHelper
 
         unless teacher.save
           # Go to the next iteration if can't be saved
-          logger.error(teacher.errors.full_messages)
+          Rails.logger.error(teacher.errors.full_messages)
           next
         end
 
       rescue Exception => e
-        logger.error(e)
+        Rails.logger.error(e)
         next
       end
     end

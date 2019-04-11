@@ -1,3 +1,6 @@
+<% meta_tag :description, "Розклад занять #{@university.short_name}" %>
+<% meta_tag :keywords, "Розклад,#{@university.short_name},#{@university.full_name},Мій Університет,My University" %>
+
 <%= render "layouts/header" %>
 
 <p id="notice"><%= notice %></p>
@@ -5,6 +8,7 @@
 <main class="container" role="main">
   <p>
     <h1 class="display-5"><%= @university.full_name %></h3>
+    <h4>(<%= @university.short_name %>)</h2>
     </p>
 
     <table class="table">
