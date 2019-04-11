@@ -17,6 +17,6 @@ class UniversitiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_university
       @university = University.find_by(url: params[:url])
-      @title = 'Мій Університет - ' + @university.full_name
+      @title = 'Мій Університет - ' + @university.short_name
     end
 end
