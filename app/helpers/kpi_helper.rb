@@ -1,3 +1,6 @@
+require 'net/http'
+require 'json'
+
 module KpiHelper  
 
   #
@@ -45,6 +48,8 @@ module KpiHelper
     # Delete old records
     Record.joins(:groups).where('groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
 
+    currentDate = Date.current
+
     # Save records
     for object in data do
 
@@ -71,6 +76,11 @@ module KpiHelper
         end
 
         startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
+
+        # Skip old records
+        if startDate < currentDate
+          next
+        end
 
         # Conditions for find existing pair
         conditions = {}
@@ -184,6 +194,8 @@ module KpiHelper
     # Delete old records
     Record.where('teacher_id': teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
+    currentDate = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
+
     # Save records
     for object in data do
 
@@ -211,6 +223,11 @@ module KpiHelper
 
         # Pair start date
         startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
+
+        # Skip old records
+        if startDate < currentDate
+          next
+        end
 
         # Conditions for find existing pair
         conditions = {}
@@ -442,11 +459,11 @@ module KpiHelper
 
   def self.getDate(currentWeek, timeStart, dayNumber, lessonWeek)
     # Params for generate date
-    recordDate = Date.current
+    recordDate = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
 
     if currentWeek == lessonWeek
       # Current week
-      currentWeekDay = Date.current.wday
+      currentWeekDay = DateTime.current.wday
 
       # Calculate pair date
       dayShift = 0

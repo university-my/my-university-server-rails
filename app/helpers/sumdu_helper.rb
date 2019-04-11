@@ -1,3 +1,6 @@
+require 'net/http'
+require 'json'
+
 module SumduHelper
 
   #
