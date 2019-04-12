@@ -8,40 +8,13 @@ module SumduHelper
   #
 
   def self.importRecordsForAuditorium(auditorium)
-    # Update `updated_at` date of Auditorium
-    auditorium.touch(:updated_at)
-    unless auditorium.save
-      Rails.logger.error(errors.full_messages)
-    end
-    
+
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_aud=#{auditorium.server_id}"
 
-    # Init URI
-    uri = URI(url + query)
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      auditorium.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
+    # Peform network request and parse JSON
 
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      auditorium.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
+    json = ApplicationRecord.performRequest(url + query)
     # Delete old records
     Record.where('auditorium_id': auditorium.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
@@ -110,7 +83,7 @@ module SumduHelper
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-               record.groups << group
+              record.groups << group
             end
           end
 
@@ -137,7 +110,7 @@ module SumduHelper
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-               record.groups << group
+              record.groups << group
             end
           end
 
@@ -153,6 +126,13 @@ module SumduHelper
         next
       end
     end
+
+    # Update `updated_at` date of Auditorium
+    auditorium.touch(:updated_at)
+    unless auditorium.save
+      Rails.logger.error(errors.full_messages)
+    end
+
   end
 
   #
@@ -160,39 +140,12 @@ module SumduHelper
   #
 
   def self.importRecordsForGroup(group)
-    # Update `updated_at` date of Group
-    group.touch(:updated_at)
-    unless group.save
-      Rails.logger.error(errors.full_messages)
-    end
-    
+
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_grp=#{group.server_id}"
 
-    # Init URI
-    uri = URI(url + query)
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      group.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      group.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    # Peform network request and parse JSON
+    json = ApplicationRecord.performRequest(url + query)
 
     # Delete old records
     Record.joins(:groups).where('groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
@@ -256,10 +209,10 @@ module SumduHelper
           
           # Push only unique groups
           unless record.groups.include?(group)
-           record.groups << group
-         end
+            record.groups << group
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -280,10 +233,10 @@ module SumduHelper
           
           # Push only unique groups
           unless record.groups.include?(group)
-           record.groups << group
-         end
+            record.groups << group
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -295,6 +248,12 @@ module SumduHelper
         next
       end
     end
+
+    # Update `updated_at` date of Group
+    group.touch(:updated_at)
+    unless group.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -302,39 +261,12 @@ module SumduHelper
   #
 
   def self.importRecordsForTeacher(teacher)
-    # Update `updated_at` date of Teacher
-    teacher.touch(:updated_at)
-    unless teacher.save
-      Rails.logger.error(errors.full_messages)
-    end
-    
+
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_fio=#{teacher.server_id}"
 
-    # Init URI
-    uri = URI(url + query)
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      teacher.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      teacher.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    # Peform network request and parse JSON
+    json = ApplicationRecord.performRequest(url + query)
 
     # Delete old records
     Record.where('teacher_id': teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
@@ -404,11 +336,11 @@ module SumduHelper
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-             record.groups << group
-           end
-         end
+              record.groups << group
+            end
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -429,11 +361,11 @@ module SumduHelper
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-             record.groups << group
-           end
-         end
+              record.groups << group
+            end
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -445,6 +377,12 @@ module SumduHelper
         next
       end
     end
+
+    # Update `updated_at` date of Teacher
+    teacher.touch(:updated_at)
+    unless teacher.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -454,31 +392,9 @@ module SumduHelper
   # # bin/rails runner 'SumduHelper.importAuditoriums'
   def self.importAuditoriums
 
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
-    # Delete before save
-    Auditorium.destroy_all
+    # Peform network request and parse JSON
+    url = "http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums"
+    json = ApplicationRecord.performRequest(url)
 
     # This groups for SumDU
     university = University.find_by(url: "sumdu")
@@ -489,17 +405,28 @@ module SumduHelper
         # Convert to int before save
         serverID = Integer(object[0])
         auditoriumName = object[1]
-
-        # Save new auditorium
-        auditorium = Auditorium.new
-        auditorium.server_id = serverID
-        auditorium.name = auditoriumName
-        auditorium.university = university
-
-        unless auditorium.save
-          # Go to the next iteration if can't be saved
-          Rails.logger.error(auditorium.errors.full_messages)
-          next
+        
+        # Conditions for find existing auditorium
+        conditions = {}
+        conditions[:server_id] = serverID
+        conditions[:name] = auditoriumName
+        conditions[:university_id] = university.id
+        
+        # Try to find existing auditorium first
+        auditorium = Auditorium.find_by(conditions)
+        
+        if auditorium.nil?
+          # Save new auditorium
+          auditorium = Auditorium.new
+          auditorium.server_id = serverID
+          auditorium.name = auditoriumName
+          auditorium.university = university
+          
+          unless auditorium.save
+            # Go to the next iteration if can't be saved
+            Rails.logger.error(auditorium.errors.full_messages)
+            next
+          end
         end
         
       rescue Exception => e
@@ -516,34 +443,12 @@ module SumduHelper
   # bin/rails runner 'SumduHelper.importGroups'
   def self.importGroups
 
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getGroups")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    # Peform network request and parse JSON
+    url = "http://schedule.sumdu.edu.ua/index/json?method=getGroups"
+    json = ApplicationRecord.performRequest(url)
 
     # This groups for SumDU
     university = University.find_by(url: "sumdu")
-
-    # Delete before save
-    Group.where(university_id: university.id).destroy_all
 
     for object in json do
 
@@ -552,19 +457,30 @@ module SumduHelper
         serverID = Integer(object[0])
         groupName = object[1]
 
-        # Save new group
-        group = Group.new
-        group.server_id = serverID
-        group.name = groupName
-        group.university = university
-        
-        unless group.save
-          # Go to the next iteration if can't be saved
-          Rails.logger.error(group.errors.full_messages)
-          next
-        end
+        # Conditions for find existing group
+        conditions = {}
+        conditions[:server_id] = serverID
+        conditions[:name] = groupName
+        conditions[:university_id] = university.id
 
-      rescue Exception => e
+        # Try to find existing group first
+        group = Group.find_by(conditions)
+
+        if group.nil?
+          # Save new group
+          group = Group.new
+          group.server_id = serverID
+          group.name = groupName
+          group.university = university
+          
+          unless group.save
+            # Go to the next iteration if can't be saved
+            Rails.logger.error(group.errors.full_messages)
+            next
+          end
+        end
+        
+      rescue Exception => e        
         Rails.logger.error(e)
         next
       end
@@ -575,38 +491,15 @@ module SumduHelper
   # Import teachers from SumDU API
   #
 
-  # Import from SumDU
   # bin/rails runner 'SumduHelper.importTeachers'
   def self.importTeachers
 
-    # Init URI
-    uri = URI("http://schedule.sumdu.edu.ua/index/json?method=getTeachers")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    # Peform network request and parse JSON
+    url = "http://schedule.sumdu.edu.ua/index/json?method=getTeachers"
+    json = ApplicationRecord.performRequest(url)
 
     # This teachers for SumDU
     university = University.find_by(url: "sumdu")
-
-    # Delete before save
-    Teacher.where(university_id: university.id).destroy_all
 
     for object in json do
 
@@ -615,22 +508,36 @@ module SumduHelper
         serverID = Integer(object[0])
         teacherName = object[1]
 
-        # Save new teacher
-        teacher = Teacher.new
-        teacher.server_id = serverID
-        teacher.name = teacherName
-        teacher.university = university
+        # Conditions for find existing teacher
+        conditions = {}
+        conditions[:server_id] = serverID
+        conditions[:name] = teacherName
+        conditions[:university_id] = university.id
+        
+        # Try to find existing teahcer first
+        teacher = Teacher.find_by(conditions)
 
-        unless teacher.save
-          # Go to the next iteration if can't be saved
-          Rails.logger.error(teacher.errors.full_messages)
-          next
+        if teacher.nil?
+          # Save new teacher
+          teacher = Teacher.new
+          teacher.server_id = serverID
+          teacher.name = teacherName
+          teacher.university = university
+
+          unless teacher.save
+            # Go to the next iteration if can't be saved
+            p teacher.errors.full_messages
+            Rails.logger.error(teacher.errors.full_messages)
+            next
+          end
         end
 
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
+      
     end
   end
 

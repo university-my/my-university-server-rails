@@ -4,8 +4,8 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums
   # GET /auditoriums.json
   def index
-    @auditoriums = Auditorium.all
     @university = University.find_by(url: params[:university_url])
+    @auditoriums = Auditorium.where(university_id: @university.id).all
     @title = @university.short_name + ' - Аудиторії'
   end
 

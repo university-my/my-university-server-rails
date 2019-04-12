@@ -11,38 +11,14 @@ module KpiHelper
     # Get current week from API
     currentWeek = getCurrentWeek
 
-    # Update `updated_at` date of Group
-    group.touch(:updated_at)
-    unless group.save
-      Rails.logger.error(errors.full_messages)
-    end
-
+    # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
-    # Init URI
-    uri = URI(url)
-
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      group.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
+    json = ApplicationRecord.performRequest(url)
+    
+    if json.nil?
       return
     end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      group.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    
     data = json["data"]
 
     # Delete old records
@@ -147,6 +123,12 @@ module KpiHelper
         next
       end
     end
+
+    # Update `updated_at` date of Group
+    group.touch(:updated_at)
+    unless group.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -157,38 +139,14 @@ module KpiHelper
     # Get current week from API
     currentWeek = getCurrentWeek
 
-    # Update `updated_at` date of Teacher
-    teacher.touch(:updated_at)
-    unless teacher.save
-      Rails.logger.error(errors.full_messages)
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
+    json = ApplicationRecord.performRequest(url)
+    
+    if json.nil?
+      return
     end
     
-    url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
-
-    # Init URI
-    uri = URI(url)
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      teacher.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      teacher.errors.add(:base, error_message)
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
     data = json["data"]
 
     # Delete old records
@@ -298,6 +256,12 @@ module KpiHelper
         next
       end
     end
+
+    # Update `updated_at` date of Teacher
+    teacher.touch(:updated_at)
+    unless teacher.save
+      Rails.logger.error(errors.full_messages)
+    end    
   end
 
 
@@ -308,12 +272,6 @@ module KpiHelper
   # bin/rails runner 'KpiHelper.importGroups'
   def self.importGroups
     groupsTotalCount = KpiHelper.getGroupsCount
-
-    # This groups for KPI
-    university = University.find_by(url: "kpi")
-
-    # Delete before save
-    Group.where(university_id: university.id).destroy_all
 
     offset = 0
 
@@ -331,28 +289,14 @@ module KpiHelper
 
    # Make request to API for get total count of all groups
    def self.getGroupsCount
-    # Init URI
-    uri = URI("https://api.rozklad.org.ua/v2/groups")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
 
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/groups"
+    json = ApplicationRecord.performRequest(url)
+    
+    if json.nil?
+      return 0
     end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
 
     totalCount = json["meta"]["total_count"]
     teachersTotalCount = Integer(totalCount)
@@ -363,29 +307,10 @@ module KpiHelper
 
   # Make request with offset parameter and parse JSON
   def self.getGroups(offset)
-     # Init URI
-     uri = URI("https://api.rozklad.org.ua/v2/groups/?filter={%27limit%27:100,%27offset%27:#{offset}}")
-     if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
 
-     # Perform request
-     response = Net::HTTP.get_response(uri)
-     if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
-
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/groups/?filter={%27limit%27:100,%27offset%27:#{offset}}"
+    json = ApplicationRecord.performRequest(url)
     return json
   end
 
@@ -404,20 +329,44 @@ module KpiHelper
         # Convert before save
         serverID = Integer(object["group_id"])
         groupName = String(object["group_full_name"])
-
+        
         # Save new group
         group = Group.new
         group.server_id = serverID
         group.name = groupName
-        group.university = university
+        
+        # Conditions for find existing group
+        conditions = {}
+        conditions[:server_id] = serverID
+        conditions[:name] = groupName
+        conditions[:university_id] = university.id
+        
+        # Try to find existing group first
+        group = Group.find_by(conditions)
+        
+        if group.nil?
+          # Save new group
+          group = Group.new
+          group.server_id = serverID
+          group.name = groupName
+          group.university = university
 
-        unless group.save
-          # Go to the next iteration if can't be saved
-          Rails.logger.error(group.errors.full_messages)
-          next
+          unless group.save
+            
+            p 'Not saved!'
+            p group.errors.full_messages
+            
+            # Go to the next iteration if can't be saved
+            Rails.logger.error(group.errors.full_messages)
+            next
+          end
         end
 
       rescue Exception => e
+        
+        p 'Not saved!'
+        p e
+        
         Rails.logger.error(e)
         next
       end
@@ -430,28 +379,15 @@ module KpiHelper
 
   # Request current week from KPI API
   def self.getCurrentWeek
-    # Init URI
-    uri = URI("https://api.rozklad.org.ua/v2/weeks")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
 
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/weeks"
+    json = ApplicationRecord.performRequest(url)
+    
+    if json.nil?
+      return 1
     end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    
     week = json['data']
 
     return week
@@ -493,12 +429,6 @@ module KpiHelper
   def self.importTeachers
     teachersTotalCount = KpiHelper.getTeachersCount
 
-    # This teachers for KPI
-    university = University.find_by(url: "kpi")
-
-    # Delete before save
-    Teacher.where(university_id: university.id).destroy_all
-
     offset = 0
 
     while offset < teachersTotalCount
@@ -515,28 +445,14 @@ module KpiHelper
 
   # Make request to API for get total count of all teachers
   def self.getTeachersCount
-    # Init URI
-    uri = URI("https://api.rozklad.org.ua/v2/teachers")
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
+
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/teachers"
+    json = ApplicationRecord.performRequest(url)
+    
+    if json.nil?
       return
     end
-
-    # Perform request
-    response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
 
     totalCount = json["meta"]["total_count"]
     teachersTotalCount = Integer(totalCount)
@@ -547,28 +463,9 @@ module KpiHelper
 
   # Make request with offset parameter and parse JSON
   def self.getTeachers(offset)
-     # Init URI
-     uri = URI("https://api.rozklad.org.ua/v2/teachers/?filter={%27limit%27:100,%27offset%27:#{offset}}")
-     if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-     # Perform request
-     response = Net::HTTP.get_response(uri)
-     if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
-    # Parse JSON
-    json = JSON.parse(response.body)
+    # Peform network request and parse JSON
+    url = "https://api.rozklad.org.ua/v2/teachers/?filter={%27limit%27:100,%27offset%27:#{offset}}"
+    json = ApplicationRecord.performRequest(url)
 
     return json
   end
@@ -585,21 +482,32 @@ module KpiHelper
     for object in data do
 
       begin
-
         # Convert before save
         serverID = Integer(object["teacher_id"])
         teacherName = String(object["teacher_name"])
+        
+        # Conditions for find existing teacher
+        conditions = {}
+        conditions[:server_id] = serverID
+        conditions[:name] = teacherName
+        conditions[:university_id] = university.id
+        
+        # Try to find existing teahcer first
+        teacher = Teacher.find_by(conditions)
+        
+        if teacher.nil?
+          
+          # Save new teacher
+          teacher = Teacher.new
+          teacher.server_id = serverID
+          teacher.name = teacherName
+          teacher.university = university
 
-        # Save new teacher
-        teacher = Teacher.new
-        teacher.server_id = serverID
-        teacher.name = teacherName
-        teacher.university = university
-
-        unless teacher.save
-          # Go to the next iteration if can't be saved
-          Rails.logger.error(teacher.errors.full_messages)
-          next
+          unless teacher.save
+            # Go to the next iteration if can't be saved
+            Rails.logger.error(teacher.errors.full_messages)
+            next
+          end
         end
 
       rescue Exception => e
