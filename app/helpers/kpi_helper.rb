@@ -90,6 +90,7 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
@@ -113,12 +114,14 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
@@ -127,6 +130,7 @@ module KpiHelper
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     unless group.save
+      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end
   end
@@ -222,6 +226,7 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
@@ -246,12 +251,14 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
@@ -260,6 +267,7 @@ module KpiHelper
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
     unless teacher.save
+      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end    
   end
@@ -352,8 +360,6 @@ module KpiHelper
           group.university = university
 
           unless group.save
-            
-            p 'Not saved!'
             p group.errors.full_messages
             
             # Go to the next iteration if can't be saved
@@ -363,10 +369,7 @@ module KpiHelper
         end
 
       rescue Exception => e
-        
-        p 'Not saved!'
         p e
-        
         Rails.logger.error(e)
         next
       end

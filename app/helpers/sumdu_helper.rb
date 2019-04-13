@@ -424,12 +424,14 @@ module SumduHelper
           
           unless auditorium.save
             # Go to the next iteration if can't be saved
+            p auditorium.errors.full_messages
             Rails.logger.error(auditorium.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
@@ -475,12 +477,14 @@ module SumduHelper
           
           unless group.save
             # Go to the next iteration if can't be saved
+            p group.errors.full_messages
             Rails.logger.error(group.errors.full_messages)
             next
           end
         end
         
-      rescue Exception => e        
+      rescue Exception => e 
+        p e
         Rails.logger.error(e)
         next
       end
