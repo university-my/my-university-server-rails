@@ -21,8 +21,10 @@ module KpiHelper
     
     data = json["data"]
 
+    university = University.find_by(url: "kpi")
+
     # Delete old records
-    Record.joins(:groups).where('groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.joins(:groups).where(university_id: university.id, 'groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
 
     currentDate = Date.current
 
@@ -38,6 +40,11 @@ module KpiHelper
       dayNumber = object['day_number'].to_i
       lessonWeek = object['lesson_week'].to_i
 
+      if currentWeek != lessonWeek
+        # Skip if not current week
+        next
+      end
+
       # Teahcer
       teachers = object['teachers']
 
@@ -48,7 +55,7 @@ module KpiHelper
         teacher = nil
         if teacherHash = teachers.first
           teacherID = teacherHash['teacher_id'].to_i
-          teacher = Teacher.find_by(server_id: teacherID)
+          teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
         end
 
         startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
@@ -60,6 +67,7 @@ module KpiHelper
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
@@ -79,6 +87,7 @@ module KpiHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.teacher = teacher
@@ -90,6 +99,7 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
@@ -102,6 +112,7 @@ module KpiHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.teacher = teacher
@@ -113,12 +124,14 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
@@ -127,6 +140,7 @@ module KpiHelper
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     unless group.save
+      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end
   end
@@ -149,8 +163,10 @@ module KpiHelper
     
     data = json["data"]
 
+    university = University.find_by(url: "kpi")
+
     # Delete old records
-    Record.where('teacher_id': teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     currentDate = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
 
@@ -177,7 +193,7 @@ module KpiHelper
             groupIDs.push(id)
           end
         end
-        groups = Group.where(server_id: groupIDs)
+        groups = Group.where(university_id: university.id, server_id: groupIDs)
 
         # Pair start date
         startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
@@ -189,6 +205,7 @@ module KpiHelper
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
@@ -209,6 +226,7 @@ module KpiHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.teacher = teacher
@@ -222,6 +240,7 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
@@ -233,6 +252,7 @@ module KpiHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.teacher = teacher
@@ -246,12 +266,14 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
+            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
         
       rescue Exception => e
+        p e
         Rails.logger.error(e)
         next
       end
@@ -260,6 +282,7 @@ module KpiHelper
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
     unless teacher.save
+      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end    
   end
@@ -337,9 +360,9 @@ module KpiHelper
         
         # Conditions for find existing group
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:server_id] = serverID
         conditions[:name] = groupName
-        conditions[:university_id] = university.id
         
         # Try to find existing group first
         group = Group.find_by(conditions)
@@ -352,8 +375,6 @@ module KpiHelper
           group.university = university
 
           unless group.save
-            
-            p 'Not saved!'
             p group.errors.full_messages
             
             # Go to the next iteration if can't be saved
@@ -363,10 +384,7 @@ module KpiHelper
         end
 
       rescue Exception => e
-        
-        p 'Not saved!'
         p e
-        
         Rails.logger.error(e)
         next
       end
@@ -394,27 +412,26 @@ module KpiHelper
   end
 
   def self.getDate(currentWeek, timeStart, dayNumber, lessonWeek)
+
     # Params for generate date
-    recordDate = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
+    recordDate = DateTime.current.beginning_of_day
 
-    if currentWeek == lessonWeek
-      # Current week
-      currentWeekDay = DateTime.current.wday
-
-      # Calculate pair date
-      dayShift = 0
-      if currentWeekDay > dayNumber
-        dayShift = currentWeekDay - dayNumber
-        recordDate = recordDate - dayShift.days
-
-      elsif currentWeekDay < dayNumber
-        dayShift = dayNumber - currentWeekDay 
-        recordDate = recordDate + dayShift.days
-      end
-    else
-      # Next week
+    # Shift from Sunday to Monday
+    if recordDate.wday == 0
       recordDate = recordDate.next_week.beginning_of_week
-      dayShift = dayNumber - 1
+    end
+
+    # Current week day
+    currentWeekDay = recordDate.wday
+
+    # Calculate pair date
+    dayShift = 0
+    if currentWeekDay > dayNumber
+      dayShift = currentWeekDay - dayNumber
+      recordDate = recordDate - dayShift.days
+
+    elsif currentWeekDay < dayNumber
+      dayShift = dayNumber - currentWeekDay 
       recordDate = recordDate + dayShift.days
     end
     return recordDate
@@ -488,9 +505,9 @@ module KpiHelper
         
         # Conditions for find existing teacher
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:server_id] = serverID
         conditions[:name] = teacherName
-        conditions[:university_id] = university.id
         
         # Try to find existing teahcer first
         teacher = Teacher.find_by(conditions)
