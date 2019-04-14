@@ -3,11 +3,7 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums
   # GET /auditoriums.json
   def index
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
+    @university = University.find_by!(url: params[:university_url])
     @auditoriums = Auditorium.where(university_id: @university.id).all
     @title = @university.short_name + ' - Аудиторії'
   end
@@ -15,29 +11,14 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums/1
   # GET /auditoriums/1.json
   def show
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
-    @auditorium = Auditorium.find_by(university_id: @university.id, id: params[:id])
-    if @auditorium.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
+    @university = University.find_by!(url: params[:university_url])
+    @auditorium = Auditorium.find_by!(university_id: @university.id, id: params[:id])
     @title = @university.short_name + ' - ' + @auditorium.name
   end
   
   def records
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
-    @auditorium = Auditorium.find_by(university_id: @university.id, id: params[:id])
-    if @auditorium.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
+    @university = University.find_by!(url: params[:university_url])
+    @auditorium = Auditorium.find_by!(university_id: @university.id, id: params[:id])
 
     # Check if need to update records
     if @auditorium.needToUpdateRecords

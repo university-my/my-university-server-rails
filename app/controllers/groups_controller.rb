@@ -3,11 +3,7 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
+    @university = University.find_by!(url: params[:university_url])
     @groups = Group.where(university_id: @university.id).all
     @title = @university.short_name + ' - Групи'
   end
@@ -15,30 +11,15 @@ class GroupsController < ApplicationController
   # GET /groups/1
   # GET /groups/1.json
   def show
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
-    @group = Group.find_by(university_id: @university.id, id: params[:id])
-    if @group.blank?
-      raise ActionController::RoutingError.new('Not Found')
-    end
-
+    @university = University.find_by!(url: params[:university_url])
+    @group = Group.find_by!(university_id: @university.id, id: params[:id])
     @title = @university.short_name + ' - ' + @group.name
   end
   
   # GET /groups/1/records
   def records
-    @university = University.find_by(url: params[:university_url])
-    if @university.blank?
-      raise ActionController::RoutingError.new('Not Found')  
-    end
-
-    @group = Group.find_by(university_id: @university.id, id: params[:id])
-    if @group.blank?
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    @university = University.find_by!(url: params[:university_url])
+    @group = Group.find_by!(university_id: @university.id, id: params[:id])
     
     # Check if need to update records
     if @group.needToUpdateRecords
