@@ -13,10 +13,12 @@ module SumduHelper
     query = "&id_aud=#{auditorium.server_id}"
 
     # Peform network request and parse JSON
-
     json = ApplicationRecord.performRequest(url + query)
+
+    university = University.find_by(url: "sumdu")
+
     # Delete old records
-    Record.where('auditorium_id': auditorium.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.where(university_id: university.id, auditorium_id: auditorium.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -44,18 +46,19 @@ module SumduHelper
         for groupName in groupNames do
           stripedNames.push(groupName.strip)
         end
-        groups = Group.where(name: stripedNames)
+        groups = Group.where(university_id: university.id, name: stripedNames)
 
         # Auditorium
         # Convert to int before find request
         teacherID = kodFio.to_i
-        teacher = Teacher.where(server_id: teacherID).first
+        teacher = Teacher.where(university_id: university.id, server_id: teacherID).first
 
         # Pair start date
         startDate = dateString.to_datetime
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
@@ -75,6 +78,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -102,6 +106,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -147,8 +152,10 @@ module SumduHelper
     # Peform network request and parse JSON
     json = ApplicationRecord.performRequest(url + query)
 
+    university = University.find_by(url: "sumdu")
+
     # Delete old records
-    Record.joins(:groups).where('groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.joins(:groups).where(university_id: university.id, 'groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -172,17 +179,18 @@ module SumduHelper
 
         # Auditorium
         auditoriumID = kodAud.to_i
-        auditorium = Auditorium.find_by(server_id: auditoriumID)
+        auditorium = Auditorium.find_by(university_id: university.id, server_id: auditoriumID)
 
         # Teacher
         teacherID = kodFio.to_i
-        teacher = Teacher.find_by(server_id: teacherID)
+        teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
 
         # Pair start date
         startDate = dateString.to_datetime
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
@@ -202,6 +210,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -226,6 +235,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -268,8 +278,10 @@ module SumduHelper
     # Peform network request and parse JSON
     json = ApplicationRecord.performRequest(url + query)
 
+    university = University.find_by(url: "sumdu")
+
     # Delete old records
-    Record.where('teacher_id': teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     # Save records
     for object in json do
@@ -297,18 +309,19 @@ module SumduHelper
         for groupName in groupNames do
           stripedNames.push(groupName.strip)
         end
-        groups = Group.where(name: stripedNames)
+        groups = Group.where(university_id: university.id, name: stripedNames)
 
         # Auditorium
         # Convert to int before find request
         auditoriumID = kodAud.to_i
-        auditorium = Auditorium.where(server_id: auditoriumID).first
+        auditorium = Auditorium.where(university_id: university.id, server_id: auditoriumID).first
 
         # Pair start date
         startDate = dateString.to_datetime
 
         # Conditions for find existing pair
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:start_date] = startDate
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
@@ -328,6 +341,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -353,6 +367,7 @@ module SumduHelper
           record.name = nameString
           record.reason = reason
           record.kind = kind
+          record.university = university
 
           # Associations
           record.auditorium = auditorium
@@ -408,9 +423,9 @@ module SumduHelper
         
         # Conditions for find existing auditorium
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:server_id] = serverID
         conditions[:name] = auditoriumName
-        conditions[:university_id] = university.id
         
         # Try to find existing auditorium first
         auditorium = Auditorium.find_by(conditions)
@@ -461,9 +476,9 @@ module SumduHelper
 
         # Conditions for find existing group
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:server_id] = serverID
         conditions[:name] = groupName
-        conditions[:university_id] = university.id
 
         # Try to find existing group first
         group = Group.find_by(conditions)
@@ -514,9 +529,9 @@ module SumduHelper
 
         # Conditions for find existing teacher
         conditions = {}
+        conditions[:university_id] = university.id
         conditions[:server_id] = serverID
         conditions[:name] = teacherName
-        conditions[:university_id] = university.id
         
         # Try to find existing teahcer first
         teacher = Teacher.find_by(conditions)
