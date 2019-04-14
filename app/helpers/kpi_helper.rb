@@ -182,6 +182,11 @@ module KpiHelper
       dayNumber = object['day_number'].to_i
       lessonWeek = object['lesson_week'].to_i
 
+      if currentWeek != lessonWeek
+        # Skip if not current week
+        next
+      end
+
       # Groups
       groups = object['groups']
 
