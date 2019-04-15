@@ -22,13 +22,14 @@ class GroupsController < ApplicationController
     @group = Group.find_by!(university_id: @university.id, id: params[:id])
     
     # Check if need to update records
-    if @group.needToUpdateRecords
+    if @group.need_to_update_records
 
       # Import new
-      @group.importRecords
+      @group.import_records
     end
     
-    @records = Record.joins(:groups).where(university_id: @university.id, 'groups.id': @group.id).where("start_date >= ?", DateTime.current).order(:start_date).order(:pair_name)
+    current_day = DateTime.current.beginning_of_day
+    @records = Record.joins(:groups).where(university_id: @university.id, 'groups.id': @group.id).where("start_date >= ?", current_day).order(:start_date).order(:pair_name)
     @records_days = @records.group_by { |t| t.start_date }
     
     if @records.empty?

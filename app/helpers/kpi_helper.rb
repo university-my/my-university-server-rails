@@ -7,13 +7,13 @@ module KpiHelper
   # Import records for group from KPI API
   #
 
-  def self.importRecordsForGroup(group)
+  def self.import_records_for_group(group)
     # Get current week from API
-    currentWeek = getCurrentWeek
+    currentWeek = get_current_week
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     
     if json.nil?
       return
@@ -58,7 +58,7 @@ module KpiHelper
           teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
         end
 
-        startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
+        startDate = KpiHelper.get_date(currentWeek, time, dayNumber, lessonWeek)
 
         # Skip old records
         if startDate < currentDate
@@ -149,13 +149,13 @@ module KpiHelper
   # Import records for teacher from KPI API
   #
 
-  def self.importRecordsForTeacher(teacher)
+  def self.import_records_for_teacher(teacher)
     # Get current week from API
-    currentWeek = getCurrentWeek
+    currentWeek = get_current_week
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     
     if json.nil?
       return
@@ -201,7 +201,7 @@ module KpiHelper
         groups = Group.where(university_id: university.id, server_id: groupIDs)
 
         # Pair start date
-        startDate = KpiHelper.getDate(currentWeek, time, dayNumber, lessonWeek)
+        startDate = KpiHelper.get_date(currentWeek, time, dayNumber, lessonWeek)
 
         # Skip old records
         if startDate < currentDate
@@ -297,18 +297,18 @@ module KpiHelper
   # Import groups from KPI API
   #
 
-  # bin/rails runner 'KpiHelper.importGroups'
-  def self.importGroups
-    groupsTotalCount = KpiHelper.getGroupsCount
+  # bin/rails runner 'KpiHelper.import_groups'
+  def self.import_groups
+    groupsTotalCount = KpiHelper.get_groups_count
 
     offset = 0
 
     while offset < groupsTotalCount
       # Get json with groups from API
-      json = KpiHelper.getGroups(offset)
+      json = KpiHelper.get_groups(offset)
 
       # Save to database
-      KpiHelper.saveGroupsFrom(json)
+      KpiHelper.save_groups_from(json)
 
       offset += 100
     end
@@ -316,11 +316,11 @@ module KpiHelper
 
 
    # Make request to API for get total count of all groups
-   def self.getGroupsCount
+   def self.get_groups_count
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     
     if json.nil?
       return 0
@@ -334,17 +334,17 @@ module KpiHelper
 
 
   # Make request with offset parameter and parse JSON
-  def self.getGroups(offset)
+  def self.get_groups(offset)
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/?filter={%27limit%27:100,%27offset%27:#{offset}}"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     return json
   end
 
 
   # Serialize groups from JSON and save to database
-  def self.saveGroupsFrom(json)
+  def self.save_groups_from(json)
 
     data = json["data"]
 
@@ -401,11 +401,11 @@ module KpiHelper
   #
 
   # Request current week from KPI API
-  def self.getCurrentWeek
+  def self.get_current_week
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/weeks"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     
     if json.nil?
       return 1
@@ -416,7 +416,7 @@ module KpiHelper
     return week
   end
 
-  def self.getDate(currentWeek, timeStart, dayNumber, lessonWeek)
+  def self.get_date(currentWeek, timeStart, dayNumber, lessonWeek)
 
     # Params for generate date
     recordDate = DateTime.current.beginning_of_day
@@ -447,18 +447,18 @@ module KpiHelper
   #
 
   # Import from KPI
-  # bin/rails runner 'KpiHelper.importTeachers'
-  def self.importTeachers
-    teachersTotalCount = KpiHelper.getTeachersCount
+  # bin/rails runner 'KpiHelper.import_teachers'
+  def self.import_teachers
+    teachersTotalCount = KpiHelper.get_teachers_count
 
     offset = 0
 
     while offset < teachersTotalCount
       # Get json with teachers from API
-      json = KpiHelper.getTeachers(offset)
+      json = KpiHelper.get_teachers(offset)
 
       # Save to database
-      KpiHelper.saveTeachersFrom(json)
+      KpiHelper.save_teachers_from(json)
 
       offset += 100
     end
@@ -466,11 +466,11 @@ module KpiHelper
 
 
   # Make request to API for get total count of all teachers
-  def self.getTeachersCount
+  def self.get_teachers_count
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
     
     if json.nil?
       return
@@ -484,17 +484,17 @@ module KpiHelper
 
 
   # Make request with offset parameter and parse JSON
-  def self.getTeachers(offset)
+  def self.get_teachers(offset)
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/?filter={%27limit%27:100,%27offset%27:#{offset}}"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
 
     return json
   end
 
 
   # Serialize teachers from JSON and save to database
-  def self.saveTeachersFrom(json)
+  def self.save_teachers_from(json)
 
     data = json["data"]
 

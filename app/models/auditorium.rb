@@ -13,22 +13,22 @@ class Auditorium < ApplicationRecord
   belongs_to :university, optional: true
 
 
-  # bin/rails runner 'Auditorium.resetUpdateDate'
-  def self.resetUpdateDate
+  # bin/rails runner 'Auditorium.reset_update_date'
+  def self.reset_update_date
     Auditorium.update_all(updated_at: DateTime.current - 2.hour)
   end
 
 
   # Import records for current Auditorium
-  def importRecords
+  def import_records
     if university.url == "sumdu"
-      SumduHelper.importRecordsForAuditorium(self)
+      SumduHelper.import_records_for_auditorium(self)
     end
   end
   
 
   # Check if need to update records in the Auditorium
-  def needToUpdateRecords
+  def need_to_update_records
     needToUpdate = false
 
     # Check by date

@@ -7,13 +7,13 @@ module SumduHelper
   # Import records for auditorium from SumDU API
   #
 
-  def self.importRecordsForAuditorium(auditorium)
+  def self.import_records_for_auditorium(auditorium)
 
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_aud=#{auditorium.server_id}"
 
     # Peform network request and parse JSON
-    json = ApplicationRecord.performRequest(url + query)
+    json = ApplicationRecord.perform_request(url + query)
 
     university = University.find_by(url: "sumdu")
 
@@ -144,13 +144,13 @@ module SumduHelper
   # Import records for group from SumDU API
   #
 
-  def self.importRecordsForGroup(group)
+  def self.import_records_for_group(group)
 
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_grp=#{group.server_id}"
 
     # Peform network request and parse JSON
-    json = ApplicationRecord.performRequest(url + query)
+    json = ApplicationRecord.perform_request(url + query)
 
     university = University.find_by(url: "sumdu")
 
@@ -270,13 +270,13 @@ module SumduHelper
   # Import records for teacher from SumDU API
   #
 
-  def self.importRecordsForTeacher(teacher)
+  def self.import_records_for_teacher(teacher)
 
     url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_fio=#{teacher.server_id}"
 
     # Peform network request and parse JSON
-    json = ApplicationRecord.performRequest(url + query)
+    json = ApplicationRecord.perform_request(url + query)
 
     university = University.find_by(url: "sumdu")
 
@@ -404,12 +404,12 @@ module SumduHelper
   # Import auditorums from SumDU API
   #
 
-  # # bin/rails runner 'SumduHelper.importAuditoriums'
-  def self.importAuditoriums
+  # # bin/rails runner 'SumduHelper.import_auditoriums'
+  def self.import_auditoriums
 
     # Peform network request and parse JSON
     url = "http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
     university = University.find_by(url: "sumdu")
@@ -457,12 +457,12 @@ module SumduHelper
   # Import groups from SumDU API
   #
 
-  # bin/rails runner 'SumduHelper.importGroups'
-  def self.importGroups
+  # bin/rails runner 'SumduHelper.import_groups'
+  def self.import_groups
 
     # Peform network request and parse JSON
     url = "http://schedule.sumdu.edu.ua/index/json?method=getGroups"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
     university = University.find_by(url: "sumdu")
@@ -510,12 +510,12 @@ module SumduHelper
   # Import teachers from SumDU API
   #
 
-  # bin/rails runner 'SumduHelper.importTeachers'
-  def self.importTeachers
+  # bin/rails runner 'SumduHelper.import_teachers'
+  def self.import_teachers
 
     # Peform network request and parse JSON
     url = "http://schedule.sumdu.edu.ua/index/json?method=getTeachers"
-    json = ApplicationRecord.performRequest(url)
+    json = ApplicationRecord.perform_request(url)
 
     # This teachers for SumDU
     university = University.find_by(url: "sumdu")

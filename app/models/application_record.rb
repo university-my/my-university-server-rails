@@ -2,7 +2,7 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
   # Peform network request and parse JSON
-  def self.performRequest(url)
+  def self.perform_request(url)
     # Init URI
     uri = URI(url)
 
@@ -31,7 +31,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   # Reset increment of primary key (ID)
-  def self.resetIncrement
+  def self.reset_increment
     ActiveRecord::Base.connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{table_name}'")
   end
 

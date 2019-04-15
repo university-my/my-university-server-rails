@@ -11,26 +11,26 @@ class Group < ApplicationRecord
   has_and_belongs_to_many :records, optional: true, dependent: :nullify
   belongs_to :university, optional: true
 
-  # bin/rails runner 'Group.resetUpdateDate'
-  def self.resetUpdateDate
+  # bin/rails runner 'Group.reset_update_date'
+  def self.reset_update_date
     Group.update_all(updated_at: DateTime.current - 2.hour)
   end
 
 
   # Import records for current Group
-  def importRecords
+  def import_records
     if university.url == "sumdu"
-      SumduHelper.importRecordsForGroup(self)
+      SumduHelper.import_records_for_group(self)
     end
 
     if university.url == "kpi"
-      KpiHelper.importRecordsForGroup(self)
+      KpiHelper.import_records_for_group(self)
     end
   end
 
 
   # Check if need to update records in the Group
-  def needToUpdateRecords
+  def need_to_update_records
     needToUpdate = false
 
     # Check by date
