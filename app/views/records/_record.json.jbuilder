@@ -9,3 +9,9 @@ end
 json.groups do
 	json.partial! partial: 'groups/group', collection: record.groups, as: :group
 end
+
+if record.teacher.present?
+  json.teacher do
+    json.partial! 'teachers/teacher', teacher: record.teacher
+  end
+end
