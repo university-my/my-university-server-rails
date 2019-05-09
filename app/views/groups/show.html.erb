@@ -1,3 +1,5 @@
+<%= content_for(:canonical_link, university_group_url(@university, @group)) %>
+
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="groups"></div>
 <div data-id="<%= @group.id %>"></div>
