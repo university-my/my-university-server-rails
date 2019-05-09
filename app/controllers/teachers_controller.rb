@@ -12,7 +12,8 @@ class TeachersController < ApplicationController
   # GET /teachers/1.json
   def show
     @university = University.find_by!(url: params[:university_url])
-    @teacher = Teacher.find_by!(university_id: @university.id, id: params[:id])
+    # @teacher = Teacher.friendly.find_by!(university_id: @university.id, id: params[:id])
+    @teacher = Teacher.friendly.find(university_id: @university.id, id: params[:id])
     @title = @university.short_name + ' - ' + @teacher.name
   end
 

@@ -12,6 +12,7 @@ module MyUniversityServer
     config.load_defaults 5.2
 
     config.i18n.default_locale = :uk
+    I18n.available_locales = [:en, :uk]
     
     config.exceptions_app = self.routes
 
