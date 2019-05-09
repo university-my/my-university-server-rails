@@ -1,3 +1,5 @@
+<%= content_for(:canonical_link, university_teacher_url(@university, @teacher)) %>
+
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="teachers"></div>
 <div data-id="<%= @teacher.id %>"></div>

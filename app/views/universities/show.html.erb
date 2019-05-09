@@ -1,5 +1,6 @@
 <% meta_tag :description, "Розклад занять #{@university.short_name}" %>
 <% meta_tag :keywords, "Розклад,#{@university.short_name},#{@university.full_name},Мій Університет,My University" %>
+<%= content_for(:canonical_link, university_url(@university)) %>
 
 <%= render "layouts/header" %>
 
