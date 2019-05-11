@@ -1,0 +1,35 @@
+<%= render "layouts/header" %>
+<main class="container" role="main">
+  <div class="container">
+    <div class="row"><h1>Мій Університет для Android</h1></div>
+    <div class="row p-md-2">
+      <p>
+        <a class="btn btn-outline-secondary" href="">У вересні 2019</a>  
+      </p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row p-md-5">
+      <div class="col-md-6">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <%= image_tag("android.png", class: "mx-auto d-block w-75") %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2 class="display-6">Розклад для студентів СумДУ</h2>
+        <p>
+          <ul>
+            <li>Розклад груп, викладачів та аудиторій.</li>
+            <li>Перегляд розкладу без доступу до Інтернет.</li>
+            <li>Історія результатів пошуку.</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+<%= render "layouts/footer" %>
