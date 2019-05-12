@@ -39,4 +39,9 @@ class PagesController < ApplicationController
     @title = "Мій Університет - Android"
       render "pages/android"
   end
+
+  def donate
+    @title = "Мій Університет - Donate/Підтримати"
+      render "pages/donate"
+  end
 end
