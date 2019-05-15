@@ -1,0 +1,27 @@
+<%= render "layouts/header" %>
+<main class="container" role="main">
+  <div class="container">
+    <div class="row"><h1>Support the project</h1></div>
+    <div class="row"><h2>Підтримати проект</h2></div>
+    <div class="row">
+      <div class="col">
+        <p>Якщо ви бажаєте підтримати наш проект, можете скористатися цією кнопкою:</p>
+        <p>
+          <form method="POST" accept-charset="utf-8" action="https://www.liqpay.ua/api/3/checkout">
+            <input type="hidden" name="data" value="eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXlkb25hdGUiLCJwdWJsaWNfa2V5IjoiaTU1Nzg1MzIwOTE4IiwiYW1vdW50IjoiNSIsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiJNeSBnb29kcyIsInR5cGUiOiJkb25hdGUiLCJsYW5ndWFnZSI6InVrIn0=" />
+            <input type="hidden" name="signature" value="pSRt0hAwIthWYIkIOupl2MiNMqc=" />
+            <button style="border: none !important; display:inline-block !important;text-align: center !important;padding: 7px 20px !important;
+            color: #fff !important; font-size:16px !important; font-weight: 600 !important; font-family:OpenSans, sans-serif; cursor: pointer !important; border-radius: 2px !important;
+            background: rgb(122,183,43) !important;"onmouseover="this.style.opacity='0.5';" onmouseout="this.style.opacity='1';">
+            <img src="https://static.liqpay.ua/buttons/logo-small.png" name="btn_text"
+            style="margin-right: 7px !important; vertical-align: middle !important;"/>
+            <span style="vertical-align:middle; !important">Donate 5 UAH</span>
+          </button>
+        </form>
+      </p>
+      <p>Будемо надзвичайно вдячні за будь-яку вашу підтримку.</p>
+    </div>
+  </div>
+</div>
+</main>
+<%= render "layouts/footer" %>

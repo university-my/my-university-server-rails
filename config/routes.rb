@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get "/privacy-policy", to: "pages#privacy_policy"
   get "/terms-of-service", to: "pages#terms_of_service"
   get "/zno-2019", to: "pages#zno2019"
+  get "/ios", to: "pages#ios"
+  get "/android", to: "pages#android"
+  get "/donate", to: "pages#donate"
 
   resources :universities, only: [:index, :show], param: :url do
     
