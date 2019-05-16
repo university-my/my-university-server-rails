@@ -12,11 +12,12 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
     @university = University.find_by!(url: params[:university_url])
-    @group = Group.find_by!(university_id: @university.id, id: params[:id])
+    @group = @university.groups.friendly.find(params[:id])
     @title = @university.short_name + ' - ' + @group.name
   end
   
   # GET /groups/1/records
+  # GET /groups/1/records.json
   def records
     @university = University.find_by!(url: params[:university_url])
     @group = Group.find_by!(university_id: @university.id, id: params[:id])
@@ -35,7 +36,7 @@ class GroupsController < ApplicationController
     if @records.empty?
       render :partial => "records/empty"
     else
-      render :partial => "records/show", :locals => {:records => @records, :university =>  @university}
+      render :partial => "records/show", :locals => {:records => @records, :university => @university}
     end
   end
 end

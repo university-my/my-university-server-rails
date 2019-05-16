@@ -37,7 +37,7 @@ SitemapGenerator::Sitemap.create do
     add university_auditoriums_path(university.url), :priority => 0.5, :changefreq => 'weekly'
     
     Auditorium.find_each do |auditorium|
-      add university_auditorium_path(university.url, auditorium.id), :lastmod => auditorium.updated_at
+      add university_auditorium_path(university.url, auditorium.friendly_id), :lastmod => auditorium.updated_at
     end
   end
   
@@ -46,7 +46,7 @@ SitemapGenerator::Sitemap.create do
     add university_groups_path(university.url), :priority => 0.5, :changefreq => 'weekly'
     
     Group.find_each do |group|
-      add university_group_path(university.url, group.id), :lastmod => group.updated_at
+      add university_group_path(university.url, group.friendly_id), :lastmod => group.updated_at
     end
   end
   
@@ -55,7 +55,7 @@ SitemapGenerator::Sitemap.create do
     add university_teachers_path(university.url), :priority => 0.5, :changefreq => 'weekly'
     
     Teacher.find_each do |teacher|
-      add university_teacher_path(university.url, teacher.id), :lastmod => teacher.updated_at
+      add university_teacher_path(university.url, teacher.friendly_id), :lastmod => teacher.updated_at
     end
   end  
 end

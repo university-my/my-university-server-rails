@@ -12,18 +12,19 @@ class TeachersController < ApplicationController
   # GET /teachers/1.json
   def show
     @university = University.find_by!(url: params[:university_url])
-    # @teacher = Teacher.friendly.find_by!(university_id: @university.id, id: params[:id])
-    @teacher = Teacher.friendly.find(university_id: @university.id, id: params[:id])
+    @teacher = @university.teachers.friendly.find(params[:id])
     @title = @university.short_name + ' - ' + @teacher.name
   end
 
   # GET /teachers/1/records
+  # GET /teachers/1/records.json
   def records
     @university = University.find_by!(url: params[:university_url])
     @teacher = Teacher.find_by!(university_id: @university.id, id: params[:id])
     
     # Check if need to update records
     if @teacher.need_to_update_records
+
       # Import new
       @teacher.import_records
     end
@@ -35,7 +36,7 @@ class TeachersController < ApplicationController
     if @records.empty?
       render :partial => "records/empty"
     else
-      render :partial => "records/show", :locals => {:records => @records, :university =>  @university}
+      render :partial => "records/show", :locals => {:records => @records, :university => @university}
     end
   end
 end
