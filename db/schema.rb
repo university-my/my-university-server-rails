@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_05_16_105518) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
-    t.index ["slug"], name: "index_auditoriums_on_slug", unique: true
+    t.index ["slug"], name: "index_auditoriums_on_slug"
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
     t.index ["slug_uk"], name: "index_auditoriums_on_slug_uk"
     t.index ["university_id"], name: "index_auditoriums_on_university_id"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2019_05_16_105518) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
-    t.index ["slug"], name: "index_teachers_on_slug", unique: true
+    t.index ["slug"], name: "index_teachers_on_slug"
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
     t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
     t.index ["university_id"], name: "index_teachers_on_university_id"
