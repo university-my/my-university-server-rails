@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_14_101831) do
+ActiveRecord::Schema.define(version: 2019_05_16_105518) do
 
   create_table "auditoriums", force: :cascade do |t|
     t.string "name"
@@ -18,7 +18,24 @@ ActiveRecord::Schema.define(version: 2019_04_14_101831) do
     t.integer "university_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_auditoriums_on_slug"
+    t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
+    t.index ["slug_uk"], name: "index_auditoriums_on_slug_uk"
     t.index ["university_id"], name: "index_auditoriums_on_university_id"
+  end
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -27,6 +44,12 @@ ActiveRecord::Schema.define(version: 2019_04_14_101831) do
     t.integer "university_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_groups_on_slug"
+    t.index ["slug_en"], name: "index_groups_on_slug_en"
+    t.index ["slug_uk"], name: "index_groups_on_slug_uk"
     t.index ["university_id"], name: "index_groups_on_university_id"
   end
 
@@ -60,6 +83,12 @@ ActiveRecord::Schema.define(version: 2019_04_14_101831) do
     t.integer "university_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_teachers_on_slug"
+    t.index ["slug_en"], name: "index_teachers_on_slug_en"
+    t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
     t.index ["university_id"], name: "index_teachers_on_university_id"
   end
 

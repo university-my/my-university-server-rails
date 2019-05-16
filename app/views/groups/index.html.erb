@@ -14,7 +14,7 @@
 			<% @groups.each do |group| %>
 			<tr>
 				<td><%= group.name %></td>
-				<td><%= link_to 'Показати', university_group_url(@university.url, group.id) %></td>
+				<td><%= link_to 'Показати', university_group_url(@university.url, group.friendly_id) %></td>
 			</tr>
 			<% end %>
 		</tbody>

@@ -14,7 +14,7 @@
 			<% @auditoriums.each do |auditorium| %>
 			<tr>
 				<td><%= auditorium.name %></td>
-				<td><%= link_to 'Показати', university_auditorium_url(@university.url, auditorium.id) %></td>
+				<td><%= link_to 'Показати', university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
 			</tr>
 			<% end %>
 		</tbody>
