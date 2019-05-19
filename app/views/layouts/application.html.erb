@@ -40,5 +40,12 @@
 	<link rel="canonical" href="<%= yield(:canonical_link) %>" >
 	<% end %>
 </head>
-<body class="bg-light"><%= yield %></body>
-</html>
+<body class="bg-light">
+	<% if notice %>
+	<p class="alert alert-success"><%= notice %></p>
+	<% end %>
+	<% if alert %>
+	<p class="alert alert-danger"><%= alert %></p>
+	<% end %>
+	<%= yield %></body>
+	</html>
