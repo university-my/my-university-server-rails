@@ -67,14 +67,7 @@ module KpiHelper
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date  = (startDate.to_s(:db) + ' ' + pair_time.to_s(:time)).to_datetime
-
-        p ''
-        p 'startDate.to_s(:date)'
-        p startDate.to_s(:db)
-        p 'pair_start_date'
-        p pair_start_date
-        p '============='
+        pair_start_date  = (startDate.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
@@ -217,7 +210,8 @@ module KpiHelper
         startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
 
         # Get pair date and time
-        pair_start_date  = (startDate.to_s + ' ' + time).to_datetime
+        pair_time = time.to_time
+        pair_start_date  = (startDate.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Skip old records
         if startDate < currentDate
