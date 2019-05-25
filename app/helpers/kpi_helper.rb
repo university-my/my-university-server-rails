@@ -58,12 +58,23 @@ module KpiHelper
           teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
         end
 
-        startDate = KpiHelper.get_date(currentWeek, time, dayNumber, lessonWeek)
+        startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
 
         # Skip old records
         if startDate < currentDate
           next
         end
+
+        # Get pair date and time
+        pair_time = time.to_time
+        pair_start_date  = (startDate.to_s(:db) + ' ' + pair_time.to_s(:time)).to_datetime
+
+        p ''
+        p 'startDate.to_s(:date)'
+        p startDate.to_s(:db)
+        p 'pair_start_date'
+        p pair_start_date
+        p '============='
 
         # Conditions for find existing pair
         conditions = {}
@@ -82,6 +93,7 @@ module KpiHelper
           # Save new record
           record = Record.new
           record.start_date = startDate
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -107,6 +119,7 @@ module KpiHelper
         else
           # Update record
           record.start_date = startDate
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -201,7 +214,10 @@ module KpiHelper
         groups = Group.where(university_id: university.id, server_id: groupIDs)
 
         # Pair start date
-        startDate = KpiHelper.get_date(currentWeek, time, dayNumber, lessonWeek)
+        startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
+
+        # Get pair date and time
+        pair_start_date  = (startDate.to_s + ' ' + time).to_datetime
 
         # Skip old records
         if startDate < currentDate
@@ -226,6 +242,7 @@ module KpiHelper
           # Save new record
           record = Record.new
           record.start_date = startDate
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -252,6 +269,7 @@ module KpiHelper
 
         else
           record.start_date = startDate
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -416,7 +434,7 @@ module KpiHelper
     return week
   end
 
-  def self.get_date(currentWeek, timeStart, dayNumber, lessonWeek)
+  def self.get_date(currentWeek, dayNumber, lessonWeek)
 
     # Params for generate date
     recordDate = DateTime.current.beginning_of_day

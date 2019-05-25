@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_19_103147) do
+ActiveRecord::Schema.define(version: 2019_05_24_162917) do
 
   create_table "auditoriums", force: :cascade do |t|
     t.string "name"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_103147) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
-    t.index ["slug"], name: "index_auditoriums_on_slug", unique: true
+    t.index ["slug"], name: "index_auditoriums_on_slug"
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
     t.index ["slug_uk"], name: "index_auditoriums_on_slug_uk"
     t.index ["university_id"], name: "index_auditoriums_on_university_id"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_103147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "university_id"
+    t.datetime "pair_start_date"
     t.index ["auditorium_id"], name: "index_records_on_auditorium_id"
     t.index ["teacher_id"], name: "index_records_on_teacher_id"
     t.index ["university_id"], name: "index_records_on_university_id"
@@ -86,7 +87,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_103147) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
-    t.index ["slug"], name: "index_teachers_on_slug", unique: true
+    t.index ["slug"], name: "index_teachers_on_slug"
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
     t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
     t.index ["university_id"], name: "index_teachers_on_university_id"
