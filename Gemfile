@@ -39,10 +39,17 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.2.1'
 gem 'jquery-rails'
 
+# Enables 'enterprise-class' Google Sitemaps to be easily generated for a Rails site as a rake task
 gem 'sitemap_generator'
 
+# Collecting Locale data for Ruby on Rails
 gem 'rails-i18n'
+
+#  Creates pretty URL’s
 gem 'friendly_id', '~> 5.2.4'
+
+# Flexible authentication solution for Rails
+gem 'devise'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

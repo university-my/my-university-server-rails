@@ -54,12 +54,16 @@ module SumduHelper
         teacher = Teacher.where(university_id: university.id, server_id: teacherID).first
 
         # Pair start date
-        startDate = dateString.to_datetime
+        start_date = dateString.to_datetime
+
+        # Get pair date and time
+        pair_time = time.split('-').first
+        pair_start_date  = (dateString + ' ' + pair_time).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = startDate
+        conditions[:start_date] = start_date
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
         conditions[:reason] = reason
@@ -72,7 +76,8 @@ module SumduHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -100,7 +105,8 @@ module SumduHelper
           
         else
           # Update record
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -186,12 +192,16 @@ module SumduHelper
         teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
 
         # Pair start date
-        startDate = dateString.to_datetime
+        start_date = dateString.to_datetime
+
+        # Get pair date and time
+        pair_time = time.split('-').first
+        pair_start_date  = (dateString + ' ' + pair_time).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = startDate
+        conditions[:start_date] = start_date
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
         conditions[:reason] = reason
@@ -204,7 +214,8 @@ module SumduHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -229,7 +240,8 @@ module SumduHelper
           
         else
           # Update record
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -317,12 +329,16 @@ module SumduHelper
         auditorium = Auditorium.where(university_id: university.id, server_id: auditoriumID).first
 
         # Pair start date
-        startDate = dateString.to_datetime
+        start_date = dateString.to_datetime
+
+        # Get pair date and time
+        pair_time = time.split('-').first
+        pair_start_date  = (dateString + ' ' + pair_time).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = startDate
+        conditions[:start_date] = start_date
         conditions[:name] = nameString
         conditions[:pair_name] = pairName
         conditions[:reason] = reason
@@ -335,7 +351,8 @@ module SumduHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
@@ -361,7 +378,8 @@ module SumduHelper
           end
 
         else
-          record.start_date = startDate
+          record.start_date = start_date
+          record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pairName
           record.name = nameString
