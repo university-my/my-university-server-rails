@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
   namespace :admin do
-    resources :universities
+    resources :universities, :users
   end
+  
   devise_for :users
   get 'homepage/home'
   get "/", to: "homepage#home", as: "root"
