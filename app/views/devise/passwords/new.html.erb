@@ -1,16 +1,18 @@
-<h2>Forgot your password?</h2>
+<main class="container" role="main">
+  <div class="text-center mt-5">
+    <h2>Забули свій пароль?</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, :class => 'form-signin' }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <div class="field">
+      <%= f.label :email, class: "sr-only", for: "inputEmail" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Адреса електронної пошти", id: "inputEmail" %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Надіслати мені інструкції", class: "btn btn-lg btn-primary btn-block" %>
+    </div>
+    <% end %>
+    <%= render "devise/shared/links" %>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</main>
