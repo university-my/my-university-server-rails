@@ -44,7 +44,7 @@ class Auditorium < ApplicationRecord
     needToUpdate = false
 
     # Check by date
-    if DateTime.current >= (updated_at + 1.hour)
+    if DateTime.current >= (updated_at + 20.hour)
       needToUpdate = true
     end
 
