@@ -1,1 +1,1 @@
-json.extract! auditorium, :id, :name
+json.extract! auditorium, :id, :name, :slug_uk
