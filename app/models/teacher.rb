@@ -26,7 +26,7 @@ class Teacher < ApplicationRecord
 
   # bin/rails runner 'Teacher.reset_update_date'
   def self.reset_update_date
-    Teacher.update_all(updated_at: DateTime.current - 2.hour)
+    Teacher.update_all(updated_at: DateTime.current - 21.hour)
   end
 
 

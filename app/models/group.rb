@@ -25,7 +25,7 @@ class Group < ApplicationRecord
 
   # bin/rails runner 'Group.reset_update_date'
   def self.reset_update_date
-    Group.update_all(updated_at: DateTime.current - 2.hour)
+    Group.update_all(updated_at: DateTime.current - 21.hour)
   end
 
 

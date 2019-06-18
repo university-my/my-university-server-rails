@@ -27,7 +27,7 @@ class Auditorium < ApplicationRecord
 
   # bin/rails runner 'Auditorium.reset_update_date'
   def self.reset_update_date
-    Auditorium.update_all(updated_at: DateTime.current - 2.hour)
+    Auditorium.update_all(updated_at: DateTime.current - 21.hour)
   end
 
 
