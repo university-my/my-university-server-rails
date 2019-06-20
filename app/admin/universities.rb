@@ -1,6 +1,8 @@
 ActiveAdmin.register University do
   permit_params :short_name, :full_name, :url
-  actions :index
+  actions :index, :show
+
+  config.filters = false
   
   index do
     selectable_column
