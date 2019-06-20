@@ -30,5 +30,15 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="container">
+      <div class="row">
+        <% if @university.url == 'sumdu' %>
+        <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+        <% elsif @university.url == 'kpi' %>  
+        <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+        <% end %>
+      </div>
+    </div>
   </main>
   <%= render "layouts/footer" %>
