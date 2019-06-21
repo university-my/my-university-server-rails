@@ -2,7 +2,7 @@ ActiveAdmin.register Group do
   permit_params :name, :server_id, :university_id
   
   actions :all
-
+  
   # Filterable attributes on the index screen
   filter :university
   filter :name
