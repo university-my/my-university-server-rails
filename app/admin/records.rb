@@ -1,7 +1,7 @@
 ActiveAdmin.register Record do
   permit_params :start_date, :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :university_id, :auditorium_id, :teacher_id, :pair_start_date
   
-  actions :index
+  actions :all
   
   index do
     selectable_column

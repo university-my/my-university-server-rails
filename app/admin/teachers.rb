@@ -1,7 +1,15 @@
 ActiveAdmin.register Teacher do
-  permit_params :name, :server_id, :slug, :slug_en, :slug_uk, :university_id
+  permit_params :name, :server_id, :university_id
   
-  actions :index
+  actions :all
+
+  # Filterable attributes on the index screen
+  filter :university
+  filter :name
+  filter :server_id
+  filter :created_at
+  filter :updated_at
+  filter :slug_uk
   
   index do
     selectable_column
@@ -11,8 +19,6 @@ ActiveAdmin.register Teacher do
     column :university_id
     column :created_at
     column :updated_at
-    column :slug
-    column :slug_en
     column :slug_uk
     actions
   end
@@ -22,9 +28,6 @@ ActiveAdmin.register Teacher do
       f.input :name
       f.input :server_id
       f.input :university_id
-      f.input :slug
-      f.input :slug_en
-      f.input :slug_uk
     end
     f.actions
   end
