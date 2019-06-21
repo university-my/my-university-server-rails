@@ -3,7 +3,7 @@
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="auditoriums"></div>
 <div data-id="<%= @auditorium.id %>"></div>
-	
+
 <%= javascript_include_tag 'records' %>
 
 <% meta_tag :description, "Розклад занять #{@university.short_name}, Аудиторія " + @auditorium.name %>
@@ -23,5 +23,6 @@
 		</div>
 	</p>
 	<div id="records"></div>
+	<%= render "layouts/source_site" %>
 </main>
 <%= render "layouts/footer" %>
