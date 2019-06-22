@@ -7,12 +7,12 @@ class Ability
     if user.role == 'admin'
       can :manage, :all
     elsif user.role == 'sumdu_editor'
-      can :read, Auditorium, university_id: 1
+      can :manage, Auditorium, university_id: 1
       can :manage, Group, university_id: 1
       can :manage, Record, university_id: 1
       can :manage, Teacher, university_id: 1
     elsif user.role == 'kpi_editor'
-      can :read, Auditorium, university_id: 2
+      can :manage, Auditorium, university_id: 2
       can :manage, Group, university_id: 2
       can :manage, Record, university_id: 2
       can :manage, Teacher, university_id: 2

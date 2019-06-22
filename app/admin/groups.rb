@@ -1,4 +1,6 @@
 ActiveAdmin.register Group do
+  menu label: "Групи"
+
   permit_params :name, :server_id, :university_id
   
   actions :all
@@ -6,20 +8,15 @@ ActiveAdmin.register Group do
   # Filterable attributes on the index screen
   filter :university
   filter :name
-  filter :server_id
   filter :created_at
   filter :updated_at
-  filter :slug_uk
   
   index do
     selectable_column
-    id_column
     column :name
-    column :server_id
     column :university_id
     column :created_at
     column :updated_at
-    column :slug_uk
     actions
   end
   
