@@ -1,5 +1,4 @@
 ActiveAdmin.register Group do
-  menu label: "Групи"
 
   permit_params :name, :server_id, :university_id
   
@@ -14,7 +13,11 @@ ActiveAdmin.register Group do
   index do
     selectable_column
     column :name
-    column :university_id
+    
+    column t('university') do |group|
+      link_to group.university.short_name, admin_university_path(group.university_id)
+    end
+
     column :created_at
     column :updated_at
     actions

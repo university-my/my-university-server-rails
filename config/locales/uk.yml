@@ -1,5 +1,7 @@
 ---
 uk:
+  university: 'Університет'
+  
   activerecord:
     errors:
       messages:
@@ -7,6 +9,51 @@ uk:
         restrict_dependent_destroy:
           has_one: 'Неможливо видалити запис, так як існує залежність: %{record}'
           has_many: 'Неможливо видалити запис, так як існують залежності: %{record}'
+    models:
+      admin_user:
+        one: 'Адміністратор'
+        many: 'Адміністратори'
+        other: 'Адміністратори'
+      record:
+        one: 'Пара'
+        many: 'Пари'
+        other: 'Пари'
+      auditorium:
+        one: 'Аудиторія'
+        many: 'Аудиторії'
+        other: 'Аудиторії'
+      group:
+        one: 'Група'
+        many: 'Групи'
+        other: 'Групи'
+      teacher:
+        one: 'Викладач'
+        many: 'Викладачі'
+        other: 'Викладачі'
+      university:
+        one: 'Університет'
+        many: 'Університети'
+        few: 'Університети'
+        other: 'Університети'
+    attributes:
+      record:
+        start_date: 'Дата початку'
+        name: 'Назва'
+        pair_name: 'Номер'
+        pair_start_date: 'Початок пари'
+        reason: 'Коментар'
+        kind: 'Тип'
+        time: 'Час'
+      auditorium:
+        name: 'Назва'
+      group:
+        name: 'Назва'
+      teacher:
+        name: 'ФІО'
+      university:
+        short_name: 'Коротка назва'
+        full_name: 'Повна назва'
+
   date:
     abbr_day_names:
     - нд.

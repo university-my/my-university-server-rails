@@ -1,5 +1,4 @@
 ActiveAdmin.register Teacher do
-  menu label: "Викладачі"
 
   permit_params :name, :server_id, :university_id
   
@@ -14,7 +13,11 @@ ActiveAdmin.register Teacher do
   index do
     selectable_column
     column :name
-    column :university_id
+
+    column t('university') do |teacher|
+      link_to teacher.university.short_name, admin_university_path(teacher.university_id)
+    end
+    
     column :created_at
     column :updated_at
     actions

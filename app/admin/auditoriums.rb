@@ -1,5 +1,4 @@
 ActiveAdmin.register Auditorium do
-  menu label: "Аудиторії"
 
   permit_params :name, :server_id, :university_id
   
@@ -14,7 +13,11 @@ ActiveAdmin.register Auditorium do
   index do
     selectable_column
     column :name
-    column :university_id
+    
+    column t('university') do |auditorium|
+      link_to auditorium.university.short_name, admin_university_path(auditorium.university_id)
+    end
+
     column :created_at
     column :updated_at
     actions

@@ -1,5 +1,4 @@
 ActiveAdmin.register University do
-  menu label: "Університети"
 
   actions :index, :show
 

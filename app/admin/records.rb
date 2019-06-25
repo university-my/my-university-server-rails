@@ -1,5 +1,4 @@
 ActiveAdmin.register Record do
-  menu label: "Пари"
 
   permit_params :start_date, :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :university_id, :auditorium_id, :teacher_id, :pair_start_date
   
@@ -11,7 +10,7 @@ ActiveAdmin.register Record do
     column :name
     column :pair_name
 
-    column "Університет" do |record|
+    column t('university') do |record|
       link_to record.university.short_name, admin_university_path(record.university_id)
     end
     
