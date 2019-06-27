@@ -1,6 +1,6 @@
 ActiveAdmin.register Record do
 
-  permit_params :start_date, :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :university_id, :auditorium_id, :teacher_id, :pair_start_date
+  permit_params :start_date, :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :auditorium_id, :teacher_id, :pair_start_date
   
   actions :all
   
@@ -14,13 +14,11 @@ ActiveAdmin.register Record do
       link_to record.university.short_name, admin_university_path(record.university_id)
     end
     
-    column :created_at
-    column :updated_at
     column :reason
     column :kind
     column :time
-    column :auditorium_id
-    column :teacher_id
+    column :auditorium
+    column :teacher
     
     actions
   end
@@ -30,7 +28,6 @@ ActiveAdmin.register Record do
       f.input :start_date
       f.input :name
       f.input :pair_name
-      f.input :university_id
       f.input :reason
       f.input :kind
       f.input :time

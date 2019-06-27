@@ -13,6 +13,7 @@ uk:
       admin_user:
         one: 'Адміністратор'
         many: 'Адміністратори'
+        few: 'Адміністратори'
         other: 'Адміністратори'
       record:
         one: 'Пара'
@@ -44,12 +45,19 @@ uk:
         reason: 'Коментар'
         kind: 'Тип'
         time: 'Час'
+        teacher: 'Викладач'
+        auditorium: 'Аудиторія'
+        groups: 'Групи'
+        university: 'Університет'
       auditorium:
         name: 'Назва'
+        university: 'Університет'
       group:
         name: 'Назва'
+        university: 'Університет'
       teacher:
         name: 'ФІО'
+        university: 'Університет'
       university:
         short_name: 'Коротка назва'
         full_name: 'Повна назва'
