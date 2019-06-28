@@ -6,6 +6,12 @@ class AdminUser < ApplicationRecord
   # Constants
   ADMIN_ROLES = %w(admin reader kpi_editor sumdu_editor)
   
+  # Associations
+  belongs_to :university, optional: true
+  
+  # Associations
+  validates :university, presence: true, if: :is_kpi_editor? || :is_sumdu_editor?
+  
   # Fields validations
   validates :role, presence: true, inclusion: { in: AdminUser::ADMIN_ROLES }
   
