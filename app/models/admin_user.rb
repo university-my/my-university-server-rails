@@ -8,4 +8,20 @@ class AdminUser < ApplicationRecord
   
   # Fields validations
   validates :role, presence: true, inclusion: { in: AdminUser::ADMIN_ROLES }
+  
+  def is_admin?
+    self.role == 'admin'
+  end
+  
+  def is_reader?
+    self.role == 'reader'
+  end
+  
+  def is_kpi_editor?
+    self.role == 'kpi_editor'
+  end
+  
+  def is_sumdu_editor?
+    self.role == 'sumdu_editor'
+  end
 end

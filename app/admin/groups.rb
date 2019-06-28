@@ -21,7 +21,9 @@ ActiveAdmin.register Group do
     f.inputs do
       f.input :name
       f.input :server_id
-      f.input :university_id
+      if current_admin_user.is_admin?
+        f.input :university_id
+      end
     end
     f.actions
   end
