@@ -33,6 +33,14 @@ class ApplicationPolicy
   def destroy?
     false
   end
+  
+  def regular_permissions
+    if record.university.nil?
+      user.is_admin? || user.is_kpi_editor? || user.is_sumdu_editor?
+    else
+      user.is_admin? || user.is_kpi_editor? && record.university == user.university || user.is_sumdu_editor? && record.university == user.university
+    end
+  end
 
   class Scope
     attr_reader :user, :scope
@@ -45,10 +53,8 @@ class ApplicationPolicy
     def resolve
       if user.is_admin? || user.is_reader?
         scope.all.order(id: :desc)
-      elsif user.is_sumdu_editor?
-        scope.where(university_id: 1).order(id: :desc)
-      elsif user.is_kpi_editor?
-        scope.where(university_id: 2).order(id: :desc)
+      elsif user.is_sumdu_editor? || user.is_kpi_editor?
+        scope.where(university: user.university).order(id: :desc)
       end
     end
   end

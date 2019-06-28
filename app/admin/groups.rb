@@ -22,7 +22,9 @@ ActiveAdmin.register Group do
       f.input :name
       f.input :server_id
       if current_admin_user.is_admin?
-        f.input :university_id
+        f.input :university, as: :select, include_blank: false
+      elsif current_admin_user.is_kpi_editor? || current_admin_user.is_sumdu_editor?
+        f.input :university, as: :select, collection: [current_admin_user.university], include_blank: false
       end
     end
     f.actions

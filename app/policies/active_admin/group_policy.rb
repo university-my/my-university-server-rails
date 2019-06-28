@@ -12,11 +12,11 @@ module ActiveAdmin
     end
     
     def show?
-      user
+      regular_permissions || user.is_reader?
     end
     
     def create?
-      user.is_admin? || user.is_kpi_editor?
+      regular_permissions
     end
     
     def new?
@@ -24,7 +24,7 @@ module ActiveAdmin
     end
     
     def update?
-      user.is_admin? || user.is_kpi_editor?
+      regular_permissions
     end
     
     def edit?
@@ -32,7 +32,7 @@ module ActiveAdmin
     end
     
     def destroy?
-      user.is_admin?
+      regular_permissions
     end
   end
 end
