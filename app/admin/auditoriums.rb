@@ -9,7 +9,6 @@ ActiveAdmin.register Auditorium do
   filter :name
   
   index do
-    selectable_column
     column :name
     
     column t('university') do |auditorium|

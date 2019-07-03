@@ -5,7 +5,6 @@ ActiveAdmin.register University do
   config.filters = false
   
   index do
-    selectable_column
     column :short_name
     column :full_name
     actions

@@ -18,6 +18,7 @@ uk:
       record:
         one: 'Пара'
         many: 'Пари'
+        few: 'Пари'
         other: 'Пари'
       auditorium:
         one: 'Аудиторія'
@@ -37,6 +38,10 @@ uk:
         few: 'Університети'
         other: 'Університети'
     attributes:
+      admin_user:
+        created_at: 'Дата реєстрації'
+        role: 'Роль'
+        university: 'Університет'
       record:
         start_date: 'Дата початку'
         name: 'Назва'

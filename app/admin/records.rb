@@ -8,7 +8,6 @@ ActiveAdmin.register Record do
     selectable_column
     column :pair_start_date
     column :name
-    column :pair_name
 
     column t('university') do |record|
       link_to record.university.short_name, admin_university_path(record.university_id)
@@ -16,7 +15,6 @@ ActiveAdmin.register Record do
     
     column :reason
     column :kind
-    column :time
     column :auditorium
     column :teacher
     
