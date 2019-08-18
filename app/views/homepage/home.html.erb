@@ -12,12 +12,14 @@
       <a class="btn btn-primary btn-lg" href="/universities">Розклад <span class="text-warning">(beta)</span></a>
     </div>
 
+    <% if @records %>
     <div class="col-md-6 p-lg-2 my-2">
       <h5 class="text-center">Випадкова пара:</h5>
       <div class="text-left">
         <%= render "record" %>  
       </div>
-    </div>
+    </div>  
+    <% end %>
   </div>
 </div>
 
