@@ -14,6 +14,11 @@ class TeachersController < ApplicationController
     @university = University.find_by!(url: params[:university_url])
     @teacher = @university.teachers.friendly.find(params[:id])
     @title = @university.short_name + ' - ' + @teacher.name
+    if params.has_key?(:pair_date)
+      @pair_date = params[:pair_date]
+    else
+      @pair_date = Date.today
+    end
   end
 
   # GET /teachers/1/records
@@ -28,9 +33,21 @@ class TeachersController < ApplicationController
       # Import new
       @teacher.import_records
     end
+
+    if params.has_key?(:pair_date)
+      # Records for date
+      pair_date = params[:pair_date].to_date
+    else
+      # Records for current day
+      pair_date = Date.today
+    end
+
+    @records = Record.where(university_id: @university.id)
+      .where(teacher_id: @teacher.id)
+      .where(pair_start_date: pair_date.all_day)
+      .order(:pair_start_date)
+      .order(:pair_name)
     
-    current_day = DateTime.current.beginning_of_day
-    @records = Record.where(university_id: @university.id, teacher_id: @teacher.id).where("start_date >= ?", current_day).order(:start_date).order(:pair_name)
     @records_days = @records.group_by { |t| t.start_date }
     
     if @records.empty?

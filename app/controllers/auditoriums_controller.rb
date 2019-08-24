@@ -14,6 +14,7 @@ class AuditoriumsController < ApplicationController
     @university = University.find_by!(url: params[:university_url])
     @auditorium = @university.auditorium.friendly.find(params[:id])
     @title = @university.short_name + ' - ' + @auditorium.name
+    @pair_date = params[:pair_date]
   end
   
   # GET /auditoriums/1/records
@@ -28,9 +29,23 @@ class AuditoriumsController < ApplicationController
       # Import new
       @auditorium.import_records
     end
+
+    if params.has_key?(:pair_date)
+      # Records for date
+      pair_date = params[:pair_date].to_date
+      @records = Record.where(university_id: @university.id, auditorium: @auditorium)
+      .where("pair_start_date == ?", pair_date)
+      .order(:start_date)
+      .order(:pair_name)
+    else
+      # Records for current day
+      current_day = DateTime.current.beginning_of_day
+      @records = Record.where(university_id: @university.id, auditorium: @auditorium)
+      .where("pair_start_date == ?", current_day)
+      .order(:start_date)
+      .order(:pair_name)
+    end
     
-    current_day = DateTime.current.beginning_of_day
-    @records = Record.where(university_id: @university.id, auditorium: @auditorium).where("start_date >= ?", current_day).order(:start_date).order(:pair_name)
     @records_days = @records.group_by { |t| t.start_date }
     
     if @records.empty?

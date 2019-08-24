@@ -44,7 +44,7 @@
     <tr>
       <td>
         Аудиторія:
-        <%= link_to(university_auditorium_url(university.url, record.auditorium.friendly_id)) do %>
+        <%= link_to(university_auditorium_url(@university.url, record.auditorium.friendly_id)) do %>
         <%= record.auditorium.name %>
         <% end %>
       </td>

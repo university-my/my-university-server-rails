@@ -3,6 +3,7 @@
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="teachers"></div>
 <div data-id="<%= @teacher.id %>"></div>
+<div data-pair-date="<%= @pair_date %>"></div>
 
 <%= javascript_include_tag 'records' %>
 
@@ -15,6 +16,22 @@
 	<p>
 		<h1><%= @teacher.name %></h1>(Викладач)
 	</p>
+	<div class="row justify-content-md-center">
+		<div class="col-md-auto">
+			<form action="" method="get">
+				<div class="form-group">
+					<div class="input-group mb-3" id="inputDate">
+						<input type="date" id="start" name="pair_date"
+						value="<%= @pair_date %>"
+						min="2018-01-01" max="2022-12-31" class="form-control">
+						<div class="input-group-append">
+							<input type="submit" class="btn btn-outline-primary" value="Дивитися">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 	<p>
 		<div id="spinner" class="d-flex justify-content-center">
 			<div class="spinner-border text-primary" role="status">
