@@ -1,4 +1,4 @@
-<%= content_for(:canonical_link, university_teacher_url(@university, @teacher)) %>
+<%= content_for(:canonical_link, university_teacher_url(@university.url, @teacher)) %>
 
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="teachers"></div>
@@ -16,30 +16,16 @@
 	<p>
 		<h1><%= @teacher.name %></h1>(Викладач)
 	</p>
-	<div class="row justify-content-md-center">
-		<div class="col-md-auto">
-			<form action="" method="get">
-				<div class="form-group">
-					<div class="input-group mb-3" id="inputDate">
-						<input type="date" id="start" name="pair_date"
-						value="<%= @pair_date %>"
-						min="2018-01-01" max="2022-12-31" class="form-control">
-						<div class="input-group-append">
-							<input type="submit" class="btn btn-outline-primary" value="Дивитися">
-						</div>
-					</div>
-				</div>
-			</form>
+	<%= render "layouts/datepicker", pair_date: @pair_date %>
+	
+	<div id="spinner" class="d-flex justify-content-center mt-5">
+		<div class="spinner-border text-primary" role="status">
+			<span class="sr-only">Loading...</span>
 		</div>
+		<div style="height:300px;"></div>
 	</div>
-	<p>
-		<div id="spinner" class="d-flex justify-content-center">
-			<div class="spinner-border text-primary" role="status">
-				<span class="sr-only">Loading...</span>
-			</div>
-		</div>
-	</p>
-	<div id="records"></div>
+
+	<div id="records" class="mt-4"></div>
 	<%= render "layouts/source_site" %>
 </main>
 <%= render "layouts/footer" %>

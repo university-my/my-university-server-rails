@@ -13,12 +13,13 @@ class TeachersController < ApplicationController
   def show
     @university = University.find_by!(url: params[:university_url])
     @teacher = @university.teachers.friendly.find(params[:id])
-    @title = @university.short_name + ' - ' + @teacher.name
-    if params.has_key?(:pair_date)
-      @pair_date = params[:pair_date]
-    else
-      @pair_date = Date.today
-    end
+
+    # Date
+    @pair_date = pair_date_string_from_params
+    date = @pair_date.to_date
+
+    # Title
+    @title = @university.short_name + ' - ' + @teacher.name + " (#{localized_string_from(date)})"
   end
 
   # GET /teachers/1/records
@@ -34,13 +35,8 @@ class TeachersController < ApplicationController
       @teacher.import_records
     end
 
-    if params.has_key?(:pair_date)
-      # Records for date
-      pair_date = params[:pair_date].to_date
-    else
-      # Records for current day
-      pair_date = Date.today
-    end
+    # Date
+    pair_date = pair_date_from_params
 
     @records = Record.where(university_id: @university.id)
       .where(teacher_id: @teacher.id)
@@ -53,7 +49,11 @@ class TeachersController < ApplicationController
     if @records.empty?
       render :partial => "records/empty"
     else
-      render :partial => "records/show", :locals => {:records => @records, :university => @university}
+      render :partial => "records/show", :locals => {
+        :records => @records,
+        :university => @university,
+        :pair_date => pair_date
+      }
     end
   end
 end

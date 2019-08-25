@@ -1,4 +1,4 @@
-<%= content_for(:canonical_link, university_auditorium_url(@university, @auditorium)) %>
+<%= content_for(:canonical_link, university_auditorium_url(@university.url, @auditorium)) %>
 
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="auditoriums"></div>
@@ -7,7 +7,7 @@
 
 <%= javascript_include_tag 'records' %>
 
-<% meta_tag :description, "Розклад занять #{@university.short_name}, Аудиторія " + @auditorium.name %>
+<% meta_tag :description, "Розклад занять #{@university.url.short_name}, Аудиторія " + @auditorium.name %>
 
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
@@ -16,22 +16,8 @@
 	<p>
 		<h1><%= @auditorium.name %></h1>(Аудиторія)
 	</p>
-	<div class="row justify-content-md-center">
-		<div class="col-md-auto">
-			<form action="" method="get">
-				<div class="form-group">
-					<div class="input-group mb-3" id="inputDate">
-						<input type="date" id="start" name="pair_date"
-						value="2018-07-22"
-						min="2018-01-01" max="2018-12-31" class="form-control">
-						<div class="input-group-append">
-							<input type="submit" class="btn btn-outline-secondary" value="Дивитися">
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+	<%= render "layouts/datepicker", pair_date: @pair_date %>
+
 	<p>
 		<div id="spinner" class="d-flex justify-content-center">
 			<div class="spinner-border text-primary" role="status">

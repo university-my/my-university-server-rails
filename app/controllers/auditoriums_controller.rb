@@ -13,8 +13,13 @@ class AuditoriumsController < ApplicationController
   def show
     @university = University.find_by!(url: params[:university_url])
     @auditorium = @university.auditorium.friendly.find(params[:id])
-    @title = @university.short_name + ' - ' + @auditorium.name
-    @pair_date = params[:pair_date]
+
+    # Date
+    @pair_date = pair_date_string_from_params
+    date = @pair_date.to_date
+
+    # Title
+    @title = @university.short_name + ' - ' + @auditorium.name + " (#{localized_string_from(date)})"
   end
   
   # GET /auditoriums/1/records
@@ -30,28 +35,25 @@ class AuditoriumsController < ApplicationController
       @auditorium.import_records
     end
 
-    if params.has_key?(:pair_date)
-      # Records for date
-      pair_date = params[:pair_date].to_date
-      @records = Record.where(university_id: @university.id, auditorium: @auditorium)
-      .where("pair_start_date == ?", pair_date)
-      .order(:start_date)
+    # Date
+    pair_date = pair_date_from_params
+
+    @records = Record.where(university_id: @university.id)
+      .where(auditorium: @auditorium)
+      .where(pair_start_date: pair_date.all_day)
+      .order(:pair_start_date)
       .order(:pair_name)
-    else
-      # Records for current day
-      current_day = DateTime.current.beginning_of_day
-      @records = Record.where(university_id: @university.id, auditorium: @auditorium)
-      .where("pair_start_date == ?", current_day)
-      .order(:start_date)
-      .order(:pair_name)
-    end
     
     @records_days = @records.group_by { |t| t.start_date }
     
     if @records.empty?
       render :partial => "records/empty"
     else
-      render :partial => "records/show", :locals => {:records => @records, :university => @university}
+      render :partial => "records/show", :locals => {
+        :records => @records,
+        :university => @university,
+        :pair_date => pair_date
+      }
     end
   end
 end
