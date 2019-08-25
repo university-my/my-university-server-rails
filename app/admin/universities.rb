@@ -1,6 +1,8 @@
 ActiveAdmin.register University do
 
-  actions :index, :show
+  permit_params :short_name, :full_name, :url, :is_hidden
+
+  actions :index, :show, :edit, :update
 
   config.filters = false
   
