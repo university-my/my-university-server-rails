@@ -27,22 +27,33 @@ class TeachersController < ApplicationController
   def records
     @university = University.find_by!(url: params[:university_url])
     @teacher = Teacher.find_by!(university_id: @university.id, id: params[:id])
-    
-    # Check if need to update records
-    if @teacher.need_to_update_records
-
-      # Import new
-      @teacher.import_records
-    end
 
     # Date
     pair_date = pair_date_from_params
 
+    # TODO: Maybe use count
+
     @records = Record.where(university_id: @university.id)
-      .where(teacher_id: @teacher.id)
-      .where(pair_start_date: pair_date.all_day)
-      .order(:pair_start_date)
-      .order(:pair_name)
+    .where(teacher_id: @teacher.id)
+    .where(pair_start_date: pair_date.all_day)
+    .order(:pair_start_date)
+    .order(:pair_name)
+
+    if @records.empty?
+      @teacher.import_records(pair_date)
+
+    elsif @teacher.need_to_update_records
+
+      # Update
+      @teacher.import_records(pair_date)
+    end
+
+    # Select records one more time
+    @records = Record.where(university_id: @university.id)
+    .where(teacher_id: @teacher.id)
+    .where(pair_start_date: pair_date.all_day)
+    .order(:pair_start_date)
+    .order(:pair_name)
     
     @records_days = @records.group_by { |t| t.start_date }
     
