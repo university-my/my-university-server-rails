@@ -2,10 +2,6 @@ Rails.application.routes.draw do
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  # TODO: Delete this
-  # namespace :admin do
-  #   resources :universities, :users
-  # end
   
   devise_for :users
   get 'homepage/home'

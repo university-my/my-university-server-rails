@@ -13,7 +13,13 @@ class TeachersController < ApplicationController
   def show
     @university = University.find_by!(url: params[:university_url])
     @teacher = @university.teachers.friendly.find(params[:id])
-    @title = @university.short_name + ' - ' + @teacher.name
+
+    # Date
+    @pair_date = pair_date_string_from(params)
+    date = @pair_date.to_date
+
+    # Title
+    @title = "#{@university.short_name} - #{@teacher.name} (#{localized_string_from(date)})"
   end
 
   # GET /teachers/1/records
@@ -21,22 +27,44 @@ class TeachersController < ApplicationController
   def records
     @university = University.find_by!(url: params[:university_url])
     @teacher = Teacher.find_by!(university_id: @university.id, id: params[:id])
-    
-    # Check if need to update records
-    if @teacher.need_to_update_records
 
-      # Import new
-      @teacher.import_records
+    # Date
+    pair_date = pair_date_from(params)
+
+    # TODO: Maybe use count
+
+    @records = Record.where(university_id: @university.id)
+    .where(teacher_id: @teacher.id)
+    .where(pair_start_date: pair_date.all_day)
+    .order(:pair_start_date)
+    .order(:pair_name)
+
+    if @records.empty?
+      @teacher.import_records(pair_date)
+
+    elsif @teacher.need_to_update_records
+
+      # Update
+      @teacher.import_records(pair_date)
     end
+
+    # Select records one more time
+    @records = Record.where(university_id: @university.id)
+    .where(teacher_id: @teacher.id)
+    .where(pair_start_date: pair_date.all_day)
+    .order(:pair_start_date)
+    .order(:pair_name)
     
-    current_day = DateTime.current.beginning_of_day
-    @records = Record.where(university_id: @university.id, teacher_id: @teacher.id).where("start_date >= ?", current_day).order(:start_date).order(:pair_name)
     @records_days = @records.group_by { |t| t.start_date }
     
     if @records.empty?
-      render :partial => "records/empty"
+      render partial: "records/empty"
     else
-      render :partial => "records/show", :locals => {:records => @records, :university => @university}
+      render partial: "records/show", locals: {
+        records: @records,
+        university: @university,
+        pair_date: pair_date
+      }
     end
   end
 end

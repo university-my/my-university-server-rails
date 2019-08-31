@@ -3,7 +3,7 @@ class UniversitiesController < ApplicationController
   # GET /universities
   # GET /universities.json
   def index
-    @universities = University.all
+    @universities = University.where(is_hidden: false)
     @title = 'Мій Університет - Всі університети'
   end
 
@@ -11,6 +11,6 @@ class UniversitiesController < ApplicationController
   # GET /universities/1.json
   def show
     @university = University.find_by!(url: params[:url])
-    @title = 'Мій Університет - ' + @university.short_name
+    @title = "Мій Університет - #{@university.short_name}"
   end
 end

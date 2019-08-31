@@ -1,18 +1,15 @@
 university = $('div[data-university-url]').data('university-url')
 type = $('div[data-type]').data('type')
 id = $('div[data-id]').data('id')
+pairDate = $('div[data-pair-date]').data('pair-date')
+html = '<div class="px-3 py-3 mx-auto text-center"><h2 class="h1-responsive font-weight-bold text-center my-5">Внутрішня помилка сервера</h2><p>Спробуйте повернутися на <a href="https://my-university.com.ua">Головну</a> сторінку, або <a href="https://my-university.com.ua/contacts">Повідомте про помилку</a></p></div>'
 
-$.ajax "/universities/#{university}/#{type}/#{id}/records",
-		type: 'GET'
-		dataType: 'html'
-		error: (jqXHR, textStatus, errorThrown) ->
-			html = '<div class="px-3 py-3 mx-auto text-center">
-				<h2 class="h1-responsive font-weight-bold text-center my-5">Ой 🤔</h2>
-				<p class="grey-text text-center w-responsive mx-auto mb-5">Щось пішло не так...</p>
-				<p>Спробуйте повернутися на <a href="https://my-university.com.ua">Головну</a> сторінку, або <a href="https://my-university.com.ua/contacts">Повідомте про помилку</a></p>
-			</div>'
-			$('#spinner').remove()
-			$('#records').html(html)
-		success: (data, textStatus, jqXHR) ->
-			$('#spinner').remove()
-			$('#records').html(data)
+$.ajax "/universities/#{university}/#{type}/#{id}/records?pair_date=#{pairDate}",
+	type: 'GET'
+	dataType: 'html'
+	error: (jqXHR, textStatus, errorThrown) ->
+		$('#spinner').remove()
+		$('#records').html(html)
+	success: (data, textStatus, jqXHR) ->
+		$('#spinner').remove()
+		$('#records').html(data)

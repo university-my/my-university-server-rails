@@ -31,9 +31,9 @@ class Teacher < ApplicationRecord
 
 
   # Import records for teacher for SumDU
-  def import_records
+  def import_records(date)
     if university.url == "sumdu"
-      SumduHelper.import_records_for_teacher(self)
+      SumduService.import_records_for_teacher(self, date)
     end
 
     if university.url == "kpi"

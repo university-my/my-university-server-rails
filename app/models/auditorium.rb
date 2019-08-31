@@ -32,9 +32,9 @@ class Auditorium < ApplicationRecord
 
 
   # Import records for current Auditorium
-  def import_records
+  def import_records(date)
     if university.url == "sumdu"
-      SumduHelper.import_records_for_auditorium(self)
+      SumduService.import_records_for_auditorium(self, date)
     end
   end
   
