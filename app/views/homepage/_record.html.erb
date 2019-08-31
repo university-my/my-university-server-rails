@@ -6,7 +6,7 @@
     <tr class="table-secondary"><th scope="row"><%= l day, format: "%A, %e %B %Y" %></th></tr>
 
     <% for record in records %>
-    <% if record.name.blank? == false && record.kind.blank? %>
+    <% if record.name.present? && record.kind.blank? %>
     <tr>
       <td>
         <%= record.name %>
@@ -14,7 +14,7 @@
     </tr>
     <% end %>
     
-    <% if record.name.blank? && record.kind.blank? == false %>
+    <% if record.name.blank? && record.kind.present? %>
     <tr>
       <td>
         <i><%= record.kind %></i>
@@ -22,7 +22,7 @@
     </tr>
     <% end %>
     
-    <% if record.name.blank? == false && record.kind.blank? == false %>
+    <% if record.name.present? && record.kind.present? %>
     <tr>
       <td>
         <%= record.name %><br>
@@ -31,7 +31,7 @@
     </tr>
     <% end %>
     
-    <% if record.reason.blank? == false %>
+    <% if record.reason.present? %>
     <tr>
       <td>
         <b>Коментар:</b>
@@ -40,7 +40,7 @@
     </tr>
     <% end %>
     
-    <% if record.auditorium.nil? == false %>
+    <% if record.auditorium %>
     <tr>
       <td>
         Аудиторія:
@@ -51,7 +51,7 @@
     </tr>
     <% end %>
 
-    <% if record.teacher.nil? == false %>
+    <% if record.teacher %>
     <tr>
       <td>
         Викладач:
@@ -62,7 +62,7 @@
     </tr>
     <% end %>
     
-    <% if record.groups.nil? == false && record.groups.count > 0 %>
+    <% if record.groups && record.groups.count > 0 %>
     <tr>
       <td>
         <% if record.groups.count > 1 %>
