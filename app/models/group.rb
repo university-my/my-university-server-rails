@@ -30,9 +30,9 @@ class Group < ApplicationRecord
 
 
   # Import records for current Group
-  def import_records
+  def import_records(date)
     if university.url == "sumdu"
-      SumduHelper.import_records_for_group(self)
+      SumduService.import_records_for_group(self, date)
     end
 
     if university.url == "kpi"

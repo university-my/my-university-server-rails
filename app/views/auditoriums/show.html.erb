@@ -1,8 +1,9 @@
-<%= content_for(:canonical_link, university_auditorium_url(@university, @auditorium)) %>
+<%= content_for(:canonical_link, university_auditorium_url(@university.url, @auditorium)) %>
 
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="auditoriums"></div>
 <div data-id="<%= @auditorium.id %>"></div>
+<div data-pair-date="<%= @pair_date %>"></div>
 
 <%= javascript_include_tag 'records' %>
 
@@ -15,6 +16,8 @@
 	<p>
 		<h1><%= @auditorium.name %></h1>(Аудиторія)
 	</p>
+	<%= render "layouts/datepicker", pair_date: @pair_date %>
+
 	<p>
 		<div id="spinner" class="d-flex justify-content-center">
 			<div class="spinner-border text-primary" role="status">

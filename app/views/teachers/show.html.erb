@@ -1,8 +1,9 @@
-<%= content_for(:canonical_link, university_teacher_url(@university, @teacher)) %>
+<%= content_for(:canonical_link, university_teacher_url(@university.url, @teacher)) %>
 
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="teachers"></div>
 <div data-id="<%= @teacher.id %>"></div>
+<div data-pair-date="<%= @pair_date %>"></div>
 
 <%= javascript_include_tag 'records' %>
 
@@ -15,14 +16,16 @@
 	<p>
 		<h1><%= @teacher.name %></h1>(Викладач)
 	</p>
-	<p>
-		<div id="spinner" class="d-flex justify-content-center">
-			<div class="spinner-border text-primary" role="status">
-				<span class="sr-only">Loading...</span>
-			</div>
+	<%= render "layouts/datepicker", pair_date: @pair_date %>
+	
+	<div id="spinner" class="d-flex justify-content-center mt-5">
+		<div class="spinner-border text-primary" role="status">
+			<span class="sr-only">Loading...</span>
 		</div>
-	</p>
-	<div id="records"></div>
+		<div style="height:300px;"></div>
+	</div>
+
+	<div id="records" class="mt-4"></div>
 	<%= render "layouts/source_site" %>
 </main>
 <%= render "layouts/footer" %>
