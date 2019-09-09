@@ -17,7 +17,7 @@ class Group < ApplicationRecord
 
   # Fields validations
   validates :name, presence: true
-  validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: true
+  validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: false
 
   # Associations
   has_and_belongs_to_many :records, optional: true, dependent: :nullify

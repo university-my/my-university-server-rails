@@ -23,14 +23,17 @@ uk:
       auditorium:
         one: 'Аудиторія'
         many: 'Аудиторії'
+        few: 'Аудиторії'
         other: 'Аудиторії'
       group:
         one: 'Група'
         many: 'Групи'
+        few: 'Групи'
         other: 'Групи'
       teacher:
         one: 'Викладач'
         many: 'Викладачі'
+        few: 'Викладачі'
         other: 'Викладачі'
       university:
         one: 'Університет'

@@ -17,7 +17,7 @@ class Teacher < ApplicationRecord
 
   # Field validations
   validates :name, presence: true
-  validates :server_id, presence: true, numericality: { greater_than: 0 }, uniqueness: true
+  validates :server_id, presence: true, numericality: { greater_than: 0 }, uniqueness: false
 
   # Associations
   has_many :records, dependent: :nullify
