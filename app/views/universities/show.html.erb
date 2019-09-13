@@ -19,11 +19,11 @@
             <span class="badge badge-primary badge-pill"><%= @university.auditorium.count %></span>
           </li>
           <% end %>
-          <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Групи', university_groups_url(@university.url) %>
-            <span class="badge badge-primary badge-pill"><%= @university.groups.count %></span>
-          </li>
           <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Викладачі', university_teachers_url(@university.url) %>
             <span class="badge badge-primary badge-pill"><%= @university.teachers.count %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Групи', university_groups_url(@university.url) %>
+            <span class="badge badge-primary badge-pill"><%= @university.groups.count %></span>
           </li>
         </ul>
       </div>
