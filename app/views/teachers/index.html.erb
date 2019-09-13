@@ -13,20 +13,20 @@
 		<tbody>
 			<% @teachers.each do |teacher| %>
 			<tr>
-				<td><%= teacher.name %></td>
-				<td><%= link_to 'Показати', university_teacher_url(@university.url, teacher.friendly_id) %></td>
+				<td><%= link_to teacher.name, university_teacher_url(@university.url, teacher.friendly_id) %></td>
 			</tr>
 			<% end %>
 		</tbody>
 	</table>
+
 	<div class="container">
-      <div class="row">
-        <% if @university.url == 'sumdu' %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту schedule.sumdu.edu.ua</small></p>
-        <% elsif @university.url == 'kpi' %>  
-        <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту rozklad.org.ua</small></p>
-        <% end %>
-      </div>
+    <div class="row">
+      <% if @university.url == 'sumdu' %>
+      <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту schedule.sumdu.edu.ua</small></p>
+      <% elsif @university.url == 'kpi' %>  
+      <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту rozklad.org.ua</small></p>
+      <% end %>
     </div>
+  </div>
 </main>
 <%= render "layouts/footer" %>

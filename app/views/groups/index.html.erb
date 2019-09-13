@@ -7,26 +7,25 @@
 
 <main class="container custom-padding-top" role="main">
 
-	<h1>Групи</h1>
+  <h1>Групи</h1>
+  <table class="table table-striped">
+    <tbody>
+      <% @groups.each do |group| %>
+      <tr>
+        <td><%= link_to group.name, university_group_url(@university.url, group.friendly_id) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-	<table class="table table-striped">
-		<tbody>
-			<% @groups.each do |group| %>
-			<tr>
-				<td><%= group.name %></td>
-				<td><%= link_to 'Показати', university_group_url(@university.url, group.friendly_id) %></td>
-			</tr>
-			<% end %>
-		</tbody>
-	</table>
-	<div class="container">
-      <div class="row">
-        <% if @university.url == 'sumdu' %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про групи із сайту schedule.sumdu.edu.ua</small></p>
-        <% elsif @university.url == 'kpi' %>  
-        <p class="text-muted font-weight-lighter"><small>Інформація про групи із сайту rozklad.org.ua</small></p>
-        <% end %>
-      </div>
+  <div class="container">
+    <div class="row">
+      <% if @university.url == 'sumdu' %>
+      <p class="text-muted font-weight-lighter"><small>Інформація про групи із сайту schedule.sumdu.edu.ua</small></p>
+      <% elsif @university.url == 'kpi' %>  
+      <p class="text-muted font-weight-lighter"><small>Інформація про групи із сайту rozklad.org.ua</small></p>
+      <% end %>
     </div>
+  </div>
 </main>
 <%= render "layouts/footer" %>
