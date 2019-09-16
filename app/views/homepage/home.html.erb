@@ -5,13 +5,11 @@
 
 <div class="container">
   <div class="row position-relative overflow-hidden text-center bg-light">
-
     <div class="col-md-6 p-lg-2 my-5">
-      <h1 class="display-5 font-weight-normal">Онлайн розклад для навчальних закладів</h1>
-      <p class="lead font-weight-normal">Детальний розклад занять, списки груп та вчителів</p>
-      <a class="btn btn-primary btn-lg" href="/universities">Розклад <span class="text-warning">(beta)</span></a>
+      <h1 class="display-5 font-weight-normal">Розклад для навчальних закладів</h1>
+      <p class="lead font-weight-normal">Детальна інформація про пари, списки груп та вчителів</p>
+      <a class="btn btn-primary btn-lg" href="/universities/sumdu">Розклад <span class="text-warning">(beta)</span></a>
     </div>
-
     <% if @records %>
     <div class="col-md-6 p-lg-2 my-2">
       <h5 class="text-center">Випадкова пара:</h5>
@@ -28,7 +26,6 @@
     <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">iOS</h2>
-        <p class="lead">Розклад СумДУ</p>
       </div>
       <div class="mx-auto" style="width: 50%; height: 300px;">
         <%= image_tag("ios.png", class: "img-fluid") %>
@@ -39,13 +36,18 @@
     <div class="bg-white mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-dark overflow-hidden">
       <div class="my-3 p-3">
         <h2 class="display-5">Android</h2>
-        <p class="lead">Розклад СумДУ</p>
       </div>
       <div class="mx-auto" style="width: 50%; height: 300px;">
         <%= image_tag("android4.png", class: "img-fluid") %>
       </div>
     </div>
   </a>
+</div>
+
+<div class="jumbotron">
+  <h1>Маєте ідеї чи побажання?</h1>
+  <p class="lead">Знаєте як покращити наш сервіс? Залиште відгук!</p>
+  <a class="btn btn-primary btn-lg" href="https://t.me/voevodin_yura">Напишіть нам »</a>    
 </div>
 
 <%= render "layouts/footer" %>

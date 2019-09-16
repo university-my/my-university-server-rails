@@ -9,36 +9,32 @@
 <main class="container" role="main">
   <p>
     <h1 class="display-5"><%= @university.short_name %></h3>
-    <h6>(<%= @university.full_name %>)</h2>
-    </p>
+      <h6>(<%= @university.full_name %>)</h2>
+      </p>
 
-    <table class="table">
-      <tbody>
-        <% if @university.url != "kpi" %>
-        <tr>
-          <td>Аудиторії (<%= @university.auditorium.count %>)</td>
-          <td><%= link_to 'Показати', university_auditoriums_url(@university.url) %></td>
-        </tr>
-        <tr>
+    <div class="col-md-4 my-4">
+        <ul class="list-group">
+          <% if @university.url != "kpi" %>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Аудиторії', university_auditoriums_url(@university.url) %>
+            <span class="badge badge-primary badge-pill"><%= @university.auditorium.count %></span>
+          </li>
           <% end %>
-          <td>Групи (<%= @university.groups.count %>)</td>
-          <td><%= link_to 'Показати', university_groups_url(@university.url) %></td>
-        </tr>
-        <tr>
-          <td>Викладачі (<%= @university.teachers.count %>)</td>
-          <td><%= link_to 'Показати', university_teachers_url(@university.url) %></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="container">
-      <div class="row">
-        <% if @university.url == 'sumdu' %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
-        <% elsif @university.url == 'kpi' %>  
-        <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
-        <% end %>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Викладачі', university_teachers_url(@university.url) %>
+            <span class="badge badge-primary badge-pill"><%= @university.teachers.count %></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-light"><%= link_to 'Групи', university_groups_url(@university.url) %>
+            <span class="badge badge-primary badge-pill"><%= @university.groups.count %></span>
+          </li>
+        </ul>
       </div>
-    </div>
-  </main>
-  <%= render "layouts/footer" %>
+      <div class="container">
+        <div class="row">
+          <% if @university.url == 'sumdu' %>
+          <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+          <% elsif @university.url == 'kpi' %>  
+          <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+          <% end %>
+        </div>
+      </div>
+    </main>
+    <%= render "layouts/footer" %>

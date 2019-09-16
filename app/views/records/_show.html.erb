@@ -1,11 +1,15 @@
 <% if @records_days %>
 <% @records_days.each do |day, records| %>
 
+<div class="alert alert-secondary" role="alert">
+	<span class="font-weight-bold"><%= l day, format: "%A, %e %B %Y" %></span>
+</div>
+
+<% for record in records %>
+
 <table class="table table-bordered">
 	<tbody>
-		<tr class="table-secondary"><th scope="row"><%= l day, format: "%A, %e %B %Y" %></th></tr>
-
-		<% for record in records %>
+		
 		<tr class="table-active">
 			<td scope="row"><%= record.pair_name %> (<%= record.time %>)</td>
 		</tr>
@@ -85,12 +89,10 @@
 			</td>
 		</tr>
 		<% end %>
-		
-		<% end %>
-		
+
 	</tbody>
 </table>
-<br>
+<% end %>
 
 <% end %>
 <% end %>
