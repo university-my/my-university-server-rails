@@ -8,8 +8,8 @@ module KhneuService
   # Import teachers from KHNEU API
   #
 
-  # bin/rails runner 'KhneuService.import_teachers'
-  def self.import_teachers
+  # bin/rails runner 'KhneuService.import_groups'
+  def self.import_groups
     # Faculties
     faculties_ids = request_faculties()
 
@@ -138,11 +138,9 @@ module KhneuService
 
     @doc = doc.xpath('//element').each do |group|
       groupID = group.attributes['id'].value
-      # groupName = group.attributes['displayName'].value
-      p '======'
-      p 'groupID = ', groupID
-      p 'group.children = ', group.children
-      # p group
+      groupName = group.at('./displayName').children.to_s
+
+      # TODO: Save to DB
     end
   end
 
