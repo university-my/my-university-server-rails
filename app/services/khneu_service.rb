@@ -140,7 +140,44 @@ module KhneuService
       groupID = group.attributes['id'].value
       groupName = group.at('./displayName').children.to_s
 
-      # TODO: Save to DB
+      # Save to DB
+      save_group(groupID, groupName)
+    end
+  end
+  
+  def self.save_group(server_id, group_name)
+    
+    begin
+      
+      # This groups for KHNEU
+      university = University.find_by(url: "khnue")
+      
+      # Conditions for find existing group
+      conditions = {}
+      conditions[:university_id] = university.id
+      conditions[:server_id] = server_id
+      conditions[:name] = group_name
+    
+      # Try to find existing group first
+      group = Group.find_by(conditions)
+    
+      if group.nil?
+        # Save new group
+        group = Group.new
+        group.server_id = server_id
+        group.name = group_name
+        group.university = university
+      
+        unless group.save
+          # Go to the next iteration if can't be saved
+          p group.errors.full_messages
+          Rails.logger.error(group.errors.full_messages)
+        end
+      end
+      
+    rescue Exception => e 
+      p e
+      Rails.logger.error(e)
     end
   end
 
