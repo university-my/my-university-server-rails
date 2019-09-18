@@ -50,11 +50,6 @@ module KpiHelper
 
         startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
 
-        # Skip old records
-        # if startDate < currentDate
-        #   next
-        # end
-
         # Get pair date and time
         pair_time = time.to_time
         pair_start_date  = (startDate.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
