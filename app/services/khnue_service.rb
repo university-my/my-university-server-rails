@@ -69,7 +69,7 @@ module KhnueService
 
   def self.import_records_for_group(group, date)
     # Because in API first week begins in 1th of September
-    weeks_shift = 34
+    weeks_shift = 35
     current_week = date.cweek
     week_number = 1
 
@@ -94,9 +94,8 @@ module KhnueService
 
     @doc = doc.xpath('//schedule-element').each do |element|
       # Start date
-      start = element.attributes['start'].value
-      date = element.attributes['date'].value
-      date_string = "#{date} #{start}"
+      start_time_string = element.attributes['start'].value
+      date_string = element.attributes['date'].value
 
       # Name
       name_string = element.attributes['pair'].value
@@ -106,9 +105,6 @@ module KhnueService
 
       # Kind
       kind = element.at('//type').children.to_s
-
-      # Time
-      time = start
 
       # Auditorium
       auditorium_id = element.at('//room').attributes['id'].value
@@ -124,11 +120,11 @@ module KhnueService
       end
 
       # Save to DB
-      save_or_update_record(date_string, name_string, pair_name, kind, time, auditorium_id, teacher_id, groups_ids)
+      save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_id, groups_ids)
     end
   end
 
-  def self.save_or_update_record(date_string, name_string, pair_name, kind, time, auditorium_id, teacher_id, groups_ids)
+  def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_id, groups_ids)
 
     university = University.find_by(url: "khnue")
 
@@ -144,6 +140,7 @@ module KhnueService
       
       # Pair start date
       start_date = date_string.to_datetime
+      pair_start_date = "#{date_string} #{start_time_string}".to_datetime
 
       # Conditions for find existing pair
       conditions = {}
@@ -152,7 +149,7 @@ module KhnueService
       conditions[:name] = name_string
       conditions[:pair_name] = pair_name
       conditions[:kind] = kind
-      conditions[:time] = time
+      conditions[:time] = start_time_string
 
       # Try to find existing record first
       record = Record.find_by(conditions)
@@ -161,8 +158,8 @@ module KhnueService
         # Save new record
         record = Record.new
         record.start_date = start_date
-        record.pair_start_date = start_date
-        record.time = time
+        record.pair_start_date = pair_start_date
+        record.time = start_time_string
         record.pair_name = pair_name
         record.name = name_string
         record.reason = nil
@@ -191,8 +188,8 @@ module KhnueService
         # Record not nil
         # Update record
         record.start_date = start_date
-        record.pair_start_date = start_date
-        record.time = time
+        record.pair_start_date = pair_start_date
+        record.time = start_time_string
         record.pair_name = pair_name
         record.name = name_string
         record.reason = nil

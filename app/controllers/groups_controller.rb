@@ -31,11 +31,12 @@ class GroupsController < ApplicationController
     # Date
     pair_date = pair_date_from(params)
 
-    @records = Record.where(university_id: @university.id)
-    .where(auditorium: @auditorium)
-    .where(pair_start_date: pair_date.all_day)
-    .order(:pair_start_date)
-    .order(:pair_name)
+    @records = Record.joins(:groups)
+      .where(university_id: @university.id)
+      .where('groups.id': @group.id)
+      .where(pair_start_date: pair_date.all_day)
+      .order(:pair_start_date)
+      .order(:pair_name)
 
     if @records.empty?
       @group.import_records(pair_date)
