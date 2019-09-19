@@ -33,10 +33,12 @@ class Group < ApplicationRecord
   def import_records(date)
     if university.url == "sumdu"
       SumduService.import_records_for_group(self, date)
-    end
 
-    if university.url == "kpi"
+    elsif university.url == "kpi"
       KpiHelper.import_records_for_group(self)
+
+    elsif university.url == "khnue"
+      KhnueService.import_records_for_group(self, date)
     end
   end
 

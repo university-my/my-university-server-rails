@@ -35,6 +35,9 @@ class Auditorium < ApplicationRecord
   def import_records(date)
     if university.url == "sumdu"
       SumduService.import_records_for_auditorium(self, date)
+
+    elsif university.url == "khnue"
+        KhnueService.import_records_for_auditorium(self, date)
     end
   end
   
