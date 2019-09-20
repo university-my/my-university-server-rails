@@ -37,6 +37,24 @@ module KhnueService
     doc = Nokogiri::XML(response.body)
     return doc
   end
+  
+  def self.calculate_week(date)
+    # Because in API first week begins in 1th of September
+    weeks_shift = 34
+    current_week = date.cweek
+    week_number = 1
+
+    if current_week == 35
+      week_number = 1
+
+    elsif current_week > weeks_shift
+      week_number = current_week - weeks_shift
+
+    elsif weeks_shift > current_week
+      week_number = current_week + weeks_shift
+    end
+    return week_number
+  end
 
   #
   # Import records for auditorium from KHNUE API
@@ -68,20 +86,7 @@ module KhnueService
   #
 
   def self.import_records_for_group(group, date)
-    # Because in API first week begins in 1th of September
-    weeks_shift = 35
-    current_week = date.cweek
-    week_number = 1
-
-    if current_week == 35
-      week_number = 1
-
-    elsif current_week > weeks_shift
-      week_number = current_week - weeks_shift
-
-    elsif weeks_shift > current_week
-      week_number = current_week + weeks_shift
-    end
+    week_number = calculate_week(date)
 
     url = 'http://services.ksue.edu.ua:8081/schedule/xml'
     query = "?group=#{group.server_id}&week=#{week_number}&#{authKey}"
