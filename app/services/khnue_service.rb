@@ -13,6 +13,10 @@ module KhnueService
   end
 
   def self.perform_request(url)
+    p '======'
+    p 'URL: ', url
+    p '======'
+    
     # Init URI
     uri = URI(url)
 
@@ -40,7 +44,7 @@ module KhnueService
   
   def self.calculate_week(date)
     # Because in API first week begins in 1th of September
-    weeks_shift = 34
+    weeks_shift = 35
     current_week = date.cweek
     week_number = 1
 
@@ -67,12 +71,6 @@ module KhnueService
     query = "?room=#{auditorium.server_id}&week=#{week_number}&#{authKey}"
 
     doc = perform_request(url + query)
-
-    p '======'
-    p '======'
-    p url + query
-    p '======'
-
     schedule = doc.at('//schedule//week')
 
     schedule.children.each do |day|
@@ -93,33 +91,30 @@ module KhnueService
 
     doc = perform_request(url + query)
 
-    p '======'
-    p url + query
-    p '======'
-
     @doc = doc.xpath('//schedule-element').each do |element|
       # Start date
       start_time_string = element.attributes['start'].value
       date_string = element.attributes['date'].value
 
-      # Name
-      name_string = element.attributes['pair'].value
-
       # Pair name
-      pair_name = element.at('//subject').children.to_s
+      pair_name = element.attributes['pair'].value
+
+      # Name
+      name_string = element.at('./subject').children.to_s
 
       # Kind
-      kind = element.at('//type').children.to_s
+      kind = element.at('./type').children.to_s
 
       # Auditorium
-      auditorium_id = element.at('//room').attributes['id'].value
+      auditorium_id = element.at('./room').attributes['id'].value
 
       # Teacher
-      teacher_id = element.at('//teacher').attributes['id'].value
+      teacher_id = element.at('./teacher').attributes['id'].value
 
       # Groups
       groups_ids = []
-      element.xpath("//group").each do |node|
+      groups = element.xpath("./groups")
+      groups.xpath("./group").each do |node|
         group_id = node.attributes['id'].value
         groups_ids.push(group_id)
       end
@@ -130,7 +125,6 @@ module KhnueService
   end
 
   def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_id, groups_ids)
-
     university = University.find_by(url: "khnue")
 
     begin
@@ -141,7 +135,12 @@ module KhnueService
       groups = Group.where(university_id: university.id, server_id: groups_ids)
       
       # Teacher
+      p '--------------!!!'
       teacher = Teacher.where(university_id: university.id, server_id: teacher_id.to_i).first
+      p 'teacher_id = ', teacher_id
+      p 'teacher = ', teacher
+      p '--------------!!!'
+      return
       
       # Pair start date
       start_date = date_string.to_datetime
