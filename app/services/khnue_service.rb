@@ -13,10 +13,6 @@ module KhnueService
   end
 
   def self.perform_request(url)
-    p '======'
-    p 'URL: ', url
-    p '======'
-    
     # Init URI
     uri = URI(url)
 
@@ -59,38 +55,8 @@ module KhnueService
     end
     return week_number
   end
-
-  #
-  # Import records for auditorium from KHNUE API
-  #
-
-  def self.import_records_for_auditorium(auditorium, date)
-    week_number = date.cweek
-
-    url = 'http://services.ksue.edu.ua:8081/schedule/xml'
-    query = "?room=#{auditorium.server_id}&week=#{week_number}&#{authKey}"
-
-    doc = perform_request(url + query)
-    schedule = doc.at('//schedule//week')
-
-    schedule.children.each do |day|
-      p '---'
-      p day
-    end
-  end
-
-  #
-  # Import records for groups from KHNUE API
-  #
-
-  def self.import_records_for_group(group, date)
-    week_number = calculate_week(date)
-
-    url = 'http://services.ksue.edu.ua:8081/schedule/xml'
-    query = "?group=#{group.server_id}&week=#{week_number}&#{authKey}"
-
-    doc = perform_request(url + query)
-
+  
+  def self.parse_and_save_records(doc)
     @doc = doc.xpath('//schedule-element').each do |element|
       # Start date
       start_time_string = element.attributes['start'].value
@@ -100,16 +66,32 @@ module KhnueService
       pair_name = element.attributes['pair'].value
 
       # Name
-      name_string = element.at('./subject').children.to_s
+      subject = element.at('./subject')
+      name_string = nil
+      if subject
+        name_string = subject.children.to_s
+      end
 
       # Kind
-      kind = element.at('./type').children.to_s
+      type = element.at('./type')
+      kind = nil
+      if type
+        kind = type.children.to_s
+      end
 
       # Auditorium
-      auditorium_id = element.at('./room').attributes['id'].value
+      room = element.at('./room')
+      auditorium_id = nil
+      if room
+        auditorium_id = room.attributes['id'].value
+      end
 
       # Teacher
-      teacher_id = element.at('./teacher').attributes['id'].value
+      teacher = element.at('./teacher')
+      teacher_name = nil
+      if teacher and teacher.attributes['full-name']
+        teacher_name = teacher.attributes['full-name'].value
+      end
 
       # Groups
       groups_ids = []
@@ -120,11 +102,54 @@ module KhnueService
       end
 
       # Save to DB
-      save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_id, groups_ids)
+      save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_name, groups_ids)
     end
   end
 
-  def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_id, groups_ids)
+  #
+  # Import records for auditorium from KHNUE API
+  #
+
+  def self.import_records_for_auditorium(auditorium, date)
+    week_number = calculate_week(date)
+
+    url = 'http://services.ksue.edu.ua:8081/schedule/xml'
+    query = "?room=#{auditorium.server_id}&week=#{week_number}&#{authKey}"
+
+    doc = perform_request(url + query)
+    parse_and_save_records(doc)
+  end
+
+  #
+  # Import records for group from KHNUE API
+  #
+
+  def self.import_records_for_group(group, date)
+    week_number = calculate_week(date)
+
+    url = 'http://services.ksue.edu.ua:8081/schedule/xml'
+    query = "?group=#{group.server_id}&week=#{week_number}&#{authKey}"
+
+    doc = perform_request(url + query)
+    parse_and_save_records(doc)
+  end
+  
+  #
+  # Import records for teacher from KHNUE API
+  #
+
+  def self.import_records_for_teacher(teacher, date)
+    week_number = calculate_week(date)
+
+    url = 'http://services.ksue.edu.ua:8081/schedule/xml'
+    query = "?employee=#{teacher.server_id}&week=#{week_number}&#{authKey}"
+
+    doc = perform_request(url + query)
+    parse_and_save_records(doc)
+  end
+  
+
+  def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_name, groups_ids)
     university = University.find_by(url: "khnue")
 
     begin
@@ -135,12 +160,7 @@ module KhnueService
       groups = Group.where(university_id: university.id, server_id: groups_ids)
       
       # Teacher
-      p '--------------!!!'
-      teacher = Teacher.where(university_id: university.id, server_id: teacher_id.to_i).first
-      p 'teacher_id = ', teacher_id
-      p 'teacher = ', teacher
-      p '--------------!!!'
-      return
+      teacher = Teacher.where(university_id: university.id, name: teacher_name).first
       
       # Pair start date
       start_date = date_string.to_datetime
@@ -354,7 +374,7 @@ module KhnueService
     @doc = doc.xpath('//element').each do |group|
       teacher_id = group.attributes['id'].value
       teacher_name = group.at('./displayName').children.to_s
-
+      
       # Save to DB
       save_teacher(teacher_id, teacher_name)
     end

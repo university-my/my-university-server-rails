@@ -38,6 +38,9 @@ class Teacher < ApplicationRecord
 
     if university.url == "kpi"
       KpiHelper.import_records_for_teacher(self)
+      
+    elsif university.url == "khnue"
+        KhnueService.import_records_for_teacher(self, date)
     end
   end
   
