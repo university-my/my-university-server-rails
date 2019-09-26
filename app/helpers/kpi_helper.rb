@@ -21,7 +21,7 @@ module KpiHelper
     
     data = json["data"]
 
-    university = University.find_by(url: "kpi")
+    university = University.kpi
 
     # Save records
     for object in data do
@@ -154,7 +154,7 @@ module KpiHelper
     
     data = json["data"]
 
-    university = University.find_by(url: "kpi")
+    university = University.kpi
 
     # Delete old records
     Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
@@ -346,7 +346,7 @@ module KpiHelper
     data = json["data"]
 
     # This groups for SumDU
-    university = University.find_by(url: "kpi")
+    university = University.kpi
     
     for object in data do
 
@@ -496,7 +496,7 @@ module KpiHelper
     data = json["data"]
 
     # This groups for SumDU
-    university = University.find_by(url: "kpi")
+    university = University.kpi
     
     for object in data do
 

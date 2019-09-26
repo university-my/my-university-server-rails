@@ -150,7 +150,7 @@ module KhnueService
   
 
   def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_name, groups_ids)
-    university = University.find_by(url: "khnue")
+    university = University.khnue
 
     begin
       # Auditorium
@@ -299,7 +299,7 @@ module KhnueService
   def self.save_auditorium(server_id, auditorium_name)
 
     begin
-      university = University.find_by(url: "khnue")
+      university = University.khnue
 
       # Conditions for find existing auditorium
       conditions = {}
@@ -384,7 +384,7 @@ module KhnueService
   def self.save_teacher(server_id, teacher_name)
 
     begin
-      university = University.find_by(url: "khnue")
+      university = University.khnue
 
       # Conditions for find existing teacher
       conditions = {}
@@ -493,7 +493,7 @@ module KhnueService
   def self.save_group(server_id, group_name)
 
     begin
-      university = University.find_by(url: "khnue")
+      university = University.khnue
 
       # Conditions for find existing group
       conditions = {}

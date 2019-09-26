@@ -16,10 +16,12 @@ class AuditoriumsController < ApplicationController
 
     # Date
     @pair_date = pair_date_string_from(params)
-    date = @pair_date.to_date
+    @date = @pair_date.to_date
+    @nextDate = @date + 1.day
+    @previousDate = @date - 1.day
 
     # Title
-    @title = "#{@university.short_name} - #{@auditorium.name} (#{localized_string_from(date)})"
+    @title = "#{@university.short_name} - #{@auditorium.name} (#{localized_string_from(@date)})"
   end
   
   # GET /auditoriums/1/records

@@ -1,5 +1,5 @@
-<% meta_tag :description, "Розклад занять СумДУ" %>
-<% meta_tag :keywords, "Розклад,СумДУ,Мій Університет,My University" %>
+<% meta_tag :description, "Розклад занять СумДУ, ХНЕУ, КПІ" %>
+<% meta_tag :keywords, "Розклад,СумДУ,ХНЕУ,КПІ,Мій Університет,My University" %>
 
 <%= render "layouts/header" %>
 
@@ -8,7 +8,7 @@
     <div class="col-md-6 p-lg-2 my-5">
       <h1 class="display-5 font-weight-normal">Розклад для навчальних закладів</h1>
       <p class="lead font-weight-normal">Детальна інформація про пари, списки груп та вчителів</p>
-      <a class="btn btn-primary btn-lg" href="/universities">Розклад »</a>
+	  <%= link_to 'Розклад »', universities_url, class: "btn btn-primary btn-lg" %>
     </div>
     <% if @records %>
     <div class="col-md-6 p-lg-2 my-2">

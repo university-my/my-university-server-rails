@@ -12,12 +12,9 @@
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
 
-<main class="container custom-padding-top" role="main">
-	<p>
-		<h1><%= @auditorium.name %></h1>(Аудиторія)
-	</p>
+<main class="container" role="main">
+	<div class="mb-3"><h1><%= @auditorium.name %></h1><span>(Аудиторія)</span></div>
 	<%= render "layouts/datepicker", pair_date: @pair_date %>
-
 	<p>
 		<div id="spinner" class="d-flex justify-content-center">
 			<div class="spinner-border text-primary" role="status">
