@@ -33,8 +33,13 @@ class Auditorium < ApplicationRecord
 
   # Import records for current Auditorium
   def import_records(date)
-    if university.url == "sumdu"
+    case university.url
+      
+    when University.sumdu_url
       SumduService.import_records_for_auditorium(self, date)
+      
+    when University.khnue_url
+      KhnueService.import_records_for_auditorium(self, date)
     end
   end
   

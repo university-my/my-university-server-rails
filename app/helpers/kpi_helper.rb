@@ -21,12 +21,7 @@ module KpiHelper
     
     data = json["data"]
 
-    university = University.find_by(url: "kpi")
-
-    # Delete old records
-    Record.joins(:groups).where(university_id: university.id, 'groups.id': group.id).where("records.updated_at < ?", DateTime.current - 2.day).destroy_all
-
-    currentDate = Date.current
+    university = University.kpi
 
     # Save records
     for object in data do
@@ -39,11 +34,6 @@ module KpiHelper
       reason = object['lesson_room']
       dayNumber = object['day_number'].to_i
       lessonWeek = object['lesson_week'].to_i
-
-      if currentWeek != lessonWeek
-        # Skip if not current week
-        next
-      end
 
       # Teahcer
       teachers = object['teachers']
@@ -59,11 +49,6 @@ module KpiHelper
         end
 
         startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
-
-        # Skip old records
-        if startDate < currentDate
-          next
-        end
 
         # Get pair date and time
         pair_time = time.to_time
@@ -169,7 +154,7 @@ module KpiHelper
     
     data = json["data"]
 
-    university = University.find_by(url: "kpi")
+    university = University.kpi
 
     # Delete old records
     Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
@@ -361,7 +346,7 @@ module KpiHelper
     data = json["data"]
 
     # This groups for SumDU
-    university = University.find_by(url: "kpi")
+    university = University.kpi
     
     for object in data do
 
@@ -511,7 +496,7 @@ module KpiHelper
     data = json["data"]
 
     # This groups for SumDU
-    university = University.find_by(url: "kpi")
+    university = University.kpi
     
     for object in data do
 

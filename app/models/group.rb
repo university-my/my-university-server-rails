@@ -31,12 +31,16 @@ class Group < ApplicationRecord
 
   # Import records for current Group
   def import_records(date)
-    if university.url == "sumdu"
+    case university.url
+      
+    when University.sumdu_url
       SumduService.import_records_for_group(self, date)
-    end
-
-    if university.url == "kpi"
+      
+    when University.kpi_url
       KpiHelper.import_records_for_group(self)
+      
+    when University.khnue_url
+      KhnueService.import_records_for_group(self, date)
     end
   end
 

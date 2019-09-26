@@ -16,10 +16,12 @@ class GroupsController < ApplicationController
 
     # Date
     @pair_date = pair_date_string_from(params)
-    date = @pair_date.to_date
+    @date = @pair_date.to_date
+    @nextDate = @date + 1.day
+    @previousDate = @date - 1.day
 
     # Title
-    @title = "#{@university.short_name} - #{@group.name} (#{localized_string_from(date)})"
+    @title = "#{@university.short_name} - #{@group.name} (#{localized_string_from(@date)})"
   end
   
   # GET /groups/1/records
@@ -31,8 +33,9 @@ class GroupsController < ApplicationController
     # Date
     pair_date = pair_date_from(params)
 
-    @records = Record.where(university_id: @university.id)
-    .where(auditorium: @auditorium)
+    @records = Record.joins(:groups)
+    .where(university_id: @university.id)
+    .where('groups.id': @group.id)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
@@ -48,11 +51,11 @@ class GroupsController < ApplicationController
 
     # Select records one more time
     @records = Record.joins(:groups)
-      .where(university_id: @university.id)
-      .where('groups.id': @group.id)
-      .where(pair_start_date: pair_date.all_day)
-      .order(:pair_start_date)
-      .order(:pair_name)
+    .where(university_id: @university.id)
+    .where('groups.id': @group.id)
+    .where(pair_start_date: pair_date.all_day)
+    .order(:pair_start_date)
+    .order(:pair_name)
     
     @records_days = @records.group_by { |t| t.start_date }
     

@@ -17,7 +17,7 @@ class SumduService
     # Peform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
 
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     # Save records
     for object in json do
@@ -158,7 +158,7 @@ class SumduService
     # Peform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
 
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     # Save records
     for object in json do
@@ -291,7 +291,7 @@ class SumduService
     # Peform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
 
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     # Save records
     for object in json do
@@ -427,7 +427,7 @@ class SumduService
     json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     for object in json do
 
@@ -479,7 +479,7 @@ class SumduService
     json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     for object in json do
 
@@ -531,7 +531,7 @@ class SumduService
     json = ApplicationRecord.perform_request(url)
 
     # This teachers for SumDU
-    university = University.find_by(url: "sumdu")
+    university = University.sumdu
 
     for object in json do
 
