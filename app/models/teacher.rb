@@ -33,18 +33,18 @@ class Teacher < ApplicationRecord
   # Import records for teacher for SumDU
   def import_records(date)
     case university.url
-      
+
     when University.sumdu_url
       SumduService.import_records_for_teacher(self, date)
-      
+
     when University.kpi_url
-      KpiHelper.import_records_for_teacher(self)
-      
+      KpiHelper.import_records_for_teacher(self, date)
+
     when University.khnue_url
       KhnueService.import_records_for_teacher(self, date)
     end
   end
-  
+
 
   # Check if need to update records in the Teacher
   def need_to_update_records

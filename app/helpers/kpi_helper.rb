@@ -1,24 +1,24 @@
 require 'net/http'
 require 'json'
 
-module KpiHelper  
+module KpiHelper
 
   #
   # Import records for group from KPI API
   #
 
-  def self.import_records_for_group(group)
+  def self.import_records_for_group(group, selected_pair_date)
     # Get current week from API
-    currentWeek = get_current_week
+    current_week = get_current_week
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
-    
+
     if json.nil?
       return
     end
-    
+
     data = json["data"]
 
     university = University.kpi
@@ -28,12 +28,12 @@ module KpiHelper
 
       # Get data from JSON
       time = object['time_start']
-      pairName = object['lesson_number']
-      nameString = object['lesson_full_name']
+      pair_name = object['lesson_number']
+      name_string = object['lesson_full_name']
       kind = object['lesson_type']
       reason = object['lesson_room']
-      dayNumber = object['day_number'].to_i
-      lessonWeek = object['lesson_week'].to_i
+      day_number = object['day_number'].to_i
+      lesson_week = object['lesson_week'].to_i
 
       # Teahcer
       teachers = object['teachers']
@@ -43,23 +43,24 @@ module KpiHelper
 
         # Teacher
         teacher = nil
-        if teacherHash = teachers.first
-          teacherID = teacherHash['teacher_id'].to_i
-          teacher = Teacher.find_by(university_id: university.id, server_id: teacherID)
+        if teacher_hash = teachers.first
+          teacher_id = teacher_hash['teacher_id'].to_i
+          teacher = Teacher.find_by(university_id: university.id, server_id: teacher_id)
         end
 
-        startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
+        # Calculate pair date
+        start_date = KpiHelper.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date  = (startDate.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date  = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = startDate
-        conditions[:name] = nameString
-        conditions[:pair_name] = pairName
+        conditions[:start_date] = start_date
+        conditions[:name] = name_string
+        conditions[:pair_name] = pair_name
         conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
@@ -70,18 +71,18 @@ module KpiHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = startDate
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
-          record.pair_name = pairName
-          record.name = nameString
+          record.pair_name = pair_name
+          record.name = name_string
           record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
-          
+
           # Push only unique groups
           unless record.groups.include?(group)
            record.groups << group
@@ -93,21 +94,21 @@ module KpiHelper
             Rails.logger.error(record.errors.full_messages)
             next
           end
-          
+
         else
           # Update record
-          record.start_date = startDate
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
-          record.pair_name = pairName
-          record.name = nameString
+          record.pair_name = pair_name
+          record.name = name_string
           record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
-          
+
           # Push only unique groups
           unless record.groups.include?(group)
            record.groups << group
@@ -140,18 +141,18 @@ module KpiHelper
   # Import records for teacher from KPI API
   #
 
-  def self.import_records_for_teacher(teacher)
+  def self.import_records_for_teacher(teacher, selected_pair_date)
     # Get current week from API
-    currentWeek = get_current_week
+    current_week = get_current_week
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
-    
+
     if json.nil?
       return
     end
-    
+
     data = json["data"]
 
     university = University.kpi
@@ -159,24 +160,19 @@ module KpiHelper
     # Delete old records
     Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
-    currentDate = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
+    current_date = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
 
     # Save records
     for object in data do
 
       # Get data from JSON
       time = object['time_start']
-      pairName = object['lesson_number']
-      nameString = object['lesson_full_name']
+      pair_name = object['lesson_number']
+      name_string = object['lesson_full_name']
       kind = object['lesson_type']
       reason = object['lesson_room']
-      dayNumber = object['day_number'].to_i
-      lessonWeek = object['lesson_week'].to_i
-
-      if currentWeek != lessonWeek
-        # Skip if not current week
-        next
-      end
+      day_number = object['day_number'].to_i
+      lesson_week = object['lesson_week'].to_i
 
       # Groups
       groups = object['groups']
@@ -191,24 +187,24 @@ module KpiHelper
         end
         groups = Group.where(university_id: university.id, server_id: groupIDs)
 
-        # Pair start date
-        startDate = KpiHelper.get_date(currentWeek, dayNumber, lessonWeek)
+        # Calculate pair date
+        start_date = KpiHelper.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date  = (startDate.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Skip old records
-        if startDate < currentDate
+        if start_date < current_date
           next
         end
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = startDate
-        conditions[:name] = nameString
-        conditions[:pair_name] = pairName
+        conditions[:start_date] = start_date
+        conditions[:name] = name_string
+        conditions[:pair_name] = pair_name
         conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
@@ -220,18 +216,18 @@ module KpiHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = startDate
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
-          record.pair_name = pairName
-          record.name = nameString
+          record.pair_name = pair_name
+          record.name = name_string
           record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -247,18 +243,18 @@ module KpiHelper
           end
 
         else
-          record.start_date = startDate
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
-          record.pair_name = pairName
-          record.name = nameString
+          record.pair_name = pair_name
+          record.name = name_string
           record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -273,7 +269,7 @@ module KpiHelper
             next
           end
         end
-        
+
       rescue Exception => e
         p e
         Rails.logger.error(e)
@@ -286,7 +282,7 @@ module KpiHelper
     unless teacher.save
       p errors.full_messages
       Rails.logger.error(errors.full_messages)
-    end    
+    end
   end
 
 
@@ -296,11 +292,11 @@ module KpiHelper
 
   # bin/rails runner 'KpiHelper.import_groups'
   def self.import_groups
-    groupsTotalCount = KpiHelper.get_groups_count
+    groups_total_count = KpiHelper.get_groups_count
 
     offset = 0
 
-    while offset < groupsTotalCount
+    while offset < groups_total_count
       # Get json with groups from API
       json = KpiHelper.get_groups(offset)
 
@@ -318,15 +314,15 @@ module KpiHelper
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups"
     json = ApplicationRecord.perform_request(url)
-    
+
     if json.nil?
       return 0
     end
 
-    totalCount = json["meta"]["total_count"]
-    teachersTotalCount = Integer(totalCount)
+    total_count = json["meta"]["total_count"]
+    teachers_total_count = Integer(total_count)
 
-    return teachersTotalCount
+    return teachers_total_count
   end
 
 
@@ -347,38 +343,38 @@ module KpiHelper
 
     # This groups for SumDU
     university = University.kpi
-    
+
     for object in data do
 
       begin
         # Convert before save
-        serverID = Integer(object["group_id"])
-        groupName = String(object["group_full_name"])
-        
+        server_id = Integer(object["group_id"])
+        group_name = String(object["group_full_name"])
+
         # Save new group
         group = Group.new
-        group.server_id = serverID
-        group.name = groupName
-        
+        group.server_id = server_id
+        group.name = group_name
+
         # Conditions for find existing group
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:server_id] = serverID
-        conditions[:name] = groupName
-        
+        conditions[:server_id] = server_id
+        conditions[:name] = group_name
+
         # Try to find existing group first
         group = Group.find_by(conditions)
-        
+
         if group.nil?
           # Save new group
           group = Group.new
-          group.server_id = serverID
-          group.name = groupName
+          group.server_id = server_id
+          group.name = group_name
           group.university = university
 
           unless group.save
             p group.errors.full_messages
-            
+
             # Go to the next iteration if can't be saved
             Rails.logger.error(group.errors.full_messages)
             next
@@ -403,40 +399,98 @@ module KpiHelper
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/weeks"
     json = ApplicationRecord.perform_request(url)
-    
+
     if json.nil?
       return 1
     end
-    
+
     week = json['data']
 
     return week
   end
 
-  def self.get_date(currentWeek, dayNumber, lessonWeek)
+  def self.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
 
-    # Params for generate date
-    recordDate = DateTime.current.beginning_of_day
+    pair_date = selected_pair_date.beginning_of_day
 
-    # Shift from Sunday to Monday
-    if recordDate.wday == 0
-      recordDate = recordDate.next_week.beginning_of_week
+    if current_week == lesson_week
+
+      if pair_date.wday > day_number
+        case day_number
+        when 1
+          pair_date = pair_date.next_occurring(:monday)
+        when 2
+          pair_date = pair_date.next_occurring(:tuesday)
+        when 3
+          pair_date = pair_date.next_occurring(:wednesday)
+        when 4
+          pair_date = pair_date.next_occurring(:thursday)
+        when 5
+          pair_date = pair_date.next_occurring(:friday)
+        when 6
+          pair_date = pair_date.next_occurring(:saturday)
+        when 7
+          pair_date = pair_date.next_occurring(:sunday)
+        end
+      elsif pair_date.wday < day_number
+        case day_number
+        when 1
+          pair_date = pair_date.prev_occurring(:monday)
+        when 2
+          pair_date = pair_date.prev_occurring(:tuesday)
+        when 3
+          pair_date = pair_date.prev_occurring(:wednesday)
+        when 4
+          pair_date = pair_date.prev_occurring(:thursday)
+        when 5
+          pair_date = pair_date.prev_occurring(:friday)
+        when 6
+          pair_date = pair_date.prev_occurring(:saturday)
+        when 7
+          pair_date = pair_date.prev_occurring(:sunday)
+        end
+      end
+
+    elsif current_week > lesson_week
+      # Previous week
+      case day_number
+      when 1
+        pair_date = pair_date.prev_occurring(:monday)
+      when 2
+        pair_date = pair_date.prev_occurring(:tuesday)
+      when 3
+        pair_date = pair_date.prev_occurring(:wednesday)
+      when 4
+        pair_date = pair_date.prev_occurring(:thursday)
+      when 5
+        pair_date = pair_date.prev_occurring(:friday)
+      when 6
+        pair_date = pair_date.prev_occurring(:saturday)
+      when 7
+        pair_date = pair_date.prev_occurring(:sunday)
+      end
+
+    elsif current_week < lesson_week
+      # Next week
+      case day_number
+      when 1
+        pair_date = pair_date.next_occurring(:monday)
+      when 2
+        pair_date = pair_date.next_occurring(:tuesday)
+      when 3
+        pair_date = pair_date.next_occurring(:wednesday)
+      when 4
+        pair_date = pair_date.next_occurring(:thursday)
+      when 5
+        pair_date = pair_date.next_occurring(:friday)
+      when 6
+        pair_date = pair_date.next_occurring(:saturday)
+      when 7
+        pair_date = pair_date.next_occurring(:sunday)
+      end
     end
 
-    # Current week day
-    currentWeekDay = recordDate.wday
-
-    # Calculate pair date
-    dayShift = 0
-    if currentWeekDay > dayNumber
-      dayShift = currentWeekDay - dayNumber
-      recordDate = recordDate - dayShift.days
-
-    elsif currentWeekDay < dayNumber
-      dayShift = dayNumber - currentWeekDay 
-      recordDate = recordDate + dayShift.days
-    end
-    return recordDate
+    return pair_date
   end
 
   #
@@ -446,11 +500,11 @@ module KpiHelper
   # Import from KPI
   # bin/rails runner 'KpiHelper.import_teachers'
   def self.import_teachers
-    teachersTotalCount = KpiHelper.get_teachers_count
+    teachers_total_count = KpiHelper.get_teachers_count
 
     offset = 0
 
-    while offset < teachersTotalCount
+    while offset < teachers_total_count
       # Get json with teachers from API
       json = KpiHelper.get_teachers(offset)
 
@@ -468,15 +522,15 @@ module KpiHelper
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers"
     json = ApplicationRecord.perform_request(url)
-    
+
     if json.nil?
       return
     end
 
-    totalCount = json["meta"]["total_count"]
-    teachersTotalCount = Integer(totalCount)
+    total_count = json["meta"]["total_count"]
+    teachers_total_count = Integer(total_count)
 
-    return teachersTotalCount
+    return teachers_total_count
   end
 
 
@@ -497,29 +551,29 @@ module KpiHelper
 
     # This groups for SumDU
     university = University.kpi
-    
+
     for object in data do
 
       begin
         # Convert before save
-        serverID = Integer(object["teacher_id"])
-        teacherName = String(object["teacher_name"])
-        
+        server_id = Integer(object["teacher_id"])
+        teacher_name = String(object["teacher_name"])
+
         # Conditions for find existing teacher
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:server_id] = serverID
-        conditions[:name] = teacherName
-        
+        conditions[:server_id] = server_id
+        conditions[:name] = teacher_name
+
         # Try to find existing teahcer first
         teacher = Teacher.find_by(conditions)
-        
+
         if teacher.nil?
-          
+
           # Save new teacher
           teacher = Teacher.new
-          teacher.server_id = serverID
-          teacher.name = teacherName
+          teacher.server_id = server_id
+          teacher.name = teacher_name
           teacher.university = university
 
           unless teacher.save
