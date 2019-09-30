@@ -4,21 +4,56 @@
 <%= render "layouts/header" %>
 
 <div class="container">
-  <div class="row position-relative overflow-hidden text-center bg-light">
-    <div class="col-md-6 p-lg-2 my-5">
-      <h1 class="display-5 font-weight-normal">Розклад для навчальних закладів</h1>
-      <p class="lead font-weight-normal">Детальна інформація про пари, списки груп та вчителів</p>
-	  <%= link_to 'Розклад »', universities_url, class: "btn btn-primary btn-lg" %>
-    </div>
-    <% if @records %>
-    <div class="col-md-6 p-lg-2 my-2">
-      <h5 class="text-center">Випадкова пара:</h5>
-      <div class="text-left">
-        <%= render "record" %>  
+  <div class="row mb-3">
+    <% @universities.each do |university| %>
+    <div class="col md-5 sm">
+      <div class="card mb-3 border-light">
+        <div class="card-body text-dark">
+          <h3 class="card-title"><%= university.short_name %></h3>
+          <h6 class="card-subtitle mb-2 text-muted"><%= university.full_name %></h6>
+
+          <div class="card-text" style="max-width: 160px;">
+            <ul class="list-group list-group-flush">
+
+              <li class="list-group-item">
+                <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
+                <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
+              </li>
+
+              <li class="list-group-item">
+                <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
+                <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
+              </li>
+
+              <% if university.url != University.kpi_url %>
+              <li class="list-group-item">
+                <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
+                <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
+              </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <div class="card-link mt-2">
+            <% if university.url == University.sumdu_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+            <% elsif university.url == University.kpi_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+            <% elsif university.url == University.khnue_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту hneu.edu.ua</small></p>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>  
+    </div>
     <% end %>
   </div>
+</div>
+
+<div class="jumbotron">
+  <h1>Маєте ідеї чи побажання?</h1>
+  <p class="lead">Знаєте як покращити наш сервіс? Залиште відгук!</p>
+  <a class="btn btn-primary btn-lg" href="https://t.me/voevodin_yura">Напишіть нам »</a>
 </div>
 
 <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
@@ -42,12 +77,6 @@
       </div>
     </div>
   </a>
-</div>
-
-<div class="jumbotron">
-  <h1>Маєте ідеї чи побажання?</h1>
-  <p class="lead">Знаєте як покращити наш сервіс? Залиште відгук!</p>
-  <a class="btn btn-primary btn-lg" href="https://t.me/voevodin_yura">Напишіть нам »</a>    
 </div>
 
 <%= render "layouts/footer" %>
