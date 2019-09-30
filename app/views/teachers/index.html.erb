@@ -7,8 +7,7 @@
 
 <main class="container custom-padding-top" role="main">
 
-	<h1>Викладачі</h1>
-
+	<h1><%= octicon "briefcase", height: 32, width: 32 %> Викладачі</h1>
 	<table class="table table-striped">
 		<tbody>
 			<% @teachers.each do |teacher| %>
@@ -23,7 +22,7 @@
     <div class="row">
       <% if @university.url == 'sumdu' %>
       <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту schedule.sumdu.edu.ua</small></p>
-      <% elsif @university.url == 'kpi' %>  
+      <% elsif @university.url == 'kpi' %>
       <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту rozklad.org.ua</small></p>
       <% end %>
     </div>
