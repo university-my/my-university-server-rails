@@ -1,6 +1,7 @@
 <% meta_tag :description, "Розклад занять #{@university.short_name}" %>
 <% meta_tag :keywords, "Розклад,#{@university.short_name},#{@university.full_name},Мій Університет,My University" %>
 <%= content_for(:canonical_link, university_url(@university)) %>
+<% @title = "Розклад #{@university.short_name}" %>
 
 <%= render "layouts/header" %>
 
@@ -10,7 +11,7 @@
 
   <div class="card mb-3 border-light">
     <div class="card-body text-dark">
-      <h1 class="card-title display-5"><%= @university.short_name %></h1>
+      <h1 class="card-title display-5">Розклад <%= @university.short_name %></h1>
         <h6 class="card-subtitle mb-2 text-muted"><%= @university.full_name %></h6>
 
         <div class="card-text" style="max-width: 160px;">
