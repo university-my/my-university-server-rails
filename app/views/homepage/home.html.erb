@@ -9,9 +9,9 @@
     <% @universities.each do |university| %>
     <div class="col md-5 sm">
       <div class="card mb-3 border-light">
-        <div class="card-body text-dark">
+        <div class="card-body">
           <h3 class="card-title"><%= university.short_name %></h3>
-          <h6 class="card-subtitle mb-2 text-muted"><%= university.full_name %></h6>
+          <h6 class="card-subtitle mb-2"><%= university.full_name %></h6>
 
           <div class="card-text" style="max-width: 160px;">
             <ul class="list-group list-group-flush">
@@ -37,11 +37,11 @@
 
           <div class="card-link mt-2">
             <% if university.url == University.sumdu_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+            <p class="font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
             <% elsif university.url == University.kpi_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+            <p class="font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
             <% elsif university.url == University.khnue_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту hneu.edu.ua</small></p>
+            <p class="font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту hneu.edu.ua</small></p>
             <% end %>
           </div>
         </div>
@@ -69,7 +69,7 @@
     </div>
   </a>
   <a href="/android" style="text-decoration: none">
-    <div class="bg-white mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-dark overflow-hidden">
+    <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 p-3">
         <h2 class="display-5">Android</h2>
       </div>
