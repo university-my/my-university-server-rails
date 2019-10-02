@@ -1,20 +1,20 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+* listed below.
+*
+* Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+* vendor/assets/stylesheets directory can be referenced here using a relative path.
+*
+* You're free to add application-wide styles to this file and they'll appear at the bottom of the
+* compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+* files in this directory. Styles in this file should be added after the last require_* statement.
+* It is generally better to create a new file per style scope.
+*
+*= require_tree .
+*= require_self
+*/
 
- /*Custom bootstrap variables must be set or imported *before* bootstrap.*/
+/*Custom bootstrap variables must be set or imported *before* bootstrap.*/
 @import "bootstrap";
 
 html {
@@ -23,62 +23,88 @@ html {
 
 @media (prefers-color-scheme: dark) {
 
-    .octicon {
-      fill: white;
-    }
+  .octicon {
+    fill: white;
+  }
 
-    body {
-      color: rgb(215, 215, 216);
-      background-color: rgb(17, 17, 17);
-    }
+  body {
+    color: rgb(215, 215, 216);
+    background-color: rgb(17, 17, 17);
+  }
 
-    .Header {
-      background-color: rgb(22, 23, 22);
-    }
+  .Header {
+    background-color: rgb(22, 23, 22);
+  }
 
+  a {
+    color: #fff;
+  }
+  a:hover {
+    color: rgb(216, 216, 216);
+  }
+
+  img {
+    opacity: .75;
+    transition: opacity .5s ease-in-out;
+  }
+  img:hover {
+    opacity: 1;
+  }
+
+  .card {
+    background-color: rgb(22, 23, 22);
+    border-color: #2c2c2c !important;
+  }
+
+  .list-group-item {
+    background-color: rgb(22, 23, 22);
+  }
+
+  .jumbotron {
+    background-color: rgb(22, 23, 22);
+  }
+
+  .Footer {
+    border-top: 1px solid #2c2c2c !important
+  }
+
+  .form-control {
+    background-color: inherit;
+  }
+
+  .Text-light {
+    color: #aaa;
+  }
+
+  .navbar-dark, .bg-dark {
     a {
-      color: #ffe;
+      color: #ffe !important;
     }
     a:hover {
-      color: rgb(216, 216, 216);
+      color: rgb(216, 216, 216) !important;
     }
+    background-color: rgb(22, 23, 22) !important;
+  }
 
-    img {
-       opacity: .75;
-      transition: opacity .5s ease-in-out;
-    }
-    img:hover {
-      opacity: 1;
-    }
+  .table th, .table td {
+    border-top: 1px solid #aaa !important;
+  }
 
-    .card {
-      background-color: rgb(22, 23, 22);
-      border-color: #2c2c2c !important;
-    }
+  .table-bordered th, .table-bordered td {
+  border: 1px solid #aaa !important;
+  }
 
-    .list-group-item {
-      background-color: rgb(22, 23, 22);
-    }
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(44, 44, 44, 0.5) !important;
+  }
 
-    .jumbotron {
-      background-color: rgb(22, 23, 22);
-    }
+  .table-active, .table-active > th, .table-active > td {
+    background-color: rgba(44, 44, 44, 0.5);
+  }
 
-    .Footer {
-      border-top: 1px solid #2c2c2c !important
-    }
-
-    .form-control {
-      background-color: inherit;
-    }
-
-    .Text-light {
-      color: #aaa;
-    }
-
-    // .table th, .table td {
-    //   padding: 0.5rem;
-    // }
+  .table-bordered {
+    border: 1px solid #2c2c2c !important;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -95,7 +121,7 @@ html {
   }
 
   .carousel-control-prev-icon {
-   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
   }
 
   .carousel-control-next-icon {
@@ -104,8 +130,8 @@ html {
 }
 
 /*
- * Extra utilities
- */
+* Extra utilities
+*/
 
 .flex-equal > * {
   -ms-flex: 1;

@@ -12,42 +12,41 @@
 
       <% @universities.each do |university| %>
 
-      <div class="card mb-3 border-light">
-        <div class="card-body text-dark">
+      <div class="card mb-3">
+        <div class="card-body">
           <h3 class="card-title"><%= university.short_name %></h3>
-          <h6 class="card-subtitle mb-2 text-muted"><%= university.full_name %></h6>
+          <h6 class="card-subtitle mb-2 Text-light font-weight-lighter"><%= university.full_name %></h6>
 
           <div class="card-text" style="max-width: 160px;">
             <ul class="list-group list-group-flush">
 
-              <li class="list-group-item">
+              <li class="list-group-item border-0">
                 <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
                 <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
               </li>
 
-              <li class="list-group-item">
+              <li class="list-group-item border-0">
                 <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
                 <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
               </li>
 
               <% if university.url != University.kpi_url %>
-              <li class="list-group-item">
+              <li class="list-group-item border-0">
                 <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
                 <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
               </li>
               <% end %>
             </ul>
           </div>
-
-          <div class="card-link mt-2">
-            <% if university.url == University.sumdu_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
-            <% elsif university.url == University.kpi_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
-            <% elsif university.url == University.khnue_url %>
-            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту hneu.edu.ua</small></p>
-            <% end %>
-          </div>
+        </div>
+        <div class="card-footer">
+          <% if university.url == University.sumdu_url %>
+          <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+          <% elsif university.url == University.kpi_url %>
+          <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+          <% elsif university.url == University.khnue_url %>
+          <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту hneu.edu.ua</small></p>
+          <% end %>
         </div>
       </div>
       <% end %>
