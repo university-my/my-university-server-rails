@@ -13,7 +13,7 @@
 							value="<%= @pair_date %>"
 							min="2018-01-01" max="2022-12-31" class="form-control">
 							<div class="input-group-append">
-								<input type="submit" class="btn btn-outline-primary" value="Дивитися">
+								<input type="submit" class="btn btn-primary" value="Дивитися">
 							</div>
 						</div>
 					</div>
@@ -23,17 +23,16 @@
 				<form action="" method="get">
 					<input type="date" id="start" name="pair_date"
 					value="<%= @previousDate %>" hidden>
-					<input type="submit" class="btn btn-outline-primary" value="<%= l @previousDate, format: "%A, %e %B" %>">
+					<input type="submit" class="btn btn-primary" value="<%= l @previousDate, format: "%A, %e %B" %>">
 				</form>
 			</div>
 			<div class="btn-group mr-2 mb-2" role="group">
 				<form action="" method="get">
 					<input type="date" id="start" name="pair_date"
 					value="<%= @nextDate %>" hidden>
-					<input type="submit" class="btn btn-outline-primary" value="<%= l @nextDate, format: "%A, %e %B" %>">
+					<input type="submit" class="btn btn-primary" value="<%= l @nextDate, format: "%A, %e %B" %>">
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
-
