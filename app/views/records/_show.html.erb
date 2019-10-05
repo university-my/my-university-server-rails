@@ -1,4 +1,10 @@
 
+<script type="text/javascript">
+	$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
 <div class="mx-auto col-md-8">
 	<% if @records_days %>
 	<% @records_days.each do |day, records| %>
@@ -7,18 +13,18 @@
 		<div class="col mb-4 mr-0 ml-0">
 			<div class="card">
 				<div class="card-header">
-					<span><%= record.pair_name %> (<%= record.time %>)</span>
+					<span data-toggle="tooltip" title="<%= l day, format: "%A, %e %B %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
 				</div>
 
 				<% if record.name.present? || record.kind.present? %>
 				<div class="card-body">
 					<% if record.name.present? %>
-					<h6 class="card-title"><%= record.name %></h6>
+					<h6 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.name %></span></h6>
 					<% end %>
 
 					<% if record.kind.present? %>
-					<h6 class="card-subtitle Text-light font-weight-lighter">
-						<%= record.kind %>
+					<h6 class="card-subtitle Text-light font-weight-light">
+						<span data-toggle="tooltip" title="Тип пари"><%= record.kind %></span>
 					</h6>
 					<% end %>
 				</div>
@@ -27,22 +33,24 @@
 				<ul class="list-group list-group-flush">
 					<% if record.reason.present? %>
 					<li class="list-group-item">
-						<span class="align-text-bottom"><%= octicon "pencil" %></span><span class="ml-2"><%= record.reason %></span>
+						<span class="align-text-bottom"><%= octicon "pencil" %></span><span class="ml-2" data-toggle="tooltip" title="Коментар"><%= record.reason %></span>
 					</li>
 					<% end %>
 
 					<% if record.auditorium %>
 					<li class="list-group-item">
+					<span class="align-text-bottom"><%= octicon "sign-in" %></span>
 						<%= link_to university_auditorium_url(university.url, record.auditorium.friendly_id, pair_date: pair_date) do %>
-						<span class="align-text-bottom"><%= octicon "sign-in" %></span><span class="ml-2"><%= record.auditorium.name %></span>
+						<span class="ml-2" data-toggle="tooltip" title="Аудиторія"><%= record.auditorium.name %></span>
 						<% end %>
 					</li>
 					<% end %>
 
 					<% if record.teacher %>
 					<li class="list-group-item">
+						<span class="align-text-bottom"><%= octicon "briefcase" %></span>
 						<%= link_to university_teacher_url(university.url, record.teacher.friendly_id, pair_date: pair_date) do %>
-						<span class="align-text-bottom"><%= octicon "briefcase" %></span><span class="ml-2"><%= record.teacher.name %></span>
+						<span class="ml-2" data-toggle="tooltip" title="Викладач"><%= record.teacher.name %></span>
 						<% end %>
 					</li>
 					<% end %>
@@ -53,7 +61,7 @@
 						<span class="align-text-bottom mr-2"><%= octicon "organization" %></span>
 						<% for i in 1..record.groups.count do %>
 						<%= link_to university_group_url(university.url, record.groups[i-1].friendly_id, pair_date: pair_date) do %>
-						<%= record.groups[i-1].name %>
+						<span data-toggle="tooltip" title="Група"><%= record.groups[i-1].name %></span>
 						<% end %>
 						<% if i != record.groups.count %>
 						<%= ',' %>
