@@ -37,7 +37,7 @@ module KhnueService
     doc = Nokogiri::XML(response.body)
     return doc
   end
-  
+
   def self.calculate_week(date)
     # Because in API first week begins in 1th of September
     weeks_shift = 35
@@ -55,7 +55,7 @@ module KhnueService
     end
     return week_number
   end
-  
+
   def self.parse_and_save_records(doc)
     @doc = doc.xpath('//schedule-element').each do |element|
       # Start date
@@ -133,7 +133,7 @@ module KhnueService
     doc = perform_request(url + query)
     parse_and_save_records(doc)
   end
-  
+
   #
   # Import records for teacher from KHNUE API
   #
@@ -147,7 +147,7 @@ module KhnueService
     doc = perform_request(url + query)
     parse_and_save_records(doc)
   end
-  
+
 
   def self.save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_name, groups_ids)
     university = University.khnue
@@ -155,13 +155,13 @@ module KhnueService
     begin
       # Auditorium
       auditorium = Auditorium.find_by(university_id: university.id, server_id: auditorium_id.to_i)
-      
+
       # Groups
       groups = Group.where(university_id: university.id, server_id: groups_ids)
-      
+
       # Teacher
       teacher = Teacher.where(university_id: university.id, name: teacher_name).first
-      
+
       # Pair start date
       start_date = date_string.to_datetime
       pair_start_date = "#{date_string} #{start_time_string}".to_datetime
@@ -177,7 +177,7 @@ module KhnueService
 
       # Try to find existing record first
       record = Record.find_by(conditions)
-      
+
       if record.nil?
         # Save new record
         record = Record.new
@@ -200,14 +200,14 @@ module KhnueService
             record.groups << group
           end
         end
-        
+
         # Try to save record
         unless record.save
           # Go to the next iteration if record can't be saved
           p record.errors.full_messages
           Rails.logger.error(record.errors.full_messages)
         end
-        
+
       else
         # Record not nil
         # Update record
@@ -230,15 +230,15 @@ module KhnueService
             record.groups << group
           end
         end
-      
+
         unless record.save
           # Go to the next iteration if record can't be saved
           p record.errors.full_messages
           Rails.logger.error(record.errors.full_messages)
         end
-        
+
       end
-      
+
 
     rescue Exception => e
       p e
@@ -266,11 +266,33 @@ module KhnueService
 
     @doc = doc.xpath('//element').each do |building|
       building_id = building.attributes['id'].value
+      building_name = building.at('./displayName').children.to_s
+
+      save_building(building_id, building_name)
       buildings_ids.push(building_id)
     end
 
     # IDs of all building
     return buildings_ids
+  end
+
+  def self.save_building(server_id, name)
+    building = Building.where(server_id: server_id, name: name).first
+    university = University.khnue
+
+    if building.nil?
+      # Save new building
+      building = Building.new
+      building.server_id = server_id
+      building.name = name
+      building.university = university
+
+      unless building.save
+        # Go to the next iteration if can't be saved
+        p building.errors.full_messages
+        Rails.logger.error(building.errors.full_messages)
+      end
+    end
   end
 
   # 2. Iterate through all buildings_ids
@@ -291,15 +313,16 @@ module KhnueService
       auditorium_name = auditorium.at('./displayName').children.to_s
 
       # Save to DB
-      save_auditorium(auditorium_id, auditorium_name)
+      save_auditorium(auditorium_id, auditorium_name, building_id)
     end
   end
 
   # 4. Save auditorium to the DB
-  def self.save_auditorium(server_id, auditorium_name)
+  def self.save_auditorium(server_id, auditorium_name, building_id)
 
     begin
       university = University.khnue
+      building = Building.where(server_id: building_id).first
 
       # Conditions for find existing auditorium
       conditions = {}
@@ -316,6 +339,7 @@ module KhnueService
         auditorium.server_id = server_id
         auditorium.name = auditorium_name
         auditorium.university = university
+        auditorium.building = building
 
         unless auditorium.save
           # Go to the next iteration if can't be saved
@@ -374,7 +398,7 @@ module KhnueService
     @doc = doc.xpath('//element').each do |group|
       teacher_id = group.attributes['id'].value
       teacher_name = group.at('./displayName').children.to_s
-      
+
       # Save to DB
       save_teacher(teacher_id, teacher_name)
     end

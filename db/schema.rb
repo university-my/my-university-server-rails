@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_05_203252) do
+ActiveRecord::Schema.define(version: 2019_10_08_193606) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2019_10_05_203252) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
+    t.integer "building_id"
+    t.index ["building_id"], name: "index_auditoriums_on_building_id"
     t.index ["slug"], name: "index_auditoriums_on_slug", unique: true
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
     t.index ["slug_uk"], name: "index_auditoriums_on_slug_uk"
@@ -44,6 +46,7 @@ ActiveRecord::Schema.define(version: 2019_10_05_203252) do
     t.integer "university_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "server_id"
     t.index ["university_id"], name: "index_buildings_on_university_id"
   end
 
