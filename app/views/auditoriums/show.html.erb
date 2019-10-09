@@ -13,7 +13,12 @@
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-	<div class="mb-3"><h1><%= @auditorium.name %></h1><span>(Аудиторія)</span></div>
+	<div class="mb-3">
+	<h1><%= @auditorium.name %></h1>
+	<% if @auditorium.building %>
+	<span>Корпус: <%= @auditorium.building.name %></span>
+	<% end %>
+</div>
 	<%= render "layouts/datepicker", pair_date: @pair_date %>
 		<div id="spinner" class="d-flex justify-content-center">
 			<div class="spinner-border text-primary" role="status">

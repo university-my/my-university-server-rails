@@ -4,6 +4,7 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums.json
   def index
     @university = University.find_by!(url: params[:university_url])
+    @buildings = Building.where(university_id: @university.id).all
     @auditoriums = Auditorium.where(university_id: @university.id).all
     @title = @university.short_name + ' - Аудиторії'
   end
@@ -23,7 +24,7 @@ class AuditoriumsController < ApplicationController
     # Title
     @title = "#{@university.short_name} - #{@auditorium.name} (#{localized_string_from(@date)})"
   end
-  
+
   # GET /auditoriums/1/records
   # GET /auditoriums/1/records.json
   def records
@@ -54,9 +55,9 @@ class AuditoriumsController < ApplicationController
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
-    
+
     @records_days = @records.group_by { |t| t.start_date }
-    
+
     if @records.empty?
       render partial: "records/empty"
     else

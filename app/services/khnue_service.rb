@@ -252,13 +252,13 @@ module KhnueService
 
   # bin/rails runner 'KhnueService.import_auditoriums'
   def self.import_auditoriums
-    buildings_ids = request_building()
+    buildings_ids = request_buildings()
 
     request_auditoriums(buildings_ids)
   end
 
   # 1. Request building for import auditoriums
-  def self.request_building
+  def self.request_buildings
     url = "#{baseURL}?q=buildings&#{authKey}"
     doc = perform_request(url)
 
@@ -322,7 +322,8 @@ module KhnueService
 
     begin
       university = University.khnue
-      building = Building.where(server_id: building_id).first
+      building = Building.where(university: university)
+      .where(server_id: building_id).first
 
       # Conditions for find existing auditorium
       conditions = {}
@@ -341,6 +342,14 @@ module KhnueService
         auditorium.university = university
         auditorium.building = building
 
+        unless auditorium.save
+          # Go to the next iteration if can't be saved
+          p auditorium.errors.full_messages
+          Rails.logger.error(auditorium.errors.full_messages)
+        end
+      else
+        # Update
+        auditorium.building = building
         unless auditorium.save
           # Go to the next iteration if can't be saved
           p auditorium.errors.full_messages
