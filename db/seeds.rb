@@ -15,3 +15,39 @@ khnue = University.khnue
 if khnue.nil?
   University.create(short_name: "ХНЕУ", full_name: 'Харківський національний економічний університет',  url: "khnue")
 end
+
+# Buildings for SumDU
+sumdu_buildings = [
+  { name: "АН", description: "" },
+  { name: "БІЦ", description: "" },
+  { name: "Г", description: "Головний" },
+  { name: "ЕТ", description: "" },
+  { name: "К2", description: "" },
+  { name: "К3", description: "" },
+  { name: "КУКл", description: "" },
+  { name: "ЛА", description: "" },
+  { name: "ЛБ", description: "" },
+  { name: "Н", description: "" },
+  { name: "С", description: "" },
+  { name: "ССМ", description: "" },
+  { name: "Т", description: "" },
+  { name: "ТЗ", description: "" },
+  { name: "Ц", description: "Центральний" },
+  { name: "кл.кафПА", description: "" },
+  { name: "клМДКЛ", description: "" },
+  { name: "клМКЛ-4п1", description: "" },
+  { name: "клМКЛ-5н", description: "" },
+  { name: "клМКПБ", description: "" },
+  { name: "клМКСП", description: "" },
+  { name: "клОКЛ", description: "" },
+  { name: "клОКПТД", description: "" },
+  { name: "клОКПЦ", description: "" },
+  { name: "клОКСП", description: "" },
+]
+sumdu_buildings.each do |item|
+  building = Building.find_by(university: sumdu, name: item[:name])
+  building = Building.new unless building
+  building.name = item[:name]
+  building.description = item[:description]
+  building.save
+end

@@ -1,6 +1,6 @@
 ActiveAdmin.register Auditorium do
 
-  permit_params :name, :server_id, :university_id
+  permit_params :name, :server_id, :university_id, :building_id
 
   actions :all
 
