@@ -18,15 +18,22 @@ end
 
 # Buildings for SumDU
 sumdu_buildings = [
+  { name: "АК", description: "" },
   { name: "АН", description: "" },
   { name: "БІЦ", description: "" },
   { name: "Г", description: "Головний" },
+  { name: "ГТ4", description: "" },
+  { name: "ГТ5", description: "" },
+  { name: "ГТ6", description: "" },
   { name: "ЕТ", description: "" },
+  { name: "К1", description: "" },
   { name: "К2", description: "" },
   { name: "К3", description: "" },
+  { name: "конАК", description: "" },
   { name: "КУКл", description: "" },
   { name: "ЛА", description: "" },
   { name: "ЛБ", description: "" },
+  { name: "М", description: "" },
   { name: "Н", description: "" },
   { name: "С", description: "" },
   { name: "ССМ", description: "" },
@@ -47,6 +54,7 @@ sumdu_buildings = [
 sumdu_buildings.each do |item|
   building = Building.find_by(university: sumdu, name: item[:name])
   building = Building.new unless building
+  building.university = sumdu
   building.name = item[:name]
   building.description = item[:description]
   building.save

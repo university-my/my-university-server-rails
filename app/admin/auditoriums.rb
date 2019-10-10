@@ -14,6 +14,7 @@ ActiveAdmin.register Auditorium do
     column t('university') do |auditorium|
       link_to auditorium.university.short_name, admin_university_path(auditorium.university_id)
     end
+    column :building
 
     actions
   end

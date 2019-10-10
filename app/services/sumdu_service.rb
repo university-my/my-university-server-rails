@@ -87,7 +87,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -101,7 +101,7 @@ class SumduService
             Rails.logger.error(record.errors.full_messages)
             next
           end
-          
+
         else
           # Update record
           record.start_date = start_date
@@ -116,7 +116,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -130,7 +130,7 @@ class SumduService
             next
           end
         end
-        
+
       rescue Exception => e
         Rails.logger.error(e)
         next
@@ -223,7 +223,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           unless record.groups.include?(group)
             record.groups << group
@@ -234,7 +234,7 @@ class SumduService
             Rails.logger.error(record.errors.full_messages)
             next
           end
-          
+
         else
           # Update record
           record.start_date = start_date
@@ -249,7 +249,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           unless record.groups.include?(group)
             record.groups << group
@@ -273,7 +273,7 @@ class SumduService
     unless group.save
       Rails.logger.error(errors.full_messages)
     end
-  end 
+  end
 
   #
   # Import records for teacher from SumDU API
@@ -361,7 +361,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -388,7 +388,7 @@ class SumduService
           # Associations
           record.auditorium = auditorium
           record.teacher = teacher
-          
+
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
@@ -402,7 +402,7 @@ class SumduService
             next
           end
         end
-        
+
       rescue Exception => e
         Rails.logger.error(e)
         next
@@ -435,34 +435,39 @@ class SumduService
         # Convert to int before save
         server_id = Integer(object[0])
         auditorium_name = object[1]
-        
+
+        # Building name
+        building_name = auditorium_name.split('-').first
+        if building_name
+          building = Building.where(university: university)
+          .where('name LIKE ?', "%#{building_name}").first
+        end
+
         # Conditions for find existing auditorium
         conditions = {}
         conditions[:university_id] = university.id
         conditions[:server_id] = server_id
         conditions[:name] = auditorium_name
-        
+
         # Try to find existing auditorium first
         auditorium = Auditorium.find_by(conditions)
-        
+
         if auditorium.nil?
-          # Save new auditorium
           auditorium = Auditorium.new
-          auditorium.server_id = server_id
-          auditorium.name = auditorium_name
-          auditorium.university = university
-          
-          unless auditorium.save
-            # Go to the next iteration if can't be saved
-            p auditorium.errors.full_messages
-            Rails.logger.error(auditorium.errors.full_messages)
-            next
-          end
         end
-        
+        auditorium.server_id = server_id
+        auditorium.name = auditorium_name
+        auditorium.university = university
+        auditorium.building = building
+
+        unless auditorium.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error auditorium.errors.full_messages
+          next
+        end
+
       rescue Exception => e
-        p e
-        Rails.logger.error(e)
+        Rails.logger.error e
         next
       end
     end
@@ -503,17 +508,15 @@ class SumduService
           group.server_id = server_id
           group.name = group_name
           group.university = university
-          
+
           unless group.save
             # Go to the next iteration if can't be saved
-            p group.errors.full_messages
             Rails.logger.error(group.errors.full_messages)
             next
           end
         end
-        
-      rescue Exception => e 
-        p e
+
+      rescue Exception => e
         Rails.logger.error(e)
         next
       end
@@ -545,7 +548,7 @@ class SumduService
         conditions[:university_id] = university.id
         conditions[:server_id] = server_id
         conditions[:name] = teacher_name
-        
+
         # Try to find existing teahcer first
         teacher = Teacher.find_by(conditions)
 
@@ -558,18 +561,16 @@ class SumduService
 
           unless teacher.save
             # Go to the next iteration if can't be saved
-            p teacher.errors.full_messages
             Rails.logger.error(teacher.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
-        p e
         Rails.logger.error(e)
         next
       end
-      
+
     end
   end
 
