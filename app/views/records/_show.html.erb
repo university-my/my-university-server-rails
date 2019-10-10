@@ -1,94 +1,80 @@
-<% if @records_days %>
-<% @records_days.each do |day, records| %>
 
-<% for record in records %>
+<script type="text/javascript">
+	$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
-<table class="table table-bordered">
-	<tbody>
-		
-		<tr class="table-active">
-			<td scope="row"><%= record.pair_name %> (<%= record.time %>)</td>
-		</tr>
-		
-		<% if record.name.present? && record.kind.blank? %>
-		<tr>
-			<td>
-				<%= record.name %>
-			</td>
-		</tr>
-		<% end %>
-		
-		<% if record.name.blank? && record.kind.present? %>
-		<tr>
-			<td>
-				<i><%= record.kind %></i>
-			</td>
-		</tr>
-		<% end %>
-		
-		<% if record.name.present? && record.kind.present? %>
-		<tr>
-			<td>
-				<%= record.name %><br>
-				<i><%= record.kind %></i>
-			</td>
-		</tr>
-		<% end %>
-		
-		<% if record.reason.present? %>
-		<tr>
-			<td>
-				<b>Коментар:</b>
-				<%= record.reason %><br>
-			</td>
-		</tr>
-		<% end %>
-		
-		<% if record.auditorium %>
-		<tr>
-			<td>
-				Аудиторія:
-				<%= link_to university_auditorium_url(university.url, record.auditorium.friendly_id, pair_date: pair_date) do %>
-				<%= record.auditorium.name %>
-				<% end %>
-			</td>
-		</tr>
-		<% end %>
+<div class="mx-auto col-md-8">
+	<% if @records_days %>
+	<% @records_days.each do |day, records| %>
+	<% for record in records %>
+	<div class="row">
+		<div class="col mb-4 mr-0 ml-0">
+			<div class="card">
+				<div class="card-header">
+					<span data-toggle="tooltip" title="<%= l day, format: "%A, %e %B %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
+				</div>
 
-		<% if record.teacher %>
-		<tr>
-			<td>
-				Викладач:
-				<%= link_to university_teacher_url(university.url, record.teacher.friendly_id, pair_date: pair_date) do %>
-				<%= record.teacher.name %>
-				<% end %>
-			</td>
-		</tr>
-		<% end %>
-		
-		<% if record.groups && record.groups.count > 0 %>
-		<tr>
-			<td>
-				<% if record.groups.count > 1 %>
-				Групи:
-				<%	else %>
-				Група:
-				<% end %>
-				<% for i in 1..record.groups.count do %>
-				<%= link_to university_group_url(university.url, record.groups[i-1].friendly_id, pair_date: pair_date) do %>
-				<%= record.groups[i-1].name %>
-				<% end %>
-				<% if i != record.groups.count %>
-				<%= ',' %>
-				<% end %>
-				<% end %>
-			</td>
-		</tr>
-		<% end %>
+				<% if record.name.present? || record.kind.present? %>
+				<div class="card-body">
+					<% if record.name.present? %>
+					<h6 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.name %></span></h6>
+					<% end %>
 
-	</tbody>
-</table>
-<% end %>
+					<% if record.kind.present? %>
+					<h6 class="card-subtitle Text-light font-weight-light">
+						<span data-toggle="tooltip" title="Тип пари"><%= record.kind %></span>
+					</h6>
+					<% end %>
+				</div>
+				<% end %>
 
-<% end %>
-<% end %>
+				<ul class="list-group list-group-flush">
+					<% if record.reason.present? %>
+					<li class="list-group-item">
+						<span class="align-text-bottom"><%= octicon "pencil" %></span><span class="ml-2" data-toggle="tooltip" title="Коментар"><%= record.reason %></span>
+					</li>
+					<% end %>
+
+					<% if record.auditorium %>
+					<li class="list-group-item">
+					<span class="align-text-bottom"><%= octicon "sign-in" %></span>
+						<%= link_to university_auditorium_url(university.url, record.auditorium.friendly_id, pair_date: pair_date) do %>
+						<span class="ml-2" data-toggle="tooltip" title="Аудиторія"><%= record.auditorium.name %></span>
+						<% end %>
+					</li>
+					<% end %>
+
+					<% if record.teacher %>
+					<li class="list-group-item">
+						<span class="align-text-bottom"><%= octicon "briefcase" %></span>
+						<%= link_to university_teacher_url(university.url, record.teacher.friendly_id, pair_date: pair_date) do %>
+						<span class="ml-2" data-toggle="tooltip" title="Викладач"><%= record.teacher.name %></span>
+						<% end %>
+					</li>
+					<% end %>
+
+					<% if record.groups && record.groups.count > 0 %>
+
+					<li class="list-group-item">
+						<span class="align-text-bottom mr-2"><%= octicon "organization" %></span>
+						<% for i in 1..record.groups.count do %>
+						<%= link_to university_group_url(university.url, record.groups[i-1].friendly_id, pair_date: pair_date) do %>
+						<span data-toggle="tooltip" title="Група"><%= record.groups[i-1].name %></span>
+						<% end %>
+						<% if i != record.groups.count %>
+						<%= ',' %>
+						<% end %>
+						<% end %>
+					</li>
+
+					<% end %>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<% end %>
+	<% end %>
+	<% end %>
+</div>

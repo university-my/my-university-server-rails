@@ -23,7 +23,7 @@ class Auditorium < ApplicationRecord
   # Associations
   has_many :records, dependent: :nullify
   belongs_to :university, optional: true
-
+  belongs_to :building, optional: true
 
   # bin/rails runner 'Auditorium.reset_update_date'
   def self.reset_update_date
@@ -34,15 +34,15 @@ class Auditorium < ApplicationRecord
   # Import records for current Auditorium
   def import_records(date)
     case university.url
-      
+
     when University.sumdu_url
       SumduService.import_records_for_auditorium(self, date)
-      
+
     when University.khnue_url
       KhnueService.import_records_for_auditorium(self, date)
     end
   end
-  
+
 
   # Check if need to update records in the Auditorium
   def need_to_update_records

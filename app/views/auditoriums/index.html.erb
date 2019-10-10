@@ -5,18 +5,34 @@
 
 <p id="notice"><%= notice %></p>
 
-<main class="container custom-padding-top" role="main">
+<main class="container" role="main">
 
-	<h1><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
-	<table class="table table-striped">
+	<h1 class="mb-4"><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
+
+	<% if @university.url == University.khnue_url %>
+	<% @buildings.each do |building| %>
+	<h5><%= building.name %></h5>
+	<table class="table table-sm table-striped">
 		<tbody>
-			<% @auditoriums.each do |auditorium| %>
+			<% building.auditoriums.each do |auditorium| %>
 			<tr>
-				<td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></li></td>
+				<td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
 			</tr>
 			<% end %>
 		</tbody>
 	</table>
+	<% end %>
+	<% else %>
+	<table class="table table-sm table-striped">
+		<tbody>
+			<% @auditoriums.each do |auditorium| %>
+			<tr>
+				<td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<% end %>
 
 	<div class="container">
 		<div class="row">
