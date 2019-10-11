@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  
+
   devise_for :users
   get 'homepage/home'
   get "/", to: "homepage#home", as: "root"
@@ -18,29 +18,31 @@ Rails.application.routes.draw do
   get "/android", to: "pages#android"
 
   resources :universities, only: [:index, :show], param: :url do
-    
+
     # Teachers
     resources :teachers, only: [:index, :show], param: :id do
       member do
           get :records
         end
     end
-    
+
     # Auditoriums
     resources :auditoriums, only: [:index, :show], param: :id do
       member do
           get :records
         end
     end
-    
+
     # Groups
     resources :groups, only: [:index, :show], param: :id do
       member do
           get :records
         end
     end
+
+    resources :buildings, only: [:index, :show], param: :id
   end
-  
+
   match "/404", :to => "errors#not_found", :via => :all
   match "/500", :to => "errors#internal_server_error", :via => :all
 end
