@@ -22,37 +22,37 @@
 # SumDU
 ## Teachers
 every 1.day, at: ['9:00 am', '9:00 pm'] do
-  runner -e production 'SumduService.import_teachers'
+  runner 'SumduService.import_teachers'
 end
 ## Groups
 every 1.day, at: ['9:05 am', '9:05 pm'] do
-  runner -e production 'SumduService.import_groups'
+  runner 'SumduService.import_groups'
 end
 ## Auditoriums
 every 1.day, at: ['9:10 am', '9:10 pm'] do
-  runner -e production 'SumduService.import_auditoriums'
+  runner 'SumduService.import_auditoriums'
 end
 
 # KPI
 ## Teachers
 every 1.day, at: ['9:15 am', '9:15 pm'] do
-  runner -e production 'KpiHelper.import_teachers'
+  runner 'KpiHelper.import_teachers'
 end
 ## Groups
 every 1.day, at: ['9:20 am', '9:20 pm'] do
-  runner -e production 'KpiHelper.import_groups'
+  runner 'KpiHelper.import_groups'
 end
 
 # KHNUE
 ## Teachers
 every 1.day, at: ['9:25 am', '9:25 pm'] do
-  runner -e production 'KhnueService.import_teachers'
+  runner 'KhnueService.import_teachers'
 end
 ## Auditoriums
 every 1.day, at: ['9:30 am', '9:30 pm'] do
-  runner -e production 'KhnueService.import_auditoriums'
+  runner 'KhnueService.import_auditoriums'
 end
 ## Groups
 every 1.day, at: ['9:35 am', '9:35 pm'] do
-  runner -e production 'KhnueService.import_groups'
+  runner 'KhnueService.import_groups'
 end
