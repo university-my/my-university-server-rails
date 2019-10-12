@@ -1,0 +1,25 @@
+<% meta_tag :description, "#{@university.short_name}, Аудиторії, Корпуси" %>
+<% meta_tag :keywords, "Аудиторії, Корпуси, #{@university.short_name}" %>
+<% @title = "#{@university.short_name} - аудиторії та корпуси" %>
+<%= render "layouts/tooltip" %>
+<%= render "layouts/navbar" %>
+
+<p id="notice"><%= notice %></p>
+
+<main class="container" role="main">
+  <h1 class="mb-4"><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
+
+  <% @buildings.each do |building| %>
+  <h5><%= link_to building.name, university_building_url(@university.url, building.friendly_id) %></h5>
+  <table class="table table-sm table-striped">
+    <tbody>
+      <% building.auditoriums.each do |auditorium| %>
+      <tr>
+        <td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
+</main>
+<%= render "layouts/footer" %>

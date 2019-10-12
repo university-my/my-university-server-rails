@@ -437,10 +437,14 @@ class SumduService
         auditorium_name = object[1]
 
         # Building name
-        building_name = auditorium_name.split('-').first
+        if auditorium_name.include? "-"
+          building_name = auditorium_name.split('-').first
+        elsif auditorium_name.include? "_"
+          building_name = auditorium_name.split('_').first
+        end
         if building_name
           building = Building.where(university: university)
-          .where('name LIKE ?', "%#{building_name}").first
+        .where('name LIKE ?', "#{building_name}%").first
         end
 
         # Conditions for find existing auditorium
@@ -454,11 +458,12 @@ class SumduService
 
         if auditorium.nil?
           auditorium = Auditorium.new
+          # Assign building only on create
+          auditorium.building = building
         end
         auditorium.server_id = server_id
         auditorium.name = auditorium_name
         auditorium.university = university
-        auditorium.building = building
 
         unless auditorium.save
           # Go to the next iteration if can't be saved

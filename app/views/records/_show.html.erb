@@ -1,10 +1,4 @@
-
-<script type="text/javascript">
-	$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-
+<%= render "layouts/tooltip" %>
 <div class="mx-auto col-md-8">
 	<% if @records_days %>
 	<% @records_days.each do |day, records| %>
