@@ -1,3 +1,6 @@
+<% meta_tag :description, "#{@university.short_name}, Корпус, #{@building.name}" %>
+<% meta_tag :keywords, "#{@university.short_name}, Корпус, #{@building.name}, Аудиторії" %>
+<% @title = "#{@university.short_name} - корпус #{@building.name}" %>
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
 
@@ -6,4 +9,14 @@
     <h1><%= @building.name %></h1>
     <h3><%= @building.description %></h3>
   </div>
+  <table class="table table-sm table-striped">
+    <tbody>
+      <% @building.auditoriums.each do |auditorium| %>
+      <tr>
+        <td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 </main>
+<%= render "layouts/footer" %>

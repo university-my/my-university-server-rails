@@ -1,28 +1,12 @@
-<% meta_tag :description, "Розклад занять #{@university.short_name}, Аудиторії" %>
-<% meta_tag :keywords, 'Аудиторії, #{@university.short_name},Розклад,Мій Університет,My University' %>
+<% meta_tag :description, "#{@university.short_name}, Аудиторії" %>
+<% meta_tag :keywords, "Аудиторії, #{@university.short_name}" %>
 
 <%= render "layouts/navbar" %>
 
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-
 	<h1 class="mb-4"><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
-
-	<% if @university.url == University.khnue_url %>
-	<% @buildings.each do |building| %>
-	<h5><%= building.name %></h5>
-	<table class="table table-sm table-striped">
-		<tbody>
-			<% building.auditoriums.each do |auditorium| %>
-			<tr>
-				<td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
-			</tr>
-			<% end %>
-		</tbody>
-	</table>
-	<% end %>
-	<% else %>
 	<table class="table table-sm table-striped">
 		<tbody>
 			<% @auditoriums.each do |auditorium| %>
@@ -32,8 +16,6 @@
 			<% end %>
 		</tbody>
 	</table>
-	<% end %>
-
 	<div class="container">
 		<div class="row">
 			<% if @university.url == 'sumdu' %>
@@ -41,6 +23,5 @@
 			<% end %>
 		</div>
 	</div>
-
 </main>
 <%= render "layouts/footer" %>
