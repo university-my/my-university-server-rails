@@ -4,7 +4,7 @@ class BuildingsController < ApplicationController
   # GET /buildings.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @buildings = Building.where(university_id: @university.id).all
+    @buildings = Building.where(university_id: @university.id).order(:name).all
   end
 
   # GET /buildings/1
