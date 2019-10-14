@@ -458,12 +458,15 @@ class SumduService
 
         if auditorium.nil?
           auditorium = Auditorium.new
-          # Assign building only on create
-          auditorium.building = building
         end
         auditorium.server_id = server_id
         auditorium.name = auditorium_name
         auditorium.university = university
+
+        if auditorium.building.nil?
+          # Assign building if empty
+          auditorium.building = building
+        end
 
         unless auditorium.save
           # Go to the next iteration if can't be saved
