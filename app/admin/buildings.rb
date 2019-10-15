@@ -9,11 +9,7 @@ ActiveAdmin.register Building do
   index do
     column :name
     column :description
-
-    column t('university') do |building|
-      link_to building.university.short_name, admin_university_path(building.university_id)
-    end
-
+    column :university
     actions
   end
 end
