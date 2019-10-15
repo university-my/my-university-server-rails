@@ -56,3 +56,8 @@ end
 every 1.day, at: ['9:35 am', '9:35 pm'] do
   runner 'KhnueService.import_groups'
 end
+
+# Sitemap refresh
+every 1.day, at: '12:00 pm' do
+  rake 'sitemap:refresh'
+end
