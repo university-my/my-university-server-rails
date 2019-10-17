@@ -22,25 +22,59 @@ Rails.application.routes.draw do
     # Teachers
     resources :teachers, only: [:index, :show], param: :id do
       member do
-          get :records
-        end
+        get :records
+      end
     end
 
     # Auditoriums
     resources :auditoriums, only: [:index, :show], param: :id do
       member do
-          get :records
-        end
+        get :records
+      end
     end
 
     # Groups
     resources :groups, only: [:index, :show], param: :id do
       member do
-          get :records
-        end
+        get :records
+      end
     end
 
+    # Buildings
     resources :buildings, only: [:index, :show], param: :id
+  end
+
+  # API v1
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      resources :universities, only: [:index], param: :url do
+
+        # Teachers API
+        resources :teachers, only: [:index], param: :id do
+          member do
+            get :records
+          end
+        end
+
+        # Auditoriums API
+        resources :auditoriums, only: [:index], param: :id do
+          member do
+            get :records
+          end
+        end
+
+        # Groups API
+        resources :groups, only: [:index], param: :id do
+          member do
+            get :records
+          end
+        end
+
+        # Buildings API
+        resources :buildings, only: [:index], param: :id
+
+      end
+    end
   end
 
   match "/404", :to => "errors#not_found", :via => :all

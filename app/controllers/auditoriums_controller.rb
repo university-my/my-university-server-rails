@@ -68,4 +68,5 @@ class AuditoriumsController < ApplicationController
       }
     end
   end
+
 end
