@@ -4,7 +4,7 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @auditoriums = @university.auditoriums
+    @auditoriums = @university.auditorium
   end
 
   # GET /auditoriums/1
