@@ -45,12 +45,12 @@ class SumduService
         for group_name in group_names do
           striped_names.push(group_name.strip)
         end
-        groups = Group.where(university_id: university.id, name: striped_names)
+        groups = Group.where(university: university, name: striped_names)
 
         # Auditorium
         # Convert to int before find request
         teacher_id = kod_fio.to_i
-        teacher = Teacher.where(university_id: university.id, server_id: teacher_id).first
+        teacher = Teacher.where(university: university, server_id: teacher_id).first
 
         # Pair start date
         start_date = date_string.to_datetime
@@ -319,12 +319,12 @@ class SumduService
         for group_name in group_names do
           striped_names.push(group_name.strip)
         end
-        groups = Group.where(university_id: university.id, name: striped_names)
+        groups = Group.where(university: university, name: striped_names)
 
         # Auditorium
         # Convert to int before find request
         auditorium_id = kod_aud.to_i
-        auditorium = Auditorium.where(university_id: university.id, server_id: auditorium_id).first
+        auditorium = Auditorium.where(university: university, server_id: auditorium_id).first
 
         # Pair start date
         start_date = date_string.to_datetime

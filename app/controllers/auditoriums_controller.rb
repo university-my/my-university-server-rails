@@ -4,9 +4,7 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @buildings = Building.where(university_id: @university.id).all
-    @auditoriums = Auditorium.where(university_id: @university.id).all
-    @title = @university.short_name + ' - Аудиторії'
+    @auditoriums = @university.auditoriums
   end
 
   # GET /auditoriums/1
@@ -20,9 +18,6 @@ class AuditoriumsController < ApplicationController
     @date = @pair_date.to_date
     @nextDate = @date + 1.day
     @previousDate = @date - 1.day
-
-    # Title
-    @title = "#{@university.short_name} - #{@auditorium.name} (#{localized_string_from(@date)})"
   end
 
   # GET /auditoriums/1/records
@@ -34,13 +29,13 @@ class AuditoriumsController < ApplicationController
     # Date
     pair_date = pair_date_from(params)
 
-    @records = Record.where(university_id: @university.id)
+    @records = Record.where(university: @university)
     .where(auditorium: @auditorium)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
 
-    if @records.empty?
+    if @records.blank?
       @auditorium.import_records(pair_date)
 
     elsif @auditorium.need_to_update_records
@@ -50,7 +45,7 @@ class AuditoriumsController < ApplicationController
     end
 
     # Select records one more time
-    @records = Record.where(university_id: @university.id)
+    @records = Record.where(university: @university)
     .where(auditorium: @auditorium)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
@@ -58,7 +53,7 @@ class AuditoriumsController < ApplicationController
 
     @records_days = @records.group_by { |t| t.start_date }
 
-    if @records.empty?
+    if @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {

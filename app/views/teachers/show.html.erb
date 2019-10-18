@@ -8,6 +8,7 @@
 <%= javascript_include_tag 'records' %>
 
 <% meta_tag :description, "Розклад занять #{@university.short_name}, Викладач - " + @teacher.name %>
+<% @title = "#{@university.short_name} - #{@teacher.name} (#{localized_string_from(@date)})" %>
 
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
