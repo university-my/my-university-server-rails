@@ -45,7 +45,7 @@ SitemapGenerator::Sitemap.create do
   University.where(is_hidden: false).find_each do |university|
     add university_auditoriums_path(university.url), :priority => 0.5, :changefreq => 'daily'
 
-    Auditorium.where(university_id: university.id).find_each do |auditorium|
+    Auditorium.where(university: university).find_each do |auditorium|
       add university_auditorium_path(university.url, auditorium.friendly_id), :lastmod => auditorium.updated_at
     end
   end
@@ -54,7 +54,7 @@ SitemapGenerator::Sitemap.create do
   University.where(is_hidden: false).find_each do |university|
     add university_groups_path(university.url), :priority => 0.5, :changefreq => 'daily'
 
-    Group.where(university_id: university.id).find_each do |group|
+    Group.where(university: university).find_each do |group|
       add university_group_path(university.url, group.friendly_id), :lastmod => group.updated_at
     end
   end
@@ -63,7 +63,7 @@ SitemapGenerator::Sitemap.create do
   University.where(is_hidden: false).find_each do |university|
     add university_teachers_path(university.url), :priority => 0.5, :changefreq => 'daily'
 
-    Teacher.where(university_id: university.id).find_each do |teacher|
+    Teacher.where(university: university).find_each do |teacher|
       add university_teacher_path(university.url, teacher.friendly_id), :lastmod => teacher.updated_at
     end
   end
@@ -72,7 +72,7 @@ SitemapGenerator::Sitemap.create do
   University.where(is_hidden: false).find_each do |university|
     add university_buildings_path(university.url), :priority => 0.4, :changefreq => 'monthly'
 
-    Building.where(university_id: university.id).find_each do |building|
+    Building.where(university: university).find_each do |building|
       add university_building_path(university.url, building.friendly_id), :lastmod => building.updated_at
     end
   end

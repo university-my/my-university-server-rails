@@ -154,13 +154,13 @@ module KhnueService
 
     begin
       # Auditorium
-      auditorium = Auditorium.find_by(university_id: university.id, server_id: auditorium_id.to_i)
+      auditorium = Auditorium.find_by(university: university, server_id: auditorium_id.to_i)
 
       # Groups
-      groups = Group.where(university_id: university.id, server_id: groups_ids)
+      groups = Group.where(university: university, server_id: groups_ids)
 
       # Teacher
-      teacher = Teacher.where(university_id: university.id, name: teacher_name).first
+      teacher = Teacher.where(university: university, name: teacher_name).first
 
       # Pair start date
       start_date = date_string.to_datetime

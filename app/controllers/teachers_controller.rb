@@ -4,8 +4,7 @@ class TeachersController < ApplicationController
   # GET /teachers.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @teachers = Teacher.where(university_id: @university.id).all
-    @title = @university.short_name + ' - Викладачі'
+    @teachers = @university.teachers
   end
 
   # GET /teachers/1
@@ -19,9 +18,6 @@ class TeachersController < ApplicationController
     @date = @pair_date.to_date
     @nextDate = @date + 1.day
     @previousDate = @date - 1.day
-
-    # Title
-    @title = "#{@university.short_name} - #{@teacher.name} (#{localized_string_from(@date)})"
   end
 
   # GET /teachers/1/records
@@ -35,13 +31,13 @@ class TeachersController < ApplicationController
 
     # TODO: Maybe use count
 
-    @records = Record.where(university_id: @university.id)
+    @records = Record.where(university: @university)
     .where(teacher_id: @teacher.id)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
 
-    if @records.empty?
+    if @records.blank?
       @teacher.import_records(pair_date)
 
     elsif @teacher.need_to_update_records
@@ -51,15 +47,15 @@ class TeachersController < ApplicationController
     end
 
     # Select records one more time
-    @records = Record.where(university_id: @university.id)
+    @records = Record.where(university: @university)
     .where(teacher_id: @teacher.id)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
-    
+
     @records_days = @records.group_by { |t| t.start_date }
-    
-    if @records.empty?
+
+    if @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {

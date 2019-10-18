@@ -158,7 +158,7 @@ module KpiHelper
     university = University.kpi
 
     # Delete old records
-    Record.where(university_id: university.id, teacher_id: teacher.id).where("updated_at < ?", DateTime.current - 2.day).destroy_all
+    Record.where(university: university, teacher: teacher).where("updated_at < ?", DateTime.current - 2.day).destroy_all
 
     current_date = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
 
@@ -185,7 +185,7 @@ module KpiHelper
             groupIDs.push(id)
           end
         end
-        groups = Group.where(university_id: university.id, server_id: groupIDs)
+        groups = Group.where(university: university, server_id: groupIDs)
 
         # Calculate pair date
         start_date = KpiHelper.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)

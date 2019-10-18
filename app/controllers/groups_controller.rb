@@ -4,8 +4,7 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @groups = Group.where(university_id: @university.id).all
-    @title = @university.short_name + ' - Групи'
+    @groups = @university.groups
   end
 
   # GET /groups/1
@@ -19,11 +18,8 @@ class GroupsController < ApplicationController
     @date = @pair_date.to_date
     @nextDate = @date + 1.day
     @previousDate = @date - 1.day
-
-    # Title
-    @title = "#{@university.short_name} - #{@group.name} (#{localized_string_from(@date)})"
   end
-  
+
   # GET /groups/1/records
   # GET /groups/1/records.json
   def records
@@ -34,13 +30,13 @@ class GroupsController < ApplicationController
     pair_date = pair_date_from(params)
 
     @records = Record.joins(:groups)
-    .where(university_id: @university.id)
+    .where(university: @university)
     .where('groups.id': @group.id)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
 
-    if @records.empty?
+    if @records.blank?
       @group.import_records(pair_date)
 
     elsif @group.need_to_update_records
@@ -51,15 +47,15 @@ class GroupsController < ApplicationController
 
     # Select records one more time
     @records = Record.joins(:groups)
-    .where(university_id: @university.id)
+    .where(university: @university)
     .where('groups.id': @group.id)
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
-    
+
     @records_days = @records.group_by { |t| t.start_date }
-    
-    if @records.empty?
+
+    if @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {
