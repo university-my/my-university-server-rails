@@ -15,8 +15,8 @@
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="<%= yield_meta_tag(:description, 'Розклад занять СумДУ') %>" />
-	<meta name="keywords" content="<%= yield_meta_tag(:keywords, 'Розклад,Мій Університет,My University') %>" />
+	<meta name="description" content="<%= yield_meta_tag(:description, '') %>" />
+	<meta name="keywords" content="<%= yield_meta_tag(:keywords, '') %>" />
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -36,7 +36,7 @@
 	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
 	<% if yield(:canonical_link).present? %>
-	<link rel="canonical" href="<%= yield(:canonical_link) %>" >
+	<link rel="canonical" href="<%= yield(:canonical_link) %>">
 	<% end %>
 </head>
 <body>

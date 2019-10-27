@@ -1,6 +1,7 @@
 <% meta_tag :description, "Розклад занять #{@university.short_name}, Групи" %>
-<% meta_tag :keywords, "Групи, #{@university.short_name},Розклад,#{@university.full_name},Мій Університет,My University" %>
+<% meta_tag :keywords, "Групи, #{@university.short_name},Розклад,#{@university.full_name}" %>
 <% @title = "#{@university.short_name} - Групи" %>
+<%= content_for(:canonical_link, university_groups_url(@university.url)) %>
 
 <%= render "layouts/navbar" %>
 

@@ -1,5 +1,3 @@
-<%= content_for(:canonical_link, university_teacher_url(@university.url, @teacher)) %>
-
 <div data-university-url="<%= @university.url %>"></div>
 <div data-type="teachers"></div>
 <div data-id="<%= @teacher.id %>"></div>
@@ -7,8 +5,10 @@
 
 <%= javascript_include_tag 'records' %>
 
+<% meta_tag :keywords, "Розклад, #{@university.short_name}, Викладач, #{@teacher.name}" %>
 <% meta_tag :description, "Розклад занять #{@university.short_name}, Викладач - " + @teacher.name %>
-<% @title = "#{@university.short_name} - #{@teacher.name} (#{localized_string_from(@date)})" %>
+<% @title = "#{@university.short_name} - #{@teacher.name}" %>
+<%= content_for(:canonical_link, university_teacher_url(@university.url, @teacher)) %>
 
 <%= render "layouts/navbar", university: @university %>
 <p id="notice"><%= notice %></p>
