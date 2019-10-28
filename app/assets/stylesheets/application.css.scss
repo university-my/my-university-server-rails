@@ -24,6 +24,10 @@ html {
   color-scheme: light dark;
 }
 
+html, body {
+    min-width: 320px;
+}
+
 @media (prefers-color-scheme: dark) {
 
   .octicon {
