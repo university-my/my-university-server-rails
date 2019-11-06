@@ -2,6 +2,7 @@
 <% meta_tag :keywords, "Аудиторії, #{@university.short_name}" %>
 <% @title = "#{@university.short_name} - Аудиторії" %>
 <%= content_for(:canonical_link, university_auditoriums_url(@university.url)) %>
+<% no_index %>
 
 <%= render "layouts/navbar" %>
 

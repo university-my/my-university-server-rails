@@ -18,6 +18,10 @@
 	<meta name="description" content="<%= yield_meta_tag(:description, '') %>" />
 	<meta name="keywords" content="<%= yield_meta_tag(:keywords, '') %>" />
 
+	<% if yield(:no_index).present? %>
+	<meta name="robots" content="noindex">
+	<% end %>
+
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -38,6 +42,7 @@
 	<% if yield(:canonical_link).present? %>
 	<link rel="canonical" href="<%= yield(:canonical_link) %>">
 	<% end %>
+
 </head>
 <body>
 	<% if notice %>
@@ -46,5 +51,6 @@
 	<% if alert %>
 	<p class="alert alert-danger"><%= alert %></p>
 	<% end %>
-	<%= yield %></body>
-	</html>
+	<%= yield %>
+</body>
+</html>
