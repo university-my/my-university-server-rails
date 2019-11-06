@@ -13,7 +13,7 @@
 				<% if record.name.present? || record.kind.present? %>
 				<div class="card-body">
 					<% if record.name.present? %>
-					<h6 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.name %></span></h6>
+					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.name %></span></h5>
 					<% end %>
 
 					<% if record.kind.present? %>
@@ -33,18 +33,18 @@
 
 					<% if record.auditorium %>
 					<li class="list-group-item">
-					<span class="align-text-bottom"><%= octicon "sign-in" %></span>
+					<span class="align-text-bottom" data-toggle="tooltip" title="Аудиторія"><%= octicon "sign-in" %></span>
 						<%= link_to university_auditorium_url(university.url, record.auditorium.friendly_id, pair_date: pair_date) do %>
-						<span class="ml-2" data-toggle="tooltip" title="Аудиторія"><%= record.auditorium.name %></span>
+						<span class="ml-2"><%= record.auditorium.name %></span>
 						<% end %>
 					</li>
 					<% end %>
 
 					<% if record.teacher %>
 					<li class="list-group-item">
-						<span class="align-text-bottom"><%= octicon "briefcase" %></span>
+						<span class="align-text-bottom" data-toggle="tooltip" title="Викладач"><%= octicon "briefcase" %></span>
 						<%= link_to university_teacher_url(university.url, record.teacher.friendly_id, pair_date: pair_date) do %>
-						<span class="ml-2" data-toggle="tooltip" title="Викладач"><%= record.teacher.name %></span>
+						<span class="ml-2"><%= record.teacher.name %></span>
 						<% end %>
 					</li>
 					<% end %>
@@ -52,10 +52,10 @@
 					<% if record.groups && record.groups.count > 0 %>
 
 					<li class="list-group-item">
-						<span class="align-text-bottom mr-2"><%= octicon "organization" %></span>
+						<span class="align-text-bottom mr-2" data-toggle="tooltip" title="Група"><%= octicon "organization" %></span>
 						<% for i in 1..record.groups.count do %>
 						<%= link_to university_group_url(university.url, record.groups[i-1].friendly_id, pair_date: pair_date) do %>
-						<span data-toggle="tooltip" title="Група"><%= record.groups[i-1].name %></span>
+						<%= record.groups[i-1].name %>
 						<% end %>
 						<% if i != record.groups.count %>
 						<%= ',' %>
