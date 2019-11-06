@@ -5,7 +5,7 @@
 <%= render "layouts/header" %>
 
 <div class="container">
-  <div class="row mb-3">
+  <div class="row mb-3 universities-cards">
     <div class="card-deck mr-0 ml-0">
 
       <% @universities.each do |university| %>
@@ -19,14 +19,14 @@
             <div class="col-md-3 mb-2">
               <picture>
                 <% if university.url == University.sumdu_url %>
-                <source srcset="sumdu-white.svg" media="(prefers-color-scheme: dark)">
-                  <img src="sumdu.svg" height="64" width="64">
+                <source srcset="/sumdu-white.svg" media="(prefers-color-scheme: dark)">
+                  <img src="/sumdu.svg" height="64" width="64">
                   <% elsif university.url == University.kpi_url %>
-                  <source srcset="kpi-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="kpi.svg" height="64" width="64">
+                  <source srcset="/kpi-white.svg" media="(prefers-color-scheme: dark)">
+                    <img src="/kpi.svg" height="64" width="64">
                     <% elsif university.url == University.khnue_url %>
-                    <source srcset="khnue-white.svg" media="(prefers-color-scheme: dark)">
-                      <img src="khnue.svg" height="62" width="62">
+                    <source srcset="/khnue-white.svg" media="(prefers-color-scheme: dark)">
+                      <img src="/khnue.svg" height="62" width="62">
                       <% end %>
                     </picture>
                   </div>

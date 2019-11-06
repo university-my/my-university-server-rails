@@ -28,6 +28,12 @@ html, body {
   min-width: 320px;
 }
 
+@media (max-width: 990px) {
+ .universities-cards .card-deck {
+     flex-flow: column wrap;
+ }
+}
+
 @media (prefers-color-scheme: dark) {
 
   hr {
