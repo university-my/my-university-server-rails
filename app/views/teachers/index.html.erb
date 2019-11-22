@@ -9,26 +9,29 @@
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-
-	<h1><%= octicon "briefcase", height: 32, width: 32 %> Викладачі</h1>
-	<table class="table table-sm table-striped">
-		<tbody>
-			<% @teachers.each do |teacher| %>
-			<tr>
-				<td><%= link_to teacher.name, university_teacher_url(@university.url, teacher.friendly_id) %></td>
-			</tr>
-			<% end %>
-		</tbody>
-	</table>
-
-	<div class="container">
-    <div class="row">
-      <% if @university.url == 'sumdu' %>
-      <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту schedule.sumdu.edu.ua</small></p>
-      <% elsif @university.url == 'kpi' %>
-      <p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту rozklad.org.ua</small></p>
-      <% end %>
-    </div>
-  </div>
+	<div class="mx-auto col-md-8">
+		<h1 class="mb-4"><%= octicon "briefcase", height: 32, width: 32 %> Викладачі</h1>
+		<div class="row">
+			<div class="col mb-4 mr-0 ml-0">
+				<div class="card">
+					<ul class="list-group list-group-flush">
+						<% @teachers.each do |teacher| %>
+						<li class="list-group-item"><%= link_to teacher.name, university_teacher_url(@university.url, teacher.friendly_id) %></li>
+						<% end %>
+					</ul>
+				</div>
+				<div class="mt-4"><%= will_paginate @teachers, :page_links => false, renderer: WillPaginate::ActionView::BootstrapLinkRenderer, list_classes: %w(pagination justify-content-center) %></div>
+				<div class="container">
+					<div class="row">
+						<% if @university.url == 'sumdu' %>
+						<p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту schedule.sumdu.edu.ua</small></p>
+						<% elsif @university.url == 'kpi' %>
+						<p class="text-muted font-weight-lighter"><small>Інформація про викладачів із сайту rozklad.org.ua</small></p>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
 <%= render "layouts/footer" %>

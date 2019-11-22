@@ -4,7 +4,7 @@ class TeachersController < ApplicationController
   # GET /teachers.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @teachers = @university.teachers
+    @teachers = @university.teachers.paginate(page: params[:page], per_page: 8)
   end
 
   # GET /teachers/1

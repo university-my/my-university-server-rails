@@ -29,9 +29,9 @@ html, body {
 }
 
 @media (max-width: 990px) {
- .universities-cards .card-deck {
-     flex-flow: column wrap;
- }
+  .universities-cards .card-deck {
+    flex-flow: column wrap;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -131,6 +131,15 @@ html, body {
 
   .table-bordered {
     border: 1px solid #2c2c2c !important;
+  }
+
+  .page-link {
+    color: #fff;
+    background-color: rgba(44, 44, 44, 0.5) !important;
+    border: 1px solid #aaa !important;
+  }
+  .page-link:hover {
+    color: rgb(216, 216, 216) !important;
   }
 }
 

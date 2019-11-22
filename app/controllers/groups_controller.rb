@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @groups = @university.groups
+    @groups = @university.groups.paginate(page: params[:page], per_page: 8)
   end
 
   # GET /groups/1
