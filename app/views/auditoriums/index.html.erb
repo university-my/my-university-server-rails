@@ -11,6 +11,16 @@
 <main class="container" role="main">
 	<div class="mx-auto col-md-8">
 		<h1 class="mb-4"><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
+
+		<div class="row">
+			<div class="col mb-4 mr-0 ml-0">
+				<form action="" method="get" id="previous_date" class="form-inline mt-2 mt-md-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="Назва аудиторії" aria-label="Пошук" name="query" value="<%= @query %>">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Шукати</button>
+				</form>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col mb-4 mr-0 ml-0">
 				<div class="card">

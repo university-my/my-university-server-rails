@@ -4,7 +4,14 @@ class AuditoriumsController < ApplicationController
   # GET /auditoriums.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @auditoriums = @university.auditorium.paginate(page: params[:page], per_page: 8)
+
+    @query = params["query"]
+    if @query.present?
+      @auditoriums = @university.auditorium.where("name LIKE ?", "%#{@query}%")
+        .paginate(page: params[:page], per_page: 8)
+    else
+      @auditoriums = @university.auditorium.paginate(page: params[:page], per_page: 8)
+    end
   end
 
   # GET /auditoriums/1
