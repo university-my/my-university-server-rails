@@ -15,6 +15,12 @@ class Group < ApplicationRecord
     ]
   end
 
+  before_validation :add_lowercase_name
+
+  def add_lowercase_name
+    self.lowercase_name = name.downcase
+  end
+
   # Fields validations
   validates :name, presence: true
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: false
