@@ -63,22 +63,6 @@ html, body {
     }
   }
 
-  .Screenshot {
-    background-image: url('/iPhone X.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    width: 213px;
-    height: 378px;
-  }
-
-  .article_screenshot_image {
-    margin-top: 79px;
-  margin-left: 17px;
-  float: left;
-  width: 219px;
-  height: 378px;
-}
-
   a {
     color: #fff;
   }
@@ -189,6 +173,24 @@ html, body {
   .carousel-control-next-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
   }
+}
+
+// iOS page
+
+.Screenshot {
+  background-image: url('/iPhone X.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 213px;
+  height: 430px;
+}
+
+.article_screenshot_image {
+  margin-top: 30px;
+  margin-left: -3px;
+  float: left;
+  width: 219px;
+  height: 378px;
 }
 
 /*
