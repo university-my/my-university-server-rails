@@ -4,44 +4,20 @@
 
 <%= render "layouts/header" %>
 <main class="container" role="main">
+
   <div class="container">
     <div class="row"><h1>Мій Університет для Android</h1></div>
-
   </div>
-  <div class="container">
-    <div class="row p-md-5">
-      <div class="col-md-6">
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <%= image_tag("android4.png", class: "mx-auto d-block w-50") %>
-            </div>
-            <div class="carousel-item">
-              <%= image_tag("android3.png", class: "mx-auto d-block w-50") %>
-            </div>
-            <div class="carousel-item">
-              <%= image_tag("android2.png", class: "mx-auto d-block w-50") %>
-            </div>
-            <div class="carousel-item">
-              <%= image_tag("android1.png", class: "mx-auto d-block w-50") %>
-            </div>
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="row p-md-2 mt-2">
+
+  <div class="container mt-2 mb-2">
+    <div class="row">
+
+      <div class="col-md-8 order-md-1">
+        <div class="mt-4">
           <p>
             <a href="https://play.google.com/store/apps/details?id=ua.com.myuniversity">
-                <%= image_tag("google-play-badge.png", style: "width:186px;height:72px;") %>
-              </a>
+              <%= image_tag("google-play-badge.png", style: "width:186px;height:72px;") %>
+            </a>
           </p>
         </div>
         <p><b>Android</b> додаток для <i>студентів та викладачів</i> з актуальним розкладом пар.</p>
@@ -62,6 +38,11 @@
           </ul>
         </p>
       </div>
+
+      <div class="col-md-4 order-md-2">
+        <%= image_tag("android2.png", class: "mx-auto d-block w-75") %>
+      </div>
+
     </div>
   </div>
 </main>

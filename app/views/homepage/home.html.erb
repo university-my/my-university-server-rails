@@ -5,6 +5,13 @@
 <%= render "layouts/header" %>
 
 <div class="container">
+
+  <div class="row">
+    <div class="alert alert-secondary mx-3" role="alert">
+    🔥 Нова версія Android додатку вже в <a href="https://play.google.com/store/apps/details?id=ua.com.myuniversity" class="alert-link">Google Play</a>
+    </div>
+  </div>
+
   <div class="row mb-3 universities-cards">
     <div class="card-deck mr-0 ml-0">
 
@@ -51,7 +58,7 @@
                     <% if university.url != University.kpi_url %>
                     <li class="list-group-item border-0">
                       <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
-                      <%= link_to 'Аудиторії', university_buildings_url(university.url), class: "align-middle ml-2" %>
+                      <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
                     </li>
                     <% end %>
                   </ul>

@@ -29,9 +29,9 @@ html, body {
 }
 
 @media (max-width: 990px) {
- .universities-cards .card-deck {
-     flex-flow: column wrap;
- }
+  .universities-cards .card-deck {
+    flex-flow: column wrap;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,6 +51,16 @@ html, body {
 
   .Header {
     background-color: rgb(22, 23, 22);
+  }
+
+  .alert-secondary {
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;
+    color: wheat;
+
+    .alert-link {
+      color: #fff;
+    }
   }
 
   a {
@@ -132,6 +142,15 @@ html, body {
   .table-bordered {
     border: 1px solid #2c2c2c !important;
   }
+
+  .page-link {
+    color: #fff;
+    background-color: rgba(44, 44, 44, 0.5) !important;
+    border: 1px solid #aaa !important;
+  }
+  .page-link:hover {
+    color: rgb(216, 216, 216) !important;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -154,6 +173,24 @@ html, body {
   .carousel-control-next-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
   }
+}
+
+// iOS page
+
+.Screenshot {
+  background-image: url('/iPhone X.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 213px;
+  height: 430px;
+}
+
+.article_screenshot_image {
+  margin-top: 30px;
+  margin-left: -3px;
+  float: left;
+  width: 219px;
+  height: 378px;
 }
 
 /*

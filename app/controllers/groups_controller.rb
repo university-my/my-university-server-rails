@@ -4,7 +4,16 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @groups = @university.groups
+    per_page = 6
+    @query = params["query"]
+    if @query.present?
+      @groups = @university.groups
+      .where("lowercase_name LIKE ?", "%#{@query.downcase}%")
+      .paginate(page: params[:page], per_page: per_page)
+    else
+      @groups = @university.groups
+        .paginate(page: params[:page], per_page: per_page)
+    end
   end
 
   # GET /groups/1

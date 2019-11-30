@@ -4,7 +4,16 @@ class TeachersController < ApplicationController
   # GET /teachers.json
   def index
     @university = University.find_by!(url: params[:university_url])
-    @teachers = @university.teachers
+    per_page = 6
+    @query = params["query"]
+    if @query.present?
+      @teachers = @university.teachers
+        .where("lowercase_name LIKE ?", "%#{@query.downcase}%")
+        .paginate(page: params[:page], per_page: per_page)
+    else
+      @teachers = @university.teachers
+        .paginate(page: params[:page], per_page: per_page)
+    end
   end
 
   # GET /teachers/1

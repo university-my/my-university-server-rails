@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_11_101321) do
+ActiveRecord::Schema.define(version: 2019_11_25_191527) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_101321) do
     t.string "slug_en"
     t.string "slug_uk"
     t.integer "building_id"
+    t.string "lowercase_name"
     t.index ["building_id"], name: "index_auditoriums_on_building_id"
     t.index ["slug"], name: "index_auditoriums_on_slug", unique: true
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_101321) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
+    t.string "lowercase_name"
     t.index ["slug"], name: "index_groups_on_slug"
     t.index ["slug_en"], name: "index_groups_on_slug_en"
     t.index ["slug_uk"], name: "index_groups_on_slug_uk"
@@ -116,6 +118,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_101321) do
     t.string "slug"
     t.string "slug_en"
     t.string "slug_uk"
+    t.string "lowercase_name"
     t.index ["slug"], name: "index_teachers_on_slug", unique: true
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
     t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
