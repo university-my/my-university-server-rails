@@ -1,28 +1,41 @@
 <% meta_tag :description, "#{@university.short_name}, Аудиторії, Корпуси" %>
 <% meta_tag :keywords, "Аудиторії, Корпуси, #{@university.short_name}" %>
-<% @title = "#{@university.short_name} - аудиторії та корпуси" %>
+<% @title = "#{@university.short_name} - Всі корпуси" %>
 <%= content_for(:canonical_link, university_buildings_url(@university.url)) %>
 <% no_index %>
 
-<%= render "layouts/tooltip" %>
 <%= render "layouts/navbar" %>
 
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-  <h1 class="mb-4"><%= octicon "sign-in", height: 32, width: 32 %> Аудиторії</h1>
+  <div class="mx-auto col-md-8">
+    <h1 class="mb-4"><i class="far fa-building"></i> Корпуси</h1>
 
-  <% @buildings.each do |building| %>
-  <h5><%= link_to building.name, university_building_url(@university.url, building.friendly_id) %></h5>
-  <table class="table table-sm table-striped">
-    <tbody>
-      <% building.auditoriums.each do |auditorium| %>
-      <tr>
-        <td><%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <% end %>
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <form method="get" id="search" class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Назва корпусу" aria-label="Пошук" name="query" value="<%= @query %>">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Шукати</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <% @buildings.each do |building| %>
+            <li class="list-group-item">
+              <span><%= link_to building.name, university_building_url(@university.url, building.friendly_id) %></span>
+              <p><small><%= building.description %></small></p>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="mt-4"><%= will_paginate @buildings, :page_links => false, renderer: WillPaginate::ActionView::BootstrapLinkRenderer, list_classes: %w(pagination justify-content-center) %></div>
+      </div>
+    </div>
+  </div>
 </main>
 <%= render "layouts/footer" %>
