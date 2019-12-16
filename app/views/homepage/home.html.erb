@@ -27,13 +27,13 @@
               <picture>
                 <% if university.url == University.sumdu_url %>
                 <source srcset="/sumdu-white.svg" media="(prefers-color-scheme: dark)">
-                  <img src="/sumdu.svg" height="64" width="64">
+                  <img src="/sumdu.svg" height="64" width="64" alt="Логотип СумДУ">
                   <% elsif university.url == University.kpi_url %>
                   <source srcset="/kpi-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="/kpi.svg" height="64" width="64">
+                    <img src="/kpi.svg" height="64" width="64" alt="Логотип КПІ">
                     <% elsif university.url == University.khnue_url %>
                     <source srcset="/khnue-white.svg" media="(prefers-color-scheme: dark)">
-                      <img src="/khnue.svg" height="62" width="62">
+                      <img src="/khnue.svg" height="62" width="62" alt="Логотип ХНЕУ">
                       <% end %>
                     </picture>
                   </div>
