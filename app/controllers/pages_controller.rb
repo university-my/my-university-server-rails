@@ -37,4 +37,8 @@ class PagesController < ApplicationController
   def android
     render "pages/android"
   end
+
+  def telegram_channels
+    render "pages/telegram-channels"
+  end
 end

@@ -11,6 +11,7 @@ SitemapGenerator::Sitemap.create do
   add terms_of_service_path, :priority => 0.8, :changefreq => 'monthly'
   add ios_path, :priority => 0.8, :changefreq => 'monthly'
   add android_path, :priority => 0.8, :changefreq => 'monthly'
+  add telegram_channels_path, :priority => 0.8, :changefreq => 'monthly'
 
   # Universities
   University.where(is_hidden: false).find_each do |university|
