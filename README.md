@@ -24,8 +24,8 @@ Reset increment of `id` (*optional*)
 - `rails runner 'KhnueService.import_groups'` (*Very long !!!*)
 
 ### KPI
-- `rails runner 'KpiHelper.import_groups'`
-- `rails runner 'KpiHelper.import_teachers'`
+- `rails runner 'KpiService.import_groups'`
+- `rails runner 'KpiService.import_teachers'`
 
 Generate links, for old records (*optional*)
 - `Auditorium.find_each(&:save)`
@@ -68,8 +68,8 @@ Console
 - `rails runner -e production 'KhnueService.import_groups'` (*Very long !!!*)
 
 ### KPI
-- `rails runner -e production 'KpiHelper.import_groups'`
-- `rails runner -e production 'KpiHelper.import_teachers'`
+- `rails runner -e production 'KpiService.import_groups'`
+- `rails runner -e production 'KpiService.import_teachers'`
 
 Refresh *sitemap*
 `RAILS_ENV=production rake sitemap:refresh`

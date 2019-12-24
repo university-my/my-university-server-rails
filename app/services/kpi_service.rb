@@ -1,15 +1,15 @@
 require 'net/http'
 require 'json'
 
-module KpiHelper
+module KpiService
 
   #
   # Import records for group from KPI API
   #
 
   def self.import_records_for_group(group, selected_pair_date)
-    # Get current week from API
-    current_week = get_current_week
+    # Get current week
+    current_week = week_for_selected_date(selected_pair_date)
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
@@ -49,16 +49,34 @@ module KpiHelper
         end
 
         # Calculate pair date
-        start_date = KpiHelper.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+        year = selected_pair_date.year
+        day = day_number
+        if lesson_week == current_week
+          week = selected_pair_date.cweek
+        elsif lesson_week > current_week
+          week = selected_pair_date.cweek + 1
+        elsif lesson_week < current_week
+          week = selected_pair_date.cweek - 1
+        end
+        test_start_date = date_for_week(year, week, day)
+
+        start_date = KpiService.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+
+        p '----'
+        p 'test_start_date = ', test_start_date
+        p 'start_date = ', start_date
+        p 'current_week = ', current_week
+        p 'selected_pair_date = ', selected_pair_date
+        p '----'
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date  = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date  = (test_start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
+        conditions[:start_date] = test_start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
         conditions[:reason] = reason
@@ -71,7 +89,7 @@ module KpiHelper
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = start_date
+          record.start_date = test_start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -90,14 +108,12 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
-
         else
           # Update record
-          record.start_date = start_date
+          record.start_date = test_start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -116,14 +132,12 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
-        p e
         Rails.logger.error(e)
         next
       end
@@ -132,7 +146,6 @@ module KpiHelper
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     unless group.save
-      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end
   end
@@ -142,8 +155,8 @@ module KpiHelper
   #
 
   def self.import_records_for_teacher(teacher, selected_pair_date)
-    # Get current week from API
-    current_week = get_current_week
+    # Get current week
+    current_week = week_for_selected_date(selected_pair_date)
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
@@ -188,7 +201,7 @@ module KpiHelper
         groups = Group.where(university: university, server_id: groupIDs)
 
         # Calculate pair date
-        start_date = KpiHelper.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+        start_date = KpiService.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
 
         # Get pair date and time
         pair_time = time.to_time
@@ -237,7 +250,6 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
@@ -264,14 +276,12 @@ module KpiHelper
 
          unless record.save
             # Go to the next iteration if record can't be saved
-            p record.errors.full_messages
             Rails.logger.error(record.errors.full_messages)
             next
           end
         end
 
       rescue Exception => e
-        p e
         Rails.logger.error(e)
         next
       end
@@ -280,7 +290,6 @@ module KpiHelper
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
     unless teacher.save
-      p errors.full_messages
       Rails.logger.error(errors.full_messages)
     end
   end
@@ -290,18 +299,18 @@ module KpiHelper
   # Import groups from KPI API
   #
 
-  # bin/rails runner 'KpiHelper.import_groups'
+  # bin/rails runner 'KpiService.import_groups'
   def self.import_groups
-    groups_total_count = KpiHelper.get_groups_count
+    groups_total_count = KpiService.get_groups_count
 
     offset = 0
 
     while offset < groups_total_count
       # Get json with groups from API
-      json = KpiHelper.get_groups(offset)
+      json = KpiService.get_groups(offset)
 
       # Save to database
-      KpiHelper.save_groups_from(json)
+      KpiService.save_groups_from(json)
 
       offset += 100
     end
@@ -373,8 +382,6 @@ module KpiHelper
           group.university = university
 
           unless group.save
-            p group.errors.full_messages
-
             # Go to the next iteration if can't be saved
             Rails.logger.error(group.errors.full_messages)
             next
@@ -382,7 +389,6 @@ module KpiHelper
         end
 
       rescue Exception => e
-        p e
         Rails.logger.error(e)
         next
       end
@@ -409,9 +415,25 @@ module KpiHelper
     return week
   end
 
-  def self.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+  # Week for current date
+  # What we have: Selected date
+  # What we need: Week number for selected date
+  def self.week_for_selected_date(selected_pair_date)
+    remainder_of_division = selected_pair_date.cweek % 2
+    if remainder_of_division == 0
+      return 1
+    else
+      return 2
+    end
+  end
 
-    pair_date = selected_pair_date.beginning_of_day
+  # Get date from week number and day number
+  def self.date_for_week(year, week, day)
+    Date.commercial(year, week, day)
+  end
+
+  def self.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+    pair_date = selected_pair_date
 
     if current_week == lesson_week
 
@@ -498,18 +520,18 @@ module KpiHelper
   #
 
   # Import from KPI
-  # bin/rails runner 'KpiHelper.import_teachers'
+  # bin/rails runner 'KpiService.import_teachers'
   def self.import_teachers
-    teachers_total_count = KpiHelper.get_teachers_count
+    teachers_total_count = KpiService.get_teachers_count
 
     offset = 0
 
     while offset < teachers_total_count
       # Get json with teachers from API
-      json = KpiHelper.get_teachers(offset)
+      json = KpiService.get_teachers(offset)
 
       # Save to database
-      KpiHelper.save_teachers_from(json)
+      KpiService.save_teachers_from(json)
 
       offset += 100
     end

@@ -36,11 +36,11 @@ end
 # KPI
 ## Teachers
 every 1.day, at: ['9:15 am', '9:15 pm'] do
-  runner 'KpiHelper.import_teachers'
+  runner 'KpiService.import_teachers'
 end
 ## Groups
 every 1.day, at: ['9:20 am', '9:20 pm'] do
-  runner 'KpiHelper.import_groups'
+  runner 'KpiService.import_groups'
 end
 
 # KHNUE
