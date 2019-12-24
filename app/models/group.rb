@@ -43,7 +43,7 @@ class Group < ApplicationRecord
       SumduService.import_records_for_group(self, date)
 
     when University.kpi_url
-      KpiHelper.import_records_for_group(self, date)
+      KpiService.import_records_for_group(self, date)
 
     when University.khnue_url
       KhnueService.import_records_for_group(self, date)
