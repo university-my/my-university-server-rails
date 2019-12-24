@@ -58,25 +58,23 @@ module KpiService
         elsif lesson_week < current_week
           week = selected_pair_date.cweek - 1
         end
-        test_start_date = date_for_week(year, week, day)
-
-        start_date = KpiService.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
-
-        p '----'
-        p 'test_start_date = ', test_start_date
-        p 'start_date = ', start_date
-        p 'current_week = ', current_week
-        p 'selected_pair_date = ', selected_pair_date
-        p '----'
+        # `beginning_of_day` for prevent duplication
+        start_date = date_for_week(year, week, day).beginning_of_day
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date  = (test_start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+
+        # Don't update old records because we don't want to override it
+        current_date = Date.today.beginning_of_day
+        if start_date < current_date
+          next
+        end
 
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = test_start_date
+        conditions[:start_date] = start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
         conditions[:reason] = reason
@@ -89,7 +87,7 @@ module KpiService
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = test_start_date
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -113,7 +111,7 @@ module KpiService
           end
         else
           # Update record
-          record.start_date = test_start_date
+          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -170,11 +168,6 @@ module KpiService
 
     university = University.kpi
 
-    # Delete old records
-    Record.where(university: university, teacher: teacher).where("updated_at < ?", DateTime.current - 2.day).destroy_all
-
-    current_date = DateTime.now.change({ hour: 0, min: 0, sec: 0 })
-
     # Save records
     for object in data do
 
@@ -201,13 +194,24 @@ module KpiService
         groups = Group.where(university: university, server_id: groupIDs)
 
         # Calculate pair date
-        start_date = KpiService.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
+        year = selected_pair_date.year
+        day = day_number
+        if lesson_week == current_week
+          week = selected_pair_date.cweek
+        elsif lesson_week > current_week
+          week = selected_pair_date.cweek + 1
+        elsif lesson_week < current_week
+          week = selected_pair_date.cweek - 1
+        end
+        # `beginning_of_day` for prevent duplication
+        start_date = date_for_week(year, week, day).beginning_of_day
 
         # Get pair date and time
         pair_time = time.to_time
         pair_start_date = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
 
-        # Skip old records
+        # Don't update old records because we don't want to override it
+        current_date = Date.today.beginning_of_day
         if start_date < current_date
           next
         end
@@ -253,8 +257,8 @@ module KpiService
             Rails.logger.error(record.errors.full_messages)
             next
           end
-
         else
+          # Update record
           record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
@@ -430,89 +434,6 @@ module KpiService
   # Get date from week number and day number
   def self.date_for_week(year, week, day)
     Date.commercial(year, week, day)
-  end
-
-  def self.calculate_pair_date(current_week, day_number, lesson_week, selected_pair_date)
-    pair_date = selected_pair_date
-
-    if current_week == lesson_week
-
-      if pair_date.wday > day_number
-        case day_number
-        when 1
-          pair_date = pair_date.next_occurring(:monday)
-        when 2
-          pair_date = pair_date.next_occurring(:tuesday)
-        when 3
-          pair_date = pair_date.next_occurring(:wednesday)
-        when 4
-          pair_date = pair_date.next_occurring(:thursday)
-        when 5
-          pair_date = pair_date.next_occurring(:friday)
-        when 6
-          pair_date = pair_date.next_occurring(:saturday)
-        when 7
-          pair_date = pair_date.next_occurring(:sunday)
-        end
-      elsif pair_date.wday < day_number
-        case day_number
-        when 1
-          pair_date = pair_date.prev_occurring(:monday)
-        when 2
-          pair_date = pair_date.prev_occurring(:tuesday)
-        when 3
-          pair_date = pair_date.prev_occurring(:wednesday)
-        when 4
-          pair_date = pair_date.prev_occurring(:thursday)
-        when 5
-          pair_date = pair_date.prev_occurring(:friday)
-        when 6
-          pair_date = pair_date.prev_occurring(:saturday)
-        when 7
-          pair_date = pair_date.prev_occurring(:sunday)
-        end
-      end
-
-    elsif current_week > lesson_week
-      # Previous week
-      case day_number
-      when 1
-        pair_date = pair_date.prev_occurring(:monday)
-      when 2
-        pair_date = pair_date.prev_occurring(:tuesday)
-      when 3
-        pair_date = pair_date.prev_occurring(:wednesday)
-      when 4
-        pair_date = pair_date.prev_occurring(:thursday)
-      when 5
-        pair_date = pair_date.prev_occurring(:friday)
-      when 6
-        pair_date = pair_date.prev_occurring(:saturday)
-      when 7
-        pair_date = pair_date.prev_occurring(:sunday)
-      end
-
-    elsif current_week < lesson_week
-      # Next week
-      case day_number
-      when 1
-        pair_date = pair_date.next_occurring(:monday)
-      when 2
-        pair_date = pair_date.next_occurring(:tuesday)
-      when 3
-        pair_date = pair_date.next_occurring(:wednesday)
-      when 4
-        pair_date = pair_date.next_occurring(:thursday)
-      when 5
-        pair_date = pair_date.next_occurring(:friday)
-      when 6
-        pair_date = pair_date.next_occurring(:saturday)
-      when 7
-        pair_date = pair_date.next_occurring(:sunday)
-      end
-    end
-
-    return pair_date
   end
 
   #
