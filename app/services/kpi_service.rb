@@ -4,6 +4,40 @@ require 'json'
 module KpiService
 
   #
+  # Classrooms
+  #
+
+  def self.import_classrooms(classrooms, university)
+    auditoriums = []
+    for classroom in classrooms do
+      classroom_id = classroom['room_id']
+      classroom_name = classroom['room_name']
+
+      auditorium = Auditorium.find_by(university_id: university.id, server_id: classroom_id)
+      if auditorium.nil?
+        auditorium = Auditorium.new
+        auditorium.server_id = classroom_id
+        auditorium.name = classroom_name
+        auditorium.university = university
+        auditorium.building = nil
+
+        unless auditorium.save
+          # Go to the next iteration if auditorium can't be saved
+          Rails.logger.error(record.errors.full_messages)
+          next
+        end
+      end
+
+      # Push only unique auditoriums
+      unless auditoriums.include?(auditorium)
+        auditoriums << auditorium
+      end
+    end
+
+    return auditoriums
+  end
+
+  #
   # Import records for group from KPI API
   #
 
@@ -31,12 +65,14 @@ module KpiService
       pair_name = object['lesson_number']
       name_string = object['lesson_full_name']
       kind = object['lesson_type']
-      reason = object['lesson_room']
       day_number = object['day_number'].to_i
       lesson_week = object['lesson_week'].to_i
 
       # Teahcer
       teachers = object['teachers']
+
+      # Classrooms
+      classrooms = object['rooms']
 
       begin
         # Convert to int before find request
@@ -47,6 +83,9 @@ module KpiService
           teacher_id = teacher_hash['teacher_id'].to_i
           teacher = Teacher.find_by(university_id: university.id, server_id: teacher_id)
         end
+
+        # Classrooms
+        auditoriums = import_classrooms(classrooms, university)
 
         # Calculate pair date
         year = selected_pair_date.year
@@ -77,7 +116,6 @@ module KpiService
         conditions[:start_date] = start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
-        conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
 
@@ -92,11 +130,11 @@ module KpiService
           record.time = time
           record.pair_name = pair_name
           record.name = name_string
-          record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
+          record.auditorium = auditoriums.first
           record.teacher = teacher
 
           # Push only unique groups
@@ -116,11 +154,11 @@ module KpiService
           record.time = time
           record.pair_name = pair_name
           record.name = name_string
-          record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
+          record.auditorium = auditoriums.first
           record.teacher = teacher
 
           # Push only unique groups
@@ -176,12 +214,14 @@ module KpiService
       pair_name = object['lesson_number']
       name_string = object['lesson_full_name']
       kind = object['lesson_type']
-      reason = object['lesson_room']
       day_number = object['day_number'].to_i
       lesson_week = object['lesson_week'].to_i
 
       # Groups
       groups = object['groups']
+
+      # Classrooms
+      classrooms = object['rooms']
 
       begin
         # Group
@@ -192,6 +232,9 @@ module KpiService
           end
         end
         groups = Group.where(university: university, server_id: groupIDs)
+
+        # Classrooms
+        auditoriums = import_classrooms(classrooms, university)
 
         # Calculate pair date
         year = selected_pair_date.year
@@ -222,7 +265,6 @@ module KpiService
         conditions[:start_date] = start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
-        conditions[:reason] = reason
         conditions[:kind] = kind
         conditions[:time] = time
         conditions[:teacher_id] = teacher.id
@@ -238,12 +280,12 @@ module KpiService
           record.time = time
           record.pair_name = pair_name
           record.name = name_string
-          record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
+          record.auditorium = auditoriums.first
 
           # Push only unique groups
           for group in groups do
@@ -264,12 +306,12 @@ module KpiService
           record.time = time
           record.pair_name = pair_name
           record.name = name_string
-          record.reason = reason
           record.kind = kind
           record.university = university
 
           # Associations
           record.teacher = teacher
+          record.auditorium = auditoriums.first
 
           # Push only unique groups
           for group in groups do
