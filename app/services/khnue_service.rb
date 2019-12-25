@@ -9,7 +9,7 @@ module KhnueService
   end
 
   def self.authKey
-    "auth=test"
+    "auth=vy_1be6600087"
   end
 
   def self.perform_request(url)
@@ -233,7 +233,6 @@ module KhnueService
 
         unless record.save
           # Go to the next iteration if record can't be saved
-          p record.errors.full_messages
           Rails.logger.error(record.errors.full_messages)
         end
 
@@ -241,7 +240,6 @@ module KhnueService
 
 
     rescue Exception => e
-      p e
       Rails.logger.error(e)
     end
   end
@@ -289,7 +287,6 @@ module KhnueService
 
       unless building.save
         # Go to the next iteration if can't be saved
-        p building.errors.full_messages
         Rails.logger.error(building.errors.full_messages)
       end
     end
@@ -344,7 +341,6 @@ module KhnueService
 
         unless auditorium.save
           # Go to the next iteration if can't be saved
-          p auditorium.errors.full_messages
           Rails.logger.error(auditorium.errors.full_messages)
         end
       else
@@ -352,13 +348,11 @@ module KhnueService
         auditorium.building = building
         unless auditorium.save
           # Go to the next iteration if can't be saved
-          p auditorium.errors.full_messages
           Rails.logger.error(auditorium.errors.full_messages)
         end
       end
 
     rescue Exception => e
-      p e
       Rails.logger.error(e)
     end
   end
@@ -385,11 +379,32 @@ module KhnueService
 
     @doc = doc.xpath('//element').each do |department|
       department_id = department.attributes['id'].value
+      department_name = department.at('./displayName').children.to_s
+      save_department(department_id, department_name)
+
       departments_ids.push(department_id)
     end
 
     # IDs of all departments
     return departments_ids
+  end
+
+  def self.save_department(id, name)
+    department = Department.where(server_id: id, name: name).first
+    university = University.khnue
+
+    if department.nil?
+      # Save new department
+      department = Department.new
+      department.server_id = id
+      department.name = name
+      department.university = university
+
+      unless department.save
+        # Go to the next iteration if can't be saved
+        Rails.logger.error(department.errors.full_messages)
+      end
+    end
   end
 
   # 2. Iterate through all deparments_ids
@@ -409,15 +424,17 @@ module KhnueService
       teacher_name = group.at('./displayName').children.to_s
 
       # Save to DB
-      save_teacher(teacher_id, teacher_name)
+      save_teacher(teacher_id, teacher_name, department_id)
     end
   end
 
   # 4. Save teacher to the DB
-  def self.save_teacher(server_id, teacher_name)
+  def self.save_teacher(server_id, teacher_name, department_id)
 
     begin
       university = University.khnue
+      department = Department.where(university: university)
+      .where(server_id: department_id).first
 
       # Conditions for find existing teacher
       conditions = {}
@@ -433,17 +450,16 @@ module KhnueService
         teacher = Teacher.new
         teacher.server_id = server_id
         teacher.name = teacher_name
+        teacher.department = department
         teacher.university = university
 
         unless teacher.save
           # Go to the next iteration if can't be saved
-          p teacher.errors.full_messages
           Rails.logger.error(teacher.errors.full_messages)
         end
       end
 
     rescue Exception => e
-      p e
       Rails.logger.error(e)
     end
   end

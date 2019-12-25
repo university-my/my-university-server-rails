@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_25_191527) do
+ActiveRecord::Schema.define(version: 2019_12_25_200446) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -55,6 +55,22 @@ ActiveRecord::Schema.define(version: 2019_11_25_191527) do
     t.index ["slug_en"], name: "index_buildings_on_slug_en"
     t.index ["slug_uk"], name: "index_buildings_on_slug_uk"
     t.index ["university_id"], name: "index_buildings_on_university_id"
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "server_id"
+    t.integer "university_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_departments_on_slug"
+    t.index ["slug_en"], name: "index_departments_on_slug_en"
+    t.index ["slug_uk"], name: "index_departments_on_slug_uk"
+    t.index ["university_id"], name: "index_departments_on_university_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -119,6 +135,8 @@ ActiveRecord::Schema.define(version: 2019_11_25_191527) do
     t.string "slug_en"
     t.string "slug_uk"
     t.string "lowercase_name"
+    t.integer "department_id"
+    t.index ["department_id"], name: "index_teachers_on_department_id"
     t.index ["slug"], name: "index_teachers_on_slug", unique: true
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
     t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
