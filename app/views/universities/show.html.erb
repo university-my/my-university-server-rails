@@ -38,6 +38,9 @@
               <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
               <%= link_to 'Кафедри', university_departments_url(@university.url), class: "align-middle ml-2" %>
             </li>
+            <li class="list-group-item border-0">
+              <%= link_to 'Факультети', university_faculties_url(@university.url), class: "align-middle ml-2" %>
+            </li>
             <% end %>
           </ul>
         </div>
