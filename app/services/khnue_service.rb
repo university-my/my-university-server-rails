@@ -456,6 +456,13 @@ module KhnueService
           # Go to the next iteration if can't be saved
           Rails.logger.error(teacher.errors.full_messages)
         end
+      else
+        # Update
+        teacher.department = department
+        unless teacher.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error(teacher.errors.full_messages)
+        end
       end
 
     rescue Exception => e
@@ -607,6 +614,14 @@ module KhnueService
         group.faculty = faculty
         group.speciality = speciality
 
+        unless group.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error(group.errors.full_messages)
+        end
+      else
+        # Update
+        group.faculty = faculty
+        group.speciality = speciality
         unless group.save
           # Go to the next iteration if can't be saved
           Rails.logger.error(group.errors.full_messages)
