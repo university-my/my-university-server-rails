@@ -204,7 +204,6 @@ module KhnueService
         # Try to save record
         unless record.save
           # Go to the next iteration if record can't be saved
-          p record.errors.full_messages
           Rails.logger.error(record.errors.full_messages)
         end
 
@@ -486,11 +485,32 @@ module KhnueService
 
     @doc = doc.xpath('//element').each do |faculty|
       faculty_id = faculty.attributes['id'].value
+      faculty_name = faculty.at('./displayName').children.to_s
+      save_faculty(faculty_id, faculty_name)
+
       faculties_ids.push(faculty_id)
     end
 
     # IDs of all faculties
     return faculties_ids
+  end
+
+  def self.save_faculty(id, name)
+    faculty = Faculty.where(server_id: id, name: name).first
+    university = University.khnue
+
+    if faculty.nil?
+      # Save new faculty
+      faculty = Faculty.new
+      faculty.server_id = id
+      faculty.name = name
+      faculty.university = university
+
+      unless faculty.save
+        # Go to the next iteration if can't be saved
+        Rails.logger.error(faculty.errors.full_messages)
+      end
+    end
   end
 
   # 2. Request specialities by faculties_ids.
@@ -530,19 +550,21 @@ module KhnueService
     doc = perform_request(url)
 
     @doc = doc.xpath('//element').each do |group|
-      groupID = group.attributes['id'].value
-      groupName = group.at('./displayName').children.to_s
+      group_id = group.attributes['id'].value
+      group_name = group.at('./displayName').children.to_s
 
       # Save to DB
-      save_group(groupID, groupName)
+      save_group(group_id, group_name, faculty_id)
     end
   end
 
   # 4. Save group to the DB
-  def self.save_group(server_id, group_name)
+  def self.save_group(server_id, group_name, faculty_id)
 
     begin
       university = University.khnue
+      faculty = Faculty.where(university: university)
+      .where(server_id: faculty_id).first
 
       # Conditions for find existing group
       conditions = {}
@@ -559,16 +581,15 @@ module KhnueService
         group.server_id = server_id
         group.name = group_name
         group.university = university
+        group.faculty = faculty
 
         unless group.save
           # Go to the next iteration if can't be saved
-          p group.errors.full_messages
           Rails.logger.error(group.errors.full_messages)
         end
       end
 
     rescue Exception => e
-      p e
       Rails.logger.error(e)
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_25_200446) do
+ActiveRecord::Schema.define(version: 2019_12_28_124234) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -73,6 +73,21 @@ ActiveRecord::Schema.define(version: 2019_12_25_200446) do
     t.index ["university_id"], name: "index_departments_on_university_id"
   end
 
+  create_table "faculties", force: :cascade do |t|
+    t.string "name"
+    t.integer "server_id"
+    t.integer "university_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_faculties_on_slug"
+    t.index ["slug_en"], name: "index_faculties_on_slug_en"
+    t.index ["slug_uk"], name: "index_faculties_on_slug_uk"
+    t.index ["university_id"], name: "index_faculties_on_university_id"
+  end
+
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -94,6 +109,8 @@ ActiveRecord::Schema.define(version: 2019_12_25_200446) do
     t.string "slug_en"
     t.string "slug_uk"
     t.string "lowercase_name"
+    t.integer "faculty_id"
+    t.index ["faculty_id"], name: "index_groups_on_faculty_id"
     t.index ["slug"], name: "index_groups_on_slug"
     t.index ["slug_en"], name: "index_groups_on_slug_en"
     t.index ["slug_uk"], name: "index_groups_on_slug_uk"

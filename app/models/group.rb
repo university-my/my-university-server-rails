@@ -28,6 +28,7 @@ class Group < ApplicationRecord
   # Associations
   has_and_belongs_to_many :records, optional: true, dependent: :nullify
   belongs_to :university, optional: true
+  belongs_to :faculty, optional: true
 
   # bin/rails runner 'Group.reset_update_date'
   def self.reset_update_date
