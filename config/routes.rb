@@ -43,6 +43,9 @@ Rails.application.routes.draw do
 
     # Buildings
     resources :buildings, only: [:index, :show], param: :id
+
+    # Departments
+    resources :departments, only: [:index, :show], param: :id
   end
 
   # API v1

@@ -61,6 +61,13 @@
                       <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
                     </li>
                     <% end %>
+
+                    <% if university.url == University.khnue_url %>
+              			<li class="list-group-item border-0">
+                      <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
+              				<%= link_to 'Кафедри', university_departments_url(university.url), class: "align-middle ml-2" %>
+              			</li>
+                    <% end %>
                   </ul>
                 </div>
               </div>

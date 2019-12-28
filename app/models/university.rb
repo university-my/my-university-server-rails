@@ -5,6 +5,8 @@ class University < ApplicationRecord
   has_many :groups
   has_many :teachers
   has_many :buildings
+  has_many :departments
+  has_many :faculties
 
   def self.sumdu_url
     "sumdu"
