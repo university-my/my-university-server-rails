@@ -514,15 +514,15 @@ module KhnueService
   end
 
   # 2. Request specialities by faculties_ids.
-  # And request group by faculty_id and specialty_id.
+  # And request group by faculty_id and speciality_id.
   def self.request_specialities(faculties_ids)
 
     faculties_ids.each do |faculty_id|
       specialities_ids = request_specialty(faculty_id)
 
-      specialities_ids.each do |specialty_id|
+      specialities_ids.each do |speciality_id|
         for course in 1..6 do
-          request_groups(faculty_id, specialty_id, course)
+          request_groups(faculty_id, speciality_id, course)
         end
       end
     end
@@ -536,17 +536,38 @@ module KhnueService
     specialities_ids = []
 
     @doc = doc.xpath('//element').each do |specialty|
-      specialty_id = specialty.attributes['id'].value
-      specialities_ids.push(specialty_id)
+      speciality_id = specialty.attributes['id'].value
+      speciality_name = specialty.at('./displayName').children.to_s
+      save_speciality(speciality_id, speciality_name)
+
+      specialities_ids.push(speciality_id)
     end
 
     # IDs of specialities
     return specialities_ids
   end
 
-  # 4. Request groups by faculty_id, specialty_id and course
-  def self.request_groups(faculty_id, specialty_id, course)
-    url = "#{baseURL}?q=groups&facultyid=#{faculty_id}&specialityid=#{specialty_id}&course=#{course}&#{authKey}"
+  def self.save_speciality(id, name)
+    speciality = Speciality.where(server_id: id, name: name).first
+    university = University.khnue
+
+    if speciality.nil?
+      # Save new speciality
+      speciality = Speciality.new
+      speciality.server_id = id
+      speciality.name = name
+      speciality.university = university
+
+      unless speciality.save
+        # Go to the next iteration if can't be saved
+        Rails.logger.error(speciality.errors.full_messages)
+      end
+    end
+  end
+
+  # 4. Request groups by faculty_id, speciality_id and course
+  def self.request_groups(faculty_id, speciality_id, course)
+    url = "#{baseURL}?q=groups&facultyid=#{faculty_id}&specialityid=#{speciality_id}&course=#{course}&#{authKey}"
     doc = perform_request(url)
 
     @doc = doc.xpath('//element').each do |group|
@@ -554,17 +575,19 @@ module KhnueService
       group_name = group.at('./displayName').children.to_s
 
       # Save to DB
-      save_group(group_id, group_name, faculty_id)
+      save_group(group_id, group_name, faculty_id, speciality_id)
     end
   end
 
   # 4. Save group to the DB
-  def self.save_group(server_id, group_name, faculty_id)
+  def self.save_group(server_id, group_name, faculty_id, speciality_id)
 
     begin
       university = University.khnue
       faculty = Faculty.where(university: university)
       .where(server_id: faculty_id).first
+      speciality = Speciality.where(university: university)
+      .where(server_id: speciality_id).first
 
       # Conditions for find existing group
       conditions = {}
@@ -582,6 +605,7 @@ module KhnueService
         group.name = group_name
         group.university = university
         group.faculty = faculty
+        group.speciality = speciality
 
         unless group.save
           # Go to the next iteration if can't be saved
