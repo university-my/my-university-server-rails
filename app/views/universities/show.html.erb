@@ -46,5 +46,56 @@
       </div>
     </div>
 
+    <% if @university.url == University.sumdu_url %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h1 class="card-title display-5">Корисне</h1>
+        <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
+
+        <div class="card-text">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="https://suspilne.media/regions/sumy-region">suspilne.media</a> - Новини міста Суми</li>
+            <li class="list-group-item"><a href="https://cukr.city">cukr.city</a> - Історії міста Суми</li>
+            <li class="list-group-item"><a href="https://t.me/pos_sumdu" rel="external nofollow" target="_blank">@pos_sumdu</a> – Telegram канал про майбутні студентські події та новини СумДУ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <% if @university.url == University.kpi_url %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h1 class="card-title display-5">Корисне</h1>
+        <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
+        <div class="card-text">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="https://t.me/kpilive" rel="external nofollow" target="_blank">@kpilive </a>– усе про життя студентів КПІ й навіть більше. Якщо досі не в курсі про останні хакатони і стартап-тренінги, цей канал тобі точно знадобиться!</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_library" rel="external nofollow" target="_blank">@kpi_library</a> – якщо запланував похід у бібліотеку. Дайджест літературних та освітніх подій університету.</li>
+            <li class="list-group-item"><a href="https://t.me/KPI_Literature" rel="external nofollow" target="_blank">@KPI_Literature</a> – для цінувальників вечорів поезії КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpitv" rel="external nofollow" target="_blank">@kpitv</a> – подкасти й матеріали університетського телебачення.</li>
+            <li class="list-group-item"><a href="https://t.me/vezhakpi" rel="external nofollow" target="_blank">@vezhakpi</a> – арт-простір Київського політеху. Мистецькі події, фільми та літературні зустрічі.</li>
+            <li class="list-group-item"><a href="https://t.me/kpiday" rel="external nofollow" target="_blank">@kpiday</a> – телеграм-щоденник життя Політехніки.</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_work" rel="external nofollow" target="_blank">@kpi_work</a> – популярний канал пошуку роботи для студентів університету.</li>
+            <li class="list-group-item"><a href="https://t.me/kpicampus" rel="external nofollow" target="_blank">@kpicampus</a> – канал гуртожитської спільноти КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpikids" rel="external nofollow" target="_blank">@kpikids</a> – якщо ти нещодавно долучився до КПІ-спільноти, цей телеграм-ресурс – необхідний гайд для початку твоєї студентської стежини.</li>
+            <li class="list-group-item"><a href="https://t.me/chankpi" rel="external nofollow" target="_blank">@chankpi</a> – студентський гумор та розваги в одному чані.</li>
+            <li class="list-group-item"><a href="https://t.me/itkpi" rel="external nofollow" target="_blank">@itkpi</a> – простір для пошуку ІТ-можливостей. Must-have для програмістів.</li>
+            <li class="list-group-item"><a href="https://t.me/leport" rel="external nofollow" target="_blank">@leport</a> – літературна дискусійна платформа. Критиків та цінувальників мистецтва шукай тут.</li>
+            <li class="list-group-item"><a href="https://t.me/sr_kpi" rel="external nofollow" target="_blank">@sr_kpi</a> – канал Студентської ради КПІ</li>
+            <li class="list-group-item"><a href="https://t.me/radio_kpi" rel="external nofollow" target="_blank">@radio_kpi</a> – музичні новинки, ефіри РадіоКПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpiradio_bot" rel="external nofollow" target="_blank">@kpiradio_bot</a> – бот від РадіоКПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_look" rel="external nofollow" target="_blank">@kpi_look</a> – фотографії КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_777" rel="external nofollow" target="_blank">@kpi_777</a> – про те, за що студенти люблять КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_666" rel="external nofollow" target="_blank">@kpi_666</a> – про те, за що студенти не люблять КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/belka_space" rel="external nofollow" target="_blank">@belka_space</a> – канал відкритого студентського простору Belka.</li>
+            <li class="list-group-item"><a href="https://t.me/kpi_lampa" rel="external nofollow" target="_blank">@kpi_lampa</a> – відкрита лабораторія електроніки в КПІ.</li>
+            <li class="list-group-item"><a href="https://t.me/hochu_v_kpi" rel="external nofollow" target="_blank">@hochu_v_kpi</a> – канал для абітурієнтів КПІ.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
   </main>
   <%= render "layouts/footer" %>
