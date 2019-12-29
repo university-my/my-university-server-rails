@@ -18,15 +18,22 @@
 			<li class="nav-item">
 				<%= link_to 'Групи', university_groups_url, class: "nav-link" %>
 			</li>
+		</ul>
+		<ul class="navbar-nav mr-2">
 			<% if @university.url == University.khnue_url %>
+			<div class="row"><div class="col"><hr></div></div>
 			<li class="nav-item">
 				<%= link_to 'Кафедри', university_departments_url, class: "nav-link" %>
 			</li>
 			<li class="nav-item">
 				<%= link_to 'Факультети', university_faculties_url, class: "nav-link" %>
 			</li>
+			<li class="nav-item">
+				<%= link_to 'Спеціальності', university_specialities_url, class: "nav-link" %>
+			</li>
 			<% end %>
 		</ul>
+		<div class="row"><div class="col"><hr></div></div>
 	<a href="https://forms.gle/QuLTXgoKMXbDACGD6"><span data-toggle="tooltip" title="Знайшли помилку?"><%= octicon "bug", height: 18, width: 18, fill: "white" %></span></a>
 	</div>
 </nav>

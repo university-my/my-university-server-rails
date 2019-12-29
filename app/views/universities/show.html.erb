@@ -10,102 +10,128 @@
 <main class="container" role="main">
 
   <div class="card mb-3">
-    <div class="card-body">
-      <h1 class="card-title display-5">Розклад <%= @university.short_name %></h1>
-        <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= @university.full_name %></h6>
+    <div class="card-header">
+      <div class="media">
+        <picture>
+          <% if @university.url == University.sumdu_url %>
+          <source srcset="/sumdu-white.svg" media="(prefers-color-scheme: dark)">
+            <img src="/sumdu.svg" height="64" width="64" alt="Логотип СумДУ" class="align-self-center mr-3">
+            <% elsif @university.url == University.kpi_url %>
+            <source srcset="/kpi-white.svg" media="(prefers-color-scheme: dark)">
+              <img src="/kpi.svg" height="64" width="64" alt="Логотип КПІ" class="align-self-center mr-3">
+              <% elsif @university.url == University.khnue_url %>
+              <source srcset="/khnue-white.svg" media="(prefers-color-scheme: dark)">
+                <img src="/khnue.svg" height="62" width="62" alt="Логотип ХНЕУ" class="align-self-center mr-3">
+                <% end %>
+              </picture>
+              <div class="media-body">
+                <h1 display-3 class="mt-0">Розклад <%= @university.short_name %></h1>
+                <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= @university.full_name %></h6>
+              </div>
+            </div>
+          </div>
 
-        <div class="card-text" style="max-width: 160px;">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item border-0">
-              <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
-              <span class="align-middle"><%= link_to 'Групи', university_groups_url(@university.url), class: "align-middle ml-2" %></span>
-            </li>
+          <div class="card-body">
+            <div class="card-text">
+              <ul class="list-group list-group-flush">
 
-            <li class="list-group-item border-0">
-              <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
-              <%= link_to 'Викладачі', university_teachers_url(@university.url), class: "align-middle ml-2" %>
-            </li>
+                <% if @university.url == University.khnue_url %>
 
-            <% if @university.url != University.kpi_url %>
-            <li class="list-group-item border-0">
-              <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
-              <%= link_to 'Аудиторії', university_auditoriums_url(@university.url), class: "align-middle ml-2" %>
-            </li>
+                <li class="list-group-item border-0">
+                  <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
+                  <span class="align-middle"><%= link_to 'Кафедри', university_departments_url(@university.url), class: "align-middle ml-2" %></span>
+                </li>
+                <li class="list-group-item border-0">
+                  <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
+                  <span class="align-middle"><%= link_to 'Факультети', university_faculties_url(@university.url), class: "align-middle ml-2" %></span>
+                </li>
+                <li class="list-group-item border-0">
+                  <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
+                  <span class="align-middle"><%= link_to 'Спеціальності', university_specialities_url(@university.url), class: "align-middle ml-2" %></span>
+                </li>
+                <div class="row"><div class="col"><hr></div></div>
+                <% end %>
+
+                <li class="list-group-item border-0">
+                  <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
+                  <span class="align-middle"><%= link_to 'Групи', university_groups_url(@university.url), class: "align-middle ml-2" %></span>
+                </li>
+
+                <li class="list-group-item border-0">
+                  <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
+                  <%= link_to 'Викладачі', university_teachers_url(@university.url), class: "align-middle ml-2" %>
+                </li>
+
+                <% if @university.url != University.kpi_url %>
+                <li class="list-group-item border-0">
+                  <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
+                  <%= link_to 'Аудиторії', university_auditoriums_url(@university.url), class: "align-middle ml-2" %>
+                </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+          <div class="card-footer">
+            <% if @university.url == University.sumdu_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+            <% elsif @university.url == University.kpi_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+            <% elsif @university.url == University.khnue_url %>
+            <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів, кафедри та групи із сайту hneu.edu.ua</small></p>
             <% end %>
-
-            <% if @university.url == University.khnue_url %>
-            <li class="list-group-item border-0">
-              <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
-              <%= link_to 'Кафедри', university_departments_url(@university.url), class: "align-middle ml-2" %>
-            </li>
-            <li class="list-group-item border-0">
-              <%= link_to 'Факультети', university_faculties_url(@university.url), class: "align-middle ml-2" %>
-            </li>
-            <% end %>
-          </ul>
+          </div>
         </div>
-      </div>
-      <div class="card-footer">
+
         <% if @university.url == University.sumdu_url %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
-        <% elsif @university.url == University.kpi_url %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
-        <% elsif @university.url == University.khnue_url %>
-        <p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів, кафедри та групи із сайту hneu.edu.ua</small></p>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h1 class="card-title display-5">Корисне</h1>
+            <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
+
+            <div class="card-text">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="https://suspilne.media/regions/sumy-region">suspilne.media</a> - Новини міста Суми</li>
+                <li class="list-group-item"><a href="https://cukr.city">cukr.city</a> - Історії міста Суми</li>
+                <li class="list-group-item"><a href="https://t.me/pos_sumdu" rel="external nofollow" target="_blank">@pos_sumdu</a> – Telegram канал про майбутні студентські події та новини СумДУ</li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <% end %>
-      </div>
-    </div>
 
-    <% if @university.url == University.sumdu_url %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h1 class="card-title display-5">Корисне</h1>
-        <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
-
-        <div class="card-text">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="https://suspilne.media/regions/sumy-region">suspilne.media</a> - Новини міста Суми</li>
-            <li class="list-group-item"><a href="https://cukr.city">cukr.city</a> - Історії міста Суми</li>
-            <li class="list-group-item"><a href="https://t.me/pos_sumdu" rel="external nofollow" target="_blank">@pos_sumdu</a> – Telegram канал про майбутні студентські події та новини СумДУ</li>
-          </ul>
+        <% if @university.url == University.kpi_url %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h1 class="card-title display-5">Корисне</h1>
+            <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
+            <div class="card-text">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="https://t.me/kpilive" rel="external nofollow" target="_blank">@kpilive </a>– усе про життя студентів КПІ й навіть більше. Якщо досі не в курсі про останні хакатони і стартап-тренінги, цей канал тобі точно знадобиться!</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_library" rel="external nofollow" target="_blank">@kpi_library</a> – якщо запланував похід у бібліотеку. Дайджест літературних та освітніх подій університету.</li>
+                <li class="list-group-item"><a href="https://t.me/KPI_Literature" rel="external nofollow" target="_blank">@KPI_Literature</a> – для цінувальників вечорів поезії КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpitv" rel="external nofollow" target="_blank">@kpitv</a> – подкасти й матеріали університетського телебачення.</li>
+                <li class="list-group-item"><a href="https://t.me/vezhakpi" rel="external nofollow" target="_blank">@vezhakpi</a> – арт-простір Київського політеху. Мистецькі події, фільми та літературні зустрічі.</li>
+                <li class="list-group-item"><a href="https://t.me/kpiday" rel="external nofollow" target="_blank">@kpiday</a> – телеграм-щоденник життя Політехніки.</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_work" rel="external nofollow" target="_blank">@kpi_work</a> – популярний канал пошуку роботи для студентів університету.</li>
+                <li class="list-group-item"><a href="https://t.me/kpicampus" rel="external nofollow" target="_blank">@kpicampus</a> – канал гуртожитської спільноти КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpikids" rel="external nofollow" target="_blank">@kpikids</a> – якщо ти нещодавно долучився до КПІ-спільноти, цей телеграм-ресурс – необхідний гайд для початку твоєї студентської стежини.</li>
+                <li class="list-group-item"><a href="https://t.me/chankpi" rel="external nofollow" target="_blank">@chankpi</a> – студентський гумор та розваги в одному чані.</li>
+                <li class="list-group-item"><a href="https://t.me/itkpi" rel="external nofollow" target="_blank">@itkpi</a> – простір для пошуку ІТ-можливостей. Must-have для програмістів.</li>
+                <li class="list-group-item"><a href="https://t.me/leport" rel="external nofollow" target="_blank">@leport</a> – літературна дискусійна платформа. Критиків та цінувальників мистецтва шукай тут.</li>
+                <li class="list-group-item"><a href="https://t.me/sr_kpi" rel="external nofollow" target="_blank">@sr_kpi</a> – канал Студентської ради КПІ</li>
+                <li class="list-group-item"><a href="https://t.me/radio_kpi" rel="external nofollow" target="_blank">@radio_kpi</a> – музичні новинки, ефіри РадіоКПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpiradio_bot" rel="external nofollow" target="_blank">@kpiradio_bot</a> – бот від РадіоКПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_look" rel="external nofollow" target="_blank">@kpi_look</a> – фотографії КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_777" rel="external nofollow" target="_blank">@kpi_777</a> – про те, за що студенти люблять КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_666" rel="external nofollow" target="_blank">@kpi_666</a> – про те, за що студенти не люблять КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/belka_space" rel="external nofollow" target="_blank">@belka_space</a> – канал відкритого студентського простору Belka.</li>
+                <li class="list-group-item"><a href="https://t.me/kpi_lampa" rel="external nofollow" target="_blank">@kpi_lampa</a> – відкрита лабораторія електроніки в КПІ.</li>
+                <li class="list-group-item"><a href="https://t.me/hochu_v_kpi" rel="external nofollow" target="_blank">@hochu_v_kpi</a> – канал для абітурієнтів КПІ.</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <% end %>
+        <% end %>
 
-    <% if @university.url == University.kpi_url %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h1 class="card-title display-5">Корисне</h1>
-        <h6 class="card-subtitle mb-2 Text-light font-weight-light">Цікаві ресурси</h6>
-        <div class="card-text">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="https://t.me/kpilive" rel="external nofollow" target="_blank">@kpilive </a>– усе про життя студентів КПІ й навіть більше. Якщо досі не в курсі про останні хакатони і стартап-тренінги, цей канал тобі точно знадобиться!</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_library" rel="external nofollow" target="_blank">@kpi_library</a> – якщо запланував похід у бібліотеку. Дайджест літературних та освітніх подій університету.</li>
-            <li class="list-group-item"><a href="https://t.me/KPI_Literature" rel="external nofollow" target="_blank">@KPI_Literature</a> – для цінувальників вечорів поезії КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpitv" rel="external nofollow" target="_blank">@kpitv</a> – подкасти й матеріали університетського телебачення.</li>
-            <li class="list-group-item"><a href="https://t.me/vezhakpi" rel="external nofollow" target="_blank">@vezhakpi</a> – арт-простір Київського політеху. Мистецькі події, фільми та літературні зустрічі.</li>
-            <li class="list-group-item"><a href="https://t.me/kpiday" rel="external nofollow" target="_blank">@kpiday</a> – телеграм-щоденник життя Політехніки.</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_work" rel="external nofollow" target="_blank">@kpi_work</a> – популярний канал пошуку роботи для студентів університету.</li>
-            <li class="list-group-item"><a href="https://t.me/kpicampus" rel="external nofollow" target="_blank">@kpicampus</a> – канал гуртожитської спільноти КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpikids" rel="external nofollow" target="_blank">@kpikids</a> – якщо ти нещодавно долучився до КПІ-спільноти, цей телеграм-ресурс – необхідний гайд для початку твоєї студентської стежини.</li>
-            <li class="list-group-item"><a href="https://t.me/chankpi" rel="external nofollow" target="_blank">@chankpi</a> – студентський гумор та розваги в одному чані.</li>
-            <li class="list-group-item"><a href="https://t.me/itkpi" rel="external nofollow" target="_blank">@itkpi</a> – простір для пошуку ІТ-можливостей. Must-have для програмістів.</li>
-            <li class="list-group-item"><a href="https://t.me/leport" rel="external nofollow" target="_blank">@leport</a> – літературна дискусійна платформа. Критиків та цінувальників мистецтва шукай тут.</li>
-            <li class="list-group-item"><a href="https://t.me/sr_kpi" rel="external nofollow" target="_blank">@sr_kpi</a> – канал Студентської ради КПІ</li>
-            <li class="list-group-item"><a href="https://t.me/radio_kpi" rel="external nofollow" target="_blank">@radio_kpi</a> – музичні новинки, ефіри РадіоКПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpiradio_bot" rel="external nofollow" target="_blank">@kpiradio_bot</a> – бот від РадіоКПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_look" rel="external nofollow" target="_blank">@kpi_look</a> – фотографії КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_777" rel="external nofollow" target="_blank">@kpi_777</a> – про те, за що студенти люблять КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_666" rel="external nofollow" target="_blank">@kpi_666</a> – про те, за що студенти не люблять КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/belka_space" rel="external nofollow" target="_blank">@belka_space</a> – канал відкритого студентського простору Belka.</li>
-            <li class="list-group-item"><a href="https://t.me/kpi_lampa" rel="external nofollow" target="_blank">@kpi_lampa</a> – відкрита лабораторія електроніки в КПІ.</li>
-            <li class="list-group-item"><a href="https://t.me/hochu_v_kpi" rel="external nofollow" target="_blank">@hochu_v_kpi</a> – канал для абітурієнтів КПІ.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <% end %>
-
-  </main>
-  <%= render "layouts/footer" %>
+      </main>
+      <%= render "layouts/footer" %>
