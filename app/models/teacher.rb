@@ -28,7 +28,7 @@ class Teacher < ApplicationRecord
   # Associations
   has_many :records, dependent: :nullify
   belongs_to :university, optional: true
-
+  belongs_to :department, optional: true
 
   # bin/rails runner 'Teacher.reset_update_date'
   def self.reset_update_date
