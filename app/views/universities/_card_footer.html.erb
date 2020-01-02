@@ -1,0 +1,9 @@
+<% if university.url == University.sumdu_url %>
+<p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту schedule.sumdu.edu.ua</small></p>
+<% elsif university.url == University.kpi_url %>
+<p class="text-muted font-weight-lighter"><small>Інформація про викладачів та групи із сайту rozklad.org.ua</small></p>
+<% elsif university.url == University.khnue_url %>
+<p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів, групи, кафедри, факультети та спеціальності із сайту hneu.edu.ua</small></p>
+<% elsif university.url == University.nau_url %>
+<p class="text-muted font-weight-lighter"><small>Інформація про аудиторії, викладачів та групи із сайту rozklad.nau.edu.ua</small></p>
+<% end %>
