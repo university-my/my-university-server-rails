@@ -23,31 +23,31 @@ module NauService
     objects = json['departments']
 
     for object in objects do
-      department_id = object['CODE'].to_i
-      name = object['NAME']
+      faculty_id = object['CODE'].to_i
+      faculty_name = object['NAME']
 
       # Save department
-      save_department(department_id, name)
+      save_faculty(faculty_id, faculty_name)
 
       # Import groups for department
-      import_groups(department_id)
+      import_groups(faculty_id)
     end
   end
 
-  def self.save_department(id, name)
-    department = Department.where(server_id: id, name: name).first
+  def self.save_faculty(faculty_id, faculty_name)
     university = University.nau
+    faculty = Faculty.where(university: university, server_id: faculty_id, name: faculty_name).first
 
-    if department.nil?
-      # Save new department
-      department = Department.new
-      department.server_id = id
-      department.name = name
-      department.university = university
+    if faculty.nil?
+      # Save new faculty
+      faculty = Faculty.new
+      faculty.server_id = faculty_id
+      faculty.name = faculty_name
+      faculty.university = university
 
-      unless department.save
+      unless faculty.save
         # Go to the next iteration if can't be saved
-        Rails.logger.error(department.errors.full_messages)
+        Rails.logger.error(faculty.errors.full_messages)
       end
     end
   end
@@ -55,8 +55,8 @@ module NauService
   #
   # Group
   #
-  def self.import_groups(department_id)
-    url = "#{baseURL}/groups/#{department_id}"
+  def self.import_groups(faculty_id)
+    url = "#{baseURL}/groups/#{faculty_id}"
     json = ApplicationRecord.perform_request(url)
 
     if json.nil?
@@ -64,10 +64,60 @@ module NauService
     end
 
     objects = json['groups']
-    for object in objects do
-      # TODO: Save groups
+
+    if objects.nil?
+      return
     end
 
+    for object in objects do
+      # Save groups
+
+      # ID is not unique
+      group_id = object['GRP'].to_i
+      name = object['NAME']
+      course = object['COURSE'].to_i
+      stream = object['STRM'].to_i
+      save_group(group_id, name, course, stream, faculty_id)
+    end
+  end
+
+  def self.save_group(group_id, name, course, stream, faculty_id)
+    begin
+      university = University.nau
+      faculty = Faculty.where(university: university)
+      .where(server_id: faculty_id).first
+
+      # Conditions for find existing group
+      conditions = {}
+      conditions[:university_id] = university.id
+      conditions[:server_id] = group_id
+      conditions[:name] = name
+      conditions[:course] = course
+      conditions[:stream] = stream
+      conditions[:faculty] = faculty
+
+      # Try to find existing group first
+      group = Group.find_by(conditions)
+
+      if group.nil?
+        # Save new group
+        group = Group.new
+        group.server_id = group_id
+        group.name = name
+        group.university = university
+        group.course = course
+        group.stream = stream
+        group.faculty = faculty
+
+        unless group.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error(group.errors.full_messages)
+        end
+      end
+
+    rescue Exception => e
+      Rails.logger.error(e)
+    end
   end
 
 end

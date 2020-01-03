@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_28_140132) do
+ActiveRecord::Schema.define(version: 2020_01_03_185302) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -111,6 +111,8 @@ ActiveRecord::Schema.define(version: 2019_12_28_140132) do
     t.string "lowercase_name"
     t.integer "faculty_id"
     t.integer "speciality_id"
+    t.integer "course"
+    t.integer "stream"
     t.index ["faculty_id"], name: "index_groups_on_faculty_id"
     t.index ["slug"], name: "index_groups_on_slug"
     t.index ["slug_en"], name: "index_groups_on_slug_en"
