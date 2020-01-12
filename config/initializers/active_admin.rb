@@ -306,7 +306,7 @@ ActiveAdmin.setup do |config|
   # By default, the footer shows the current Active Admin version. You can
   # override the content of the footer here.
   #
-  config.footer = '© 2019 Мій Університет'
+  config.footer = '© 2019-2020 Мій Університет'
 
   # == Sorting
   #
@@ -321,5 +321,5 @@ ActiveAdmin.setup do |config|
       resource_class.is_a?(FriendlyId) ? scoped_collection.friendly.find(params[:id]) : scoped_collection.find(params[:id])
     end
   end
-  
+
 end

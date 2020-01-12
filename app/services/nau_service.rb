@@ -130,13 +130,43 @@ module NauService
     url = "#{baseURL}/schedule/#{faculty_id}/#{group.course}/#{group.stream}/#{group.server_id}"
     json = ApplicationRecord.perform_request(url)
 
-    p '---'
-    p url
-
     if json.nil?
       return
     end
 
+    schedule = json['schedule']
+
+    if schedule.nil?
+      return
+    end
+
+    p '🧙🧙🧙🧙🧙🧙🧙'
+
+    schedule.each { |object|
+      p object
+      week_day = object.first
+      data_items = week_day.split('.')
+
+      week_number = data_items[0]
+      p 'week_number = ', week_number
+
+      day_abbreviation = data_items[1]
+      p 'day_abbreviation = ', day_abbreviation
+
+      pair_number = data_items[2]
+      p 'pair_number = ', pair_number
+    }
+
+  end
+
+  # Week for current date
+  def self.week_for_selected_date(selected_pair_date)
+    remainder_of_division = selected_pair_date.cweek % 2
+    if remainder_of_division == 0
+      return 1
+    else
+      return 2
+    end
   end
 
 end
