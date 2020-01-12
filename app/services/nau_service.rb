@@ -120,4 +120,23 @@ module NauService
     end
   end
 
+  def self.import_records_for_group(group, date)
+    # Faculty
+    faculty_id = group.faculty.server_id
+    if faculty_id.nil?
+      return
+    end
+
+    url = "#{baseURL}/schedule/#{faculty_id}/#{group.course}/#{group.stream}/#{group.server_id}"
+    json = ApplicationRecord.perform_request(url)
+
+    p '---'
+    p url
+
+    if json.nil?
+      return
+    end
+
+  end
+
 end
