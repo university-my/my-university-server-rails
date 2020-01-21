@@ -147,16 +147,50 @@ module NauService
       week_day = object.first
       data_items = week_day.split('.')
 
-      week_number = data_items[0]
-      p 'week_number = ', week_number
-
+      week_number = data_items[0].to_i
       day_abbreviation = data_items[1]
-      p 'day_abbreviation = ', day_abbreviation
+      pair_number = data_items[2].to_i
 
-      pair_number = data_items[2]
-      p 'pair_number = ', pair_number
+      pair_start_date = calculate_pair_date(date, week_number, day_abbreviation)
+      p pair_start_date
+      p "------"
     }
 
+  end
+
+  def self.calculate_pair_date(selected_pair_date, lesson_week, day_abbreviation)
+
+    day_number = 7
+    if day_abbreviation == "Пнд"
+      day_number = 1
+    elsif day_abbreviation == "Втр"
+      day_number = 2
+    elsif day_abbreviation == "Срд"
+      day_number = 3
+    elsif day_abbreviation == "Чтв"
+      day_number = 4
+    elsif day_abbreviation == "Птн"
+      day_number = 5
+    elsif day_abbreviation == "Сбт"
+      day_number = 6
+    end
+
+    # Get current week
+    current_week = week_for_selected_date(selected_pair_date)
+
+    # Calculate pair date
+    year = selected_pair_date.year
+    day = day_number
+    if lesson_week == current_week
+      week = selected_pair_date.cweek
+    elsif lesson_week > current_week
+      week = selected_pair_date.cweek + 1
+    elsif lesson_week < current_week
+      week = selected_pair_date.cweek - 1
+    end
+    # `beginning_of_day` for prevent duplication
+    pair_start_date = Date.commercial(year, week, day).beginning_of_day
+    return pair_start_date
   end
 
   # Week for current date
