@@ -140,22 +140,72 @@ module NauService
       return
     end
 
-    p '🧙🧙🧙🧙🧙🧙🧙'
-
     schedule.each { |object|
-      p object
       week_day = object.first
       data_items = week_day.split('.')
 
       week_number = data_items[0].to_i
       day_abbreviation = data_items[1]
-      pair_number = data_items[2].to_i
-
+      pair_number = data_items[2]
       pair_start_date = calculate_pair_date(date, week_number, day_abbreviation)
-      p pair_start_date
-      p "------"
+
+      data = object.last
+      discipline = data["discipline"]
+
+      save_record_for_group(group, pair_start_date, discipline, pair_number)
     }
 
+  end
+
+  def self.save_record_for_group(group, start_date, name, pair_number)
+    university = University.nau
+
+    # Conditions for find existing pair
+    conditions = {}
+    conditions[:university_id] = university.id
+    conditions[:start_date] = start_date
+    conditions[:name] = name
+    conditions[:pair_name] = pair_number
+
+    # Try to find existing record first
+    record = Record.find_by(conditions)
+
+    if record.nil?
+      # Save new record
+      record = Record.new
+      record.start_date = start_date
+      record.pair_start_date = start_date
+      record.pair_name = pair_number
+      record.name = name
+      record.university = university
+
+      # Push only unique groups
+      unless record.groups.include?(group)
+        record.groups << group
+      end
+
+      unless record.save
+        # Go to the next iteration if record can't be saved
+        Rails.logger.error(record.errors.full_messages)
+      end
+    else
+      # Update record
+      record.start_date = start_date
+      record.pair_start_date = start_date
+      record.pair_name = pair_number
+      record.name = name
+      record.university = university
+
+      # Push only unique groups
+      unless record.groups.include?(group)
+        record.groups << group
+      end
+
+      unless record.save
+        # Go to the next iteration if record can't be saved
+        Rails.logger.error(record.errors.full_messages)
+      end
+    end
   end
 
   def self.calculate_pair_date(selected_pair_date, lesson_week, day_abbreviation)
