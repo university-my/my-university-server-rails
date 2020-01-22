@@ -49,6 +49,9 @@ class Group < ApplicationRecord
 
     when University.khnue_url
       KhnueService.import_records_for_group(self, date)
+
+    when University.nau_url
+      NauService.import_records_for_group(self, date)
     end
   end
 

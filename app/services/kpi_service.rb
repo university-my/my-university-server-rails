@@ -139,10 +139,10 @@ module KpiService
 
           # Push only unique groups
           unless record.groups.include?(group)
-           record.groups << group
-         end
+            record.groups << group
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -163,10 +163,10 @@ module KpiService
 
           # Push only unique groups
           unless record.groups.include?(group)
-           record.groups << group
-         end
+            record.groups << group
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -290,11 +290,11 @@ module KpiService
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-             record.groups << group
-           end
-         end
+              record.groups << group
+            end
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -316,11 +316,11 @@ module KpiService
           # Push only unique groups
           for group in groups do
             unless record.groups.include?(group)
-             record.groups << group
-           end
-         end
+              record.groups << group
+            end
+          end
 
-         unless record.save
+          unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
             next
@@ -363,8 +363,8 @@ module KpiService
   end
 
 
-   # Make request to API for get total count of all groups
-   def self.get_groups_count
+  # Make request to API for get total count of all groups
+  def self.get_groups_count
 
     # Peform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups"
