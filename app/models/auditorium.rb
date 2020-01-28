@@ -27,6 +27,7 @@ class Auditorium < ApplicationRecord
   validates :server_id, presence: true, numericality: { other_than: 0 }, uniqueness: false
 
   # Associations
+  has_and_belongs_to_many :disciplines, optional: true
   has_many :records, dependent: :nullify
   belongs_to :university, optional: true
   belongs_to :building, optional: true
