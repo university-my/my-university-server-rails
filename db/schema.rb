@@ -87,6 +87,20 @@ ActiveRecord::Schema.define(version: 2020_01_28_192329) do
     t.index ["university_id"], name: "index_disciplines_on_university_id"
   end
 
+  create_table "disciplines_groups", id: false, force: :cascade do |t|
+    t.integer "discipline_id"
+    t.integer "group_id"
+    t.index ["discipline_id"], name: "index_disciplines_groups_on_discipline_id"
+    t.index ["group_id"], name: "index_disciplines_groups_on_group_id"
+  end
+
+  create_table "disciplines_teachers", id: false, force: :cascade do |t|
+    t.integer "discipline_id"
+    t.integer "teacher_id"
+    t.index ["discipline_id"], name: "index_disciplines_teachers_on_discipline_id"
+    t.index ["teacher_id"], name: "index_disciplines_teachers_on_teacher_id"
+  end
+
   create_table "faculties", force: :cascade do |t|
     t.string "name"
     t.integer "server_id"
@@ -133,13 +147,6 @@ ActiveRecord::Schema.define(version: 2020_01_28_192329) do
     t.index ["slug_uk"], name: "index_groups_on_slug_uk"
     t.index ["speciality_id"], name: "index_groups_on_speciality_id"
     t.index ["university_id"], name: "index_groups_on_university_id"
-  end
-
-  create_table "groups_disciplines", id: false, force: :cascade do |t|
-    t.integer "group_id"
-    t.integer "discipline_id"
-    t.index ["discipline_id"], name: "index_groups_disciplines_on_discipline_id"
-    t.index ["group_id"], name: "index_groups_disciplines_on_group_id"
   end
 
   create_table "groups_records", id: false, force: :cascade do |t|
@@ -200,13 +207,6 @@ ActiveRecord::Schema.define(version: 2020_01_28_192329) do
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
     t.index ["slug_uk"], name: "index_teachers_on_slug_uk"
     t.index ["university_id"], name: "index_teachers_on_university_id"
-  end
-
-  create_table "teachers_disciplines", id: false, force: :cascade do |t|
-    t.integer "teacher_id"
-    t.integer "discipline_id"
-    t.index ["discipline_id"], name: "index_teachers_disciplines_on_discipline_id"
-    t.index ["teacher_id"], name: "index_teachers_disciplines_on_teacher_id"
   end
 
   create_table "universities", force: :cascade do |t|

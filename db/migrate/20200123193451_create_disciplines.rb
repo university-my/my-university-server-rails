@@ -13,14 +13,14 @@ class CreateDisciplines < ActiveRecord::Migration[5.2]
       t.belongs_to :discipline
     end
 
-    create_table :groups_disciplines, id: false do |t|
-      t.belongs_to :group
+    create_table :disciplines_groups, id: false do |t|
       t.belongs_to :discipline
+      t.belongs_to :group
     end
 
-    create_table :teachers_disciplines, id: false do |t|
-      t.belongs_to :teacher
+    create_table :disciplines_teachers, id: false do |t|
       t.belongs_to :discipline
+      t.belongs_to :teacher
     end
   end
 end

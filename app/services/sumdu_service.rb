@@ -95,6 +95,16 @@ class SumduService
             end
           end
 
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, groups, teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
+
           # Try to save record
           unless record.save
             # Go to the next iteration if record can't be saved
@@ -123,6 +133,16 @@ class SumduService
               record.groups << group
             end
           end
+
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, groups, teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
 
           unless record.save
             # Go to the next iteration if record can't be saved
@@ -229,6 +249,16 @@ class SumduService
             record.groups << group
           end
 
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, [group], teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
+
           unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
@@ -254,6 +284,16 @@ class SumduService
           unless record.groups.include?(group)
             record.groups << group
           end
+
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, [group], teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
 
           unless record.save
             # Go to the next iteration if record can't be saved
@@ -369,6 +409,16 @@ class SumduService
             end
           end
 
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, groups, teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
+
           unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
@@ -396,6 +446,16 @@ class SumduService
             end
           end
 
+          # Save or update Discipline
+          save_discipline(name_string, auditorium, groups, teacher)
+
+          # Fetch discipline again for assign to record
+          conditions = {}
+          conditions[:university_id] = university.id
+          conditions[:name] = name_string
+          discipline = Discipline.find_by(conditions)
+          record.discipline = discipline
+
           unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
@@ -417,7 +477,7 @@ class SumduService
   end
 
   #
-  # Import auditorums from SumDU API
+  # Import auditoriums from SumDU API
   #
   # # bin/rails runner 'SumduService.import_auditoriums'
   def self.import_auditoriums
@@ -579,6 +639,82 @@ class SumduService
         next
       end
 
+    end
+  end
+
+  #
+  # Import Discipline
+  #
+  def self.save_discipline(name, auditorium, groups, teacher)
+    university = University.sumdu
+
+    # Conditions for find existing discipline
+    conditions = {}
+    conditions[:university_id] = university.id
+    conditions[:name] = name
+
+    # Try to find existing discipline first
+    discipline = Discipline.find_by(conditions)
+
+    if discipline.nil?
+      # Save new
+      discipline = Discipline.new
+      discipline.name = name
+      discipline.university = university
+
+      # Push only unique auditoriums
+      if auditorium.present?
+        if !discipline.auditoriums.include?(auditorium)
+          discipline.auditoriums << auditorium
+        end
+      end
+
+      # Push only unique groups
+      for group in groups do
+        unless discipline.groups.include?(group)
+          discipline.groups << group
+        end
+      end
+
+      # Push only unique teachers
+      if teacher.present?
+        if !discipline.teachers.include?(teacher)
+          discipline.teachers << teacher
+        end
+      end
+
+      unless discipline.save
+        # Go to the next iteration if can't be saved
+        Rails.logger.error(discipline.errors.full_messages)
+      end
+    else
+      # Update
+
+      # Push only unique auditoriums
+      if auditorium.present?
+        if !discipline.auditoriums.include?(auditorium)
+          discipline.auditoriums << auditorium
+        end
+      end
+
+      # Push only unique groups
+      if group.present?
+        if !discipline.groups.include?(group)
+          discipline.groups << group
+        end
+      end
+
+      # Push only unique teachers
+      if teacher.present?
+        if !discipline.teachers.include?(teacher)
+          discipline.teachers << teacher
+        end
+      end
+
+      unless discipline.save
+        # Go to the next iteration if can't be saved
+        Rails.logger.error(discipline.errors.full_messages)
+      end
     end
   end
 
