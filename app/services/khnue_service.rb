@@ -201,6 +201,10 @@ module KhnueService
           end
         end
 
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditorium, groups, teacher)
+        record.discipline = discipline
+
         # Try to save record
         unless record.save
           # Go to the next iteration if record can't be saved
@@ -229,6 +233,10 @@ module KhnueService
             record.groups << group
           end
         end
+
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditorium, groups, teacher)
+        record.discipline = discipline
 
         unless record.save
           # Go to the next iteration if record can't be saved
@@ -631,6 +639,15 @@ module KhnueService
     rescue Exception => e
       Rails.logger.error(e)
     end
+  end
+
+  #
+  # Import Discipline
+  #
+  def self.save_discipline(name, auditorium, groups, teacher)
+    university = University.khnue
+    discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
+    return discipline
   end
 
 end
