@@ -39,12 +39,12 @@ module KhnueService
   end
 
   def self.calculate_week(date)
-    # Because in API first week begins in 1th of September
-    weeks_shift = 35
+    # Because of strange week numbers in API
+    weeks_shift = 17
     current_week = date.cweek
     week_number = 1
 
-    if current_week == 35
+    if current_week == 17
       week_number = 1
 
     elsif current_week > weeks_shift
@@ -118,6 +118,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Auditorium
+    auditorium.touch(:updated_at)
+    unless auditorium.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -132,6 +138,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Group
+    group.touch(:updated_at)
+    unless group.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -146,6 +158,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Teacher
+    teacher.touch(:updated_at)
+    unless teacher.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
 
