@@ -47,7 +47,7 @@ class SumduService
         end
         groups = Group.where(university: university, name: striped_names)
 
-        # Auditorium
+        # Teacher
         # Convert to int before find request
         teacher_id = kod_fio.to_i
         teacher = Teacher.where(university: university, server_id: teacher_id).first
@@ -59,77 +59,8 @@ class SumduService
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
-        # Conditions for find existing pair
-        conditions = {}
-        conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
-        conditions[:name] = name_string
-        conditions[:pair_name] = pair_name
-        conditions[:reason] = reason
-        conditions[:kind] = kind
-        conditions[:time] = time
-
-        # Try to find existing record first
-        record = Record.find_by(conditions)
-
-        if record.nil?
-          # Save new record
-          record = Record.new
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          # Try to save record
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-
-        else
-          # Update record
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-        end
+        # Save or update Record
+        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -195,72 +126,8 @@ class SumduService
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
-        # Conditions for find existing pair
-        conditions = {}
-        conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
-        conditions[:name] = name_string
-        conditions[:pair_name] = pair_name
-        conditions[:reason] = reason
-        conditions[:kind] = kind
-        conditions[:time] = time
-
-        # Try to find existing record first
-        record = Record.find_by(conditions)
-
-        if record.nil?
-          # Save new record
-          record = Record.new
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          unless record.groups.include?(group)
-            record.groups << group
-          end
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-
-        else
-          # Update record
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          unless record.groups.include?(group)
-            record.groups << group
-          end
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-        end
+        # Save or update Record
+        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, [group], university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -333,75 +200,8 @@ class SumduService
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
-        # Conditions for find existing pair
-        conditions = {}
-        conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
-        conditions[:name] = name_string
-        conditions[:pair_name] = pair_name
-        conditions[:reason] = reason
-        conditions[:kind] = kind
-        conditions[:time] = time
-
-        # Try to find existing record first
-        record = Record.find_by(conditions)
-
-        if record.nil?
-          # Save new record
-          record = Record.new
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-
-        else
-          record.start_date = start_date
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.reason = reason
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditorium
-          record.teacher = teacher
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-        end
+        # Save or update Record
+        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -417,7 +217,7 @@ class SumduService
   end
 
   #
-  # Import auditorums from SumDU API
+  # Import auditoriums from SumDU API
   #
   # # bin/rails runner 'SumduService.import_auditoriums'
   def self.import_auditoriums
@@ -444,7 +244,7 @@ class SumduService
         end
         if building_name
           building = Building.where(university: university)
-        .where('name LIKE ?', "#{building_name}%").first
+          .where('name LIKE ?', "#{building_name}%").first
         end
 
         # Conditions for find existing auditorium
@@ -580,6 +380,98 @@ class SumduService
       end
 
     end
+  end
+
+  #
+  # Record
+  #
+  def self.save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
+    # Conditions for find existing pair
+    conditions = {}
+    conditions[:university_id] = university.id
+    conditions[:start_date] = start_date
+    conditions[:name] = name_string
+    conditions[:pair_name] = pair_name
+    conditions[:reason] = reason
+    conditions[:kind] = kind
+    conditions[:time] = time
+
+    # Try to find existing record first
+    record = Record.find_by(conditions)
+
+    if record.nil?
+      # Save new record
+      record = Record.new
+      record.start_date = start_date
+      record.pair_start_date = pair_start_date
+      record.time = time
+      record.pair_name = pair_name
+      record.name = name_string
+      record.reason = reason
+      record.kind = kind
+      record.university = university
+
+      # Associations
+      record.auditorium = auditorium
+      record.teacher = teacher
+
+      # Push only unique groups
+      for group in groups do
+        unless record.groups.include?(group)
+          record.groups << group
+        end
+      end
+
+      # Save or update Discipline
+      discipline = save_discipline(name_string, auditorium, groups, teacher)
+      record.discipline = discipline
+
+      # Try to save record
+      unless record.save
+        # Go to the next iteration if record can't be saved
+        Rails.logger.error(record.errors.full_messages)
+      end
+
+    else
+      # Update record
+      record.start_date = start_date
+      record.pair_start_date = pair_start_date
+      record.time = time
+      record.pair_name = pair_name
+      record.name = name_string
+      record.reason = reason
+      record.kind = kind
+      record.university = university
+
+      # Associations
+      record.auditorium = auditorium
+      record.teacher = teacher
+
+      # Push only unique groups
+      for group in groups do
+        unless record.groups.include?(group)
+          record.groups << group
+        end
+      end
+
+      # Save or update Discipline
+      discipline = save_discipline(name_string, auditorium, groups, teacher)
+      record.discipline = discipline
+
+      unless record.save
+        # Go to the next iteration if record can't be saved
+        Rails.logger.error(record.errors.full_messages)
+      end
+    end
+  end
+
+  #
+  # Import Discipline
+  #
+  def self.save_discipline(name, auditorium, groups, teacher)
+    university = University.sumdu
+    discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
+    return discipline
   end
 
 end

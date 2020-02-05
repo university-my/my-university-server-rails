@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_03_185302) do
+ActiveRecord::Schema.define(version: 2020_01_28_192329) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(version: 2020_01_03_185302) do
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
     t.index ["slug_uk"], name: "index_auditoriums_on_slug_uk"
     t.index ["university_id"], name: "index_auditoriums_on_university_id"
+  end
+
+  create_table "auditoriums_disciplines", id: false, force: :cascade do |t|
+    t.integer "auditorium_id"
+    t.integer "discipline_id"
+    t.index ["auditorium_id"], name: "index_auditoriums_disciplines_on_auditorium_id"
+    t.index ["discipline_id"], name: "index_auditoriums_disciplines_on_discipline_id"
   end
 
   create_table "buildings", force: :cascade do |t|
@@ -71,6 +78,27 @@ ActiveRecord::Schema.define(version: 2020_01_03_185302) do
     t.index ["slug_en"], name: "index_departments_on_slug_en"
     t.index ["slug_uk"], name: "index_departments_on_slug_uk"
     t.index ["university_id"], name: "index_departments_on_university_id"
+  end
+
+  create_table "disciplines", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "university_id"
+    t.index ["university_id"], name: "index_disciplines_on_university_id"
+  end
+
+  create_table "disciplines_groups", id: false, force: :cascade do |t|
+    t.integer "discipline_id"
+    t.integer "group_id"
+    t.index ["discipline_id"], name: "index_disciplines_groups_on_discipline_id"
+    t.index ["group_id"], name: "index_disciplines_groups_on_group_id"
+  end
+
+  create_table "disciplines_teachers", id: false, force: :cascade do |t|
+    t.integer "discipline_id"
+    t.integer "teacher_id"
+    t.index ["discipline_id"], name: "index_disciplines_teachers_on_discipline_id"
+    t.index ["teacher_id"], name: "index_disciplines_teachers_on_teacher_id"
   end
 
   create_table "faculties", force: :cascade do |t|
@@ -141,7 +169,9 @@ ActiveRecord::Schema.define(version: 2020_01_03_185302) do
     t.datetime "updated_at", null: false
     t.integer "university_id"
     t.datetime "pair_start_date"
+    t.integer "discipline_id"
     t.index ["auditorium_id"], name: "index_records_on_auditorium_id"
+    t.index ["discipline_id"], name: "index_records_on_discipline_id"
     t.index ["teacher_id"], name: "index_records_on_teacher_id"
     t.index ["university_id"], name: "index_records_on_university_id"
   end

@@ -142,6 +142,10 @@ module KpiService
             record.groups << group
           end
 
+          # Save or update Discipline
+          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+          record.discipline = discipline
+
           unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
@@ -165,6 +169,10 @@ module KpiService
           unless record.groups.include?(group)
             record.groups << group
           end
+
+          # Save or update Discipline
+          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+          record.discipline = discipline
 
           unless record.save
             # Go to the next iteration if record can't be saved
@@ -294,6 +302,10 @@ module KpiService
             end
           end
 
+          # Save or update Discipline
+          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+          record.discipline = discipline
+
           unless record.save
             # Go to the next iteration if record can't be saved
             Rails.logger.error(record.errors.full_messages)
@@ -319,6 +331,10 @@ module KpiService
               record.groups << group
             end
           end
+
+          # Save or update Discipline
+          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+          record.discipline = discipline
 
           unless record.save
             # Go to the next iteration if record can't be saved
@@ -574,6 +590,15 @@ module KpiService
       end
 
     end
+  end
+
+  #
+  # Import Discipline
+  #
+  def self.save_discipline(name, auditorium, groups, teacher)
+    university = University.kpi
+    discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
+    return discipline
   end
 
 end

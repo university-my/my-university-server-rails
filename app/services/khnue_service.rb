@@ -39,12 +39,12 @@ module KhnueService
   end
 
   def self.calculate_week(date)
-    # Because in API first week begins in 1th of September
-    weeks_shift = 35
+    # Because of strange week numbers in API
+    weeks_shift = 17
     current_week = date.cweek
     week_number = 1
 
-    if current_week == 35
+    if current_week == 17
       week_number = 1
 
     elsif current_week > weeks_shift
@@ -118,6 +118,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Auditorium
+    auditorium.touch(:updated_at)
+    unless auditorium.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -132,6 +138,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Group
+    group.touch(:updated_at)
+    unless group.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
   #
@@ -146,6 +158,12 @@ module KhnueService
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
+
+    # Update `updated_at` date of Teacher
+    teacher.touch(:updated_at)
+    unless teacher.save
+      Rails.logger.error(errors.full_messages)
+    end
   end
 
 
@@ -201,6 +219,10 @@ module KhnueService
           end
         end
 
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditorium, groups, teacher)
+        record.discipline = discipline
+
         # Try to save record
         unless record.save
           # Go to the next iteration if record can't be saved
@@ -229,6 +251,10 @@ module KhnueService
             record.groups << group
           end
         end
+
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditorium, groups, teacher)
+        record.discipline = discipline
 
         unless record.save
           # Go to the next iteration if record can't be saved
@@ -631,6 +657,15 @@ module KhnueService
     rescue Exception => e
       Rails.logger.error(e)
     end
+  end
+
+  #
+  # Import Discipline
+  #
+  def self.save_discipline(name, auditorium, groups, teacher)
+    university = University.khnue
+    discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
+    return discipline
   end
 
 end

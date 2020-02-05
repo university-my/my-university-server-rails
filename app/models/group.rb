@@ -27,6 +27,7 @@ class Group < ApplicationRecord
 
   # Associations
   has_and_belongs_to_many :records, optional: true, dependent: :nullify
+  has_and_belongs_to_many :disciplines, optional: true
   belongs_to :university, optional: true
   belongs_to :faculty, optional: true
   belongs_to :speciality, optional: true

@@ -10,10 +10,10 @@
 					<span data-toggle="tooltip" title="<%= l day, format: "%A, %e %B %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
 				</div>
 
-				<% if record.name.present? || record.kind.present? %>
+				<% if record.discipline.name.present? || record.kind.present? %>
 				<div class="card-body">
-					<% if record.name.present? %>
-					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.name %></span></h5>
+					<% if record.discipline.name.present? %>
+					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.name %></span></h5>
 					<% end %>
 
 					<% if record.kind.present? %>
