@@ -16,12 +16,12 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
-    @title = "My University - Privacy Policy"
+    @title = "Мій Університет - Політика конфіденційності"
     render "pages/privacy-policy"
   end
 
   def terms_of_service
-    @title = "My University - Terms of Service"
+    @title = "Мій Університет - Умови обслуговування"
     render "pages/terms-of-service"
   end
 
