@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get "/cooperation", to: "pages#cooperation"
   get "/contacts", to: "pages#contacts"
   get "/privacy-policy", to: "pages#privacy_policy"
+  get "/privacy_policy_ios", to: "pages#privacy_policy_ios"
   get "/terms-of-service", to: "pages#terms_of_service"
   get "/zno-2019", to: "pages#zno2019"
   get "/ios", to: "pages#ios"
