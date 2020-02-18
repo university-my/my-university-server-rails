@@ -1,5 +1,38 @@
 ---
 uk:
+  formtastic:
+    :yes: 'Так'
+    :no: 'Ні'
+    :create: 'Створити'
+    :update: 'Оновити'
+    :submit: 'Надіслати'
+    :cancel: 'Відмінити'
+
+  # ActiveAdmin
+  active_admin:
+    resources:
+      auditorium:
+        new_model: 'Нова Аудиторія'
+        edit_model: 'Редагувати Аудиторію'
+        delete_model: 'Видалити Аудиторію'
+      discipline:
+        new_model: 'Нова Дисципліна'
+        edit_model: 'Редагувати Дисципліну'
+        delete_model: 'Видалити Дисципліну'
+      group:
+        new_model: 'Нова Група'
+        edit_model: 'Редагувати Групу'
+        delete_model: 'Видалити Групу'
+      teacher:
+        new_model: 'Новий Викладач'
+        edit_model: 'Редагувати Викладача'
+        delete_model: 'Видалити Викладача'
+      record:
+        new_model: 'Нова Пара'
+        edit_model: 'Редагувати Пару'
+        delete_model: 'Видалити Пару'
+    visit_on_site: 'Переглянути на сайті'
+
   will_paginate:
       previous_label: "&#8592; Попередня"
       next_label: "Наступна &#8594;"
@@ -33,7 +66,12 @@ uk:
         one: 'Корпус'
         many: 'Корпуса'
         few: 'Корпуса'
-        other: 'Корпус'
+        other: 'Корпуса'
+      discipline:
+        one: 'Дисципліна'
+        many: 'Дисципліни'
+        few: 'Дисципліни'
+        other: 'Дисципліни'
       group:
         one: 'Група'
         many: 'Групи'
@@ -66,22 +104,44 @@ uk:
         auditorium: 'Аудиторія'
         groups: 'Групи'
         university: 'Університет'
+        discipline: 'Дисципліна'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
       auditorium:
         name: 'Назва'
         university: 'Університет'
+        building: 'Корпус'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
       building:
         name: 'Назва'
         description: 'Опис'
         university: 'Університет'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
       group:
         name: 'Назва'
         university: 'Університет'
+        speciality: 'Спеціальність'
+        faculty: 'Факультет'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
       teacher:
         name: 'ФІО'
         university: 'Університет'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
+        department: 'Кафедра'
       university:
         short_name: 'Коротка назва'
         full_name: 'Повна назва'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
+      discipline:
+        name: 'Назва'
+        university: 'Університет'
+        updated_at: 'Дата оновлення'
+        created_at: 'Дата створення'
 
   date:
     abbr_day_names:
