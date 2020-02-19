@@ -1,4 +1,4 @@
-json.extract! record, :id, :name, :start_date, :pair_start_date, :pair_name, :reason, :kind, :time
+json.extract! record, :id, :name, :pair_start_date, :pair_name, :reason, :kind, :time
 
 if record.auditorium.present?
 	json.auditorium do

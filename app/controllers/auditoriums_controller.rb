@@ -60,8 +60,6 @@ class AuditoriumsController < ApplicationController
     .order(:pair_start_date)
     .order(:pair_name)
 
-    @records_days = @records.group_by { |t| t.start_date }
-
     if @records.blank?
       render partial: "records/empty"
     else

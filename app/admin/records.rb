@@ -1,6 +1,6 @@
 ActiveAdmin.register Record do
 
-  permit_params :start_date, :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :auditorium_id, :teacher_id, :pair_start_date
+  permit_params :name, :pair_name, :created_at, :updated_at, :reason, :kind, :time, :auditorium_id, :teacher_id, :pair_start_date
 
   actions :all
 
@@ -43,8 +43,6 @@ ActiveAdmin.register Record do
       f.input :discipline, as: :select,
       collection: Discipline.where(university: current_admin_user.university)
       .collect { |a| [ a.name, a.id ] }
-
-      f.input :start_date
 
       f.input :reason
       f.input :kind

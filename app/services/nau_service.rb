@@ -157,13 +157,13 @@ module NauService
 
   end
 
-  def self.save_record_for_group(group, start_date, name, pair_number)
+  def self.save_record_for_group(group, pair_start_date, name, pair_number)
     university = University.nau
 
     # Conditions for find existing pair
     conditions = {}
     conditions[:university_id] = university.id
-    conditions[:start_date] = start_date
+    conditions[:pair_start_date] = pair_start_date
     conditions[:name] = name
     conditions[:pair_name] = pair_number
 
@@ -173,8 +173,7 @@ module NauService
     if record.nil?
       # Save new record
       record = Record.new
-      record.start_date = start_date
-      record.pair_start_date = start_date
+      record.pair_start_date = pair_start_date
       record.pair_name = pair_number
       record.name = name
       record.university = university
@@ -190,8 +189,7 @@ module NauService
       end
     else
       # Update record
-      record.start_date = start_date
-      record.pair_start_date = start_date
+      record.pair_start_date = pair_start_date
       record.pair_name = pair_number
       record.name = name
       record.university = university

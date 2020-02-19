@@ -83,7 +83,13 @@ Rails.application.routes.draw do
 
         # Buildings API
         resources :buildings, only: [:index], param: :id
+      end
 
+      # Records API
+      resources :records, only: [] do
+        collection do
+          get :test
+        end
       end
     end
   end
