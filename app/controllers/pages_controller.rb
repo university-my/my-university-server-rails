@@ -46,4 +46,8 @@ class PagesController < ApplicationController
   def telegram_channels
     render "pages/telegram-channels"
   end
+
+  def patreon
+    render "pages/patreon"
+  end
 end

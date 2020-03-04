@@ -113,7 +113,7 @@ module KpiService
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
+        conditions[:pair_start_date] = pair_start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
         conditions[:kind] = kind
@@ -125,7 +125,6 @@ module KpiService
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -153,7 +152,6 @@ module KpiService
           end
         else
           # Update record
-          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -270,7 +268,7 @@ module KpiService
         # Conditions for find existing pair
         conditions = {}
         conditions[:university_id] = university.id
-        conditions[:start_date] = start_date
+        conditions[:pair_start_date] = pair_start_date
         conditions[:name] = name_string
         conditions[:pair_name] = pair_name
         conditions[:kind] = kind
@@ -283,7 +281,6 @@ module KpiService
         if record.nil?
           # Save new record
           record = Record.new
-          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name
@@ -313,7 +310,6 @@ module KpiService
           end
         else
           # Update record
-          record.start_date = start_date
           record.pair_start_date = pair_start_date
           record.time = time
           record.pair_name = pair_name

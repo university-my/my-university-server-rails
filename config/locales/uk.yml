@@ -93,7 +93,6 @@ uk:
         role: 'Роль'
         university: 'Університет'
       record:
-        start_date: 'Дата початку'
         name: 'Назва'
         pair_name: 'Номер'
         pair_start_date: 'Початок пари'

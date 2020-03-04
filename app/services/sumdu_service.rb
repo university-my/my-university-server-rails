@@ -52,15 +52,12 @@ class SumduService
         teacher_id = kod_fio.to_i
         teacher = Teacher.where(university: university, server_id: teacher_id).first
 
-        # Pair start date
-        start_date = date_string.to_datetime
-
         # Get pair date and time
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
         # Save or update Record
-        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
+        save_or_update_record(pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -119,15 +116,12 @@ class SumduService
         teacher_id = kod_fio.to_i
         teacher = Teacher.find_by(university_id: university.id, server_id: teacher_id)
 
-        # Pair start date
-        start_date = date_string.to_datetime
-
         # Get pair date and time
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
         # Save or update Record
-        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, [group], university)
+        save_or_update_record(pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, [group], university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -193,15 +187,12 @@ class SumduService
         auditorium_id = kod_aud.to_i
         auditorium = Auditorium.where(university: university, server_id: auditorium_id).first
 
-        # Pair start date
-        start_date = date_string.to_datetime
-
         # Get pair date and time
         pair_time = time.split('-').first
         pair_start_date  = (date_string + ' ' + pair_time).to_datetime
 
         # Save or update Record
-        save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
+        save_or_update_record(pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
 
       rescue Exception => e
         Rails.logger.error(e)
@@ -385,11 +376,11 @@ class SumduService
   #
   # Record
   #
-  def self.save_or_update_record(start_date, pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
+  def self.save_or_update_record(pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
     # Conditions for find existing pair
     conditions = {}
     conditions[:university_id] = university.id
-    conditions[:start_date] = start_date
+    conditions[:pair_start_date] = pair_start_date
     conditions[:name] = name_string
     conditions[:pair_name] = pair_name
     conditions[:reason] = reason
@@ -402,7 +393,6 @@ class SumduService
     if record.nil?
       # Save new record
       record = Record.new
-      record.start_date = start_date
       record.pair_start_date = pair_start_date
       record.time = time
       record.pair_name = pair_name
@@ -434,7 +424,6 @@ class SumduService
 
     else
       # Update record
-      record.start_date = start_date
       record.pair_start_date = pair_start_date
       record.time = time
       record.pair_name = pair_name

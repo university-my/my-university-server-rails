@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get "/ios", to: "pages#ios"
   get "/android", to: "pages#android"
   get "/telegram-channels", to: "pages#telegram_channels"
+  get "/patreon", to: "pages#patreon"
 
   resources :universities, only: [:index, :show], param: :url do
 
@@ -83,7 +84,13 @@ Rails.application.routes.draw do
 
         # Buildings API
         resources :buildings, only: [:index], param: :id
+      end
 
+      # Records API
+      resources :records, only: [] do
+        collection do
+          get :test
+        end
       end
     end
   end
