@@ -61,8 +61,11 @@ class GroupsController < ApplicationController
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
+    
+    if @university.url == University.khnue_url
+      render partial: "records/khnue"
 
-    if @records.blank?
+    elsif @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {

@@ -59,8 +59,11 @@ class AuditoriumsController < ApplicationController
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
-
-    if @records.blank?
+    
+    if @university.url == University.khnue_url
+      render partial: "records/khnue"
+      
+    elsif @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {
