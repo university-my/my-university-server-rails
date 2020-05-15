@@ -6,82 +6,45 @@
 
 <div class="container">
 
-  <div class="row mb-3 universities-cards">
-    <div class="card-deck mr-0 ml-0">
-
+  <div class="row">
+    <div class="mx-auto col-md-8">
+      <h1 class="mb-4">Університети</h1>
       <% @universities.each do |university| %>
-
-      <div class="card">
-        <div class="card-header">
-          <h3 class="mb-0"><%= university.short_name %></h3>
-        </div>
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-md-3 mb-2">
-              <%= render "universities/university_picture", university: university %>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <div class="media">
+                <%= render "universities/university_picture", university: university %>
+                <div class="media-body">
+                  <h1 display-3 class="mt-0"><%= university.short_name %></h1>
+                  <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= university.full_name %></h6>
+                </div>
+              </div>
             </div>
-            <div class="col-md-9">
-              <small class="card-subtitle Text-light font-weight-light"><%= university.full_name %></small>
+            <div class="card-body">
+              <div class="card-text">
+                <%= render "universities/university_list", university: university %>
+              </div>
+            </div>
+            <div class="card-footer">
+              <%= render "universities/card_footer", university: university %>
             </div>
           </div>
-
-          <div class="card-text">
-            <ul class="list-group list-group-flush">
-              <% if university.url == University.khnue_url %>
-              <li class="list-group-item border-0">
-                <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
-                <%= link_to 'Кафедри', university_departments_url(university.url), class: "align-middle ml-2" %>
-              </li>
-              <li class="list-group-item border-0">
-                <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
-                <%= link_to 'Факультети', university_faculties_url(university.url), class: "align-middle ml-2" %>
-              </li>
-              <li class="list-group-item border-0">
-                <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
-                <%= link_to 'Спеціальності', university_specialities_url(university.url), class: "align-middle ml-2" %>
-              </li>
-              <% else %>
-
-              <li class="list-group-item border-0">
-                <%= octicon "organization", height: 24, width: 24, class: "align-middle" %>
-                <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
-              </li>
-
-              <li class="list-group-item border-0">
-                <%= octicon "briefcase", height: 24, width: 24, class: "align-middle" %>
-                <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
-              </li>
-
-              <% if university.url != University.kpi_url %>
-              <li class="list-group-item border-0">
-                <%= octicon "sign-in", height: 24, width: 24, class: "align-middle" %>
-                <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
-              </li>
-              <% end %>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-        <div class="card-footer">
-          <%= render "universities/card_footer", university: university %>
         </div>
       </div>
       <% end %>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="jumbotron mb-3">
+            <h1>Маєте ідеї чи побажання?</h1>
+            <p class="lead Text-light">Знаєте як покращити наш сервіс? Залиште відгук!</p>
+            <a class="btn btn-primary btn-lg" href="https://forms.gle/QuLTXgoKMXbDACGD6">Напишіть нам »</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="row mb-3">
-    <div class="col">
-      <%= link_to 'Всі університети »', universities_url, class: "float-right"%>
-    </div>
-  </div>
-
-  <div class="jumbotron mb-3">
-    <h1>Маєте ідеї чи побажання?</h1>
-    <p class="lead Text-light">Знаєте як покращити наш сервіс? Залиште відгук!</p>
-    <a class="btn btn-primary btn-lg" href="https://forms.gle/QuLTXgoKMXbDACGD6">Напишіть нам »</a>
-  </div>
-
 </div>
 
 <%= render "layouts/footer" %>
