@@ -1,0 +1,67 @@
+<%= render "layouts/header" %>
+<main class="container" role="main">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+      <h1>Панель адміністратора</h1>
+    </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Сервіс <b>Мій Університет</b> має зручну та функціональну панель адміністратора.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div id="carouselControls" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselControls" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselControls" data-slide-to="1"></li>
+              <li data-target="#carouselControls" data-slide-to="2"></li>
+              <li data-target="#carouselControls" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <%= image_tag("admin 1.png", class: "img-fluid") %>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Пари</h5>
+                  <p>Список пар із фільтрами та сортуванням</p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <%= image_tag("admin 2.png", class: "img-fluid") %>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Групи</h5>
+                  <p>Можливість вказати спеціальність та факультет</p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <%= image_tag("admin 3.png", class: "img-fluid") %>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Викладачі</h5>
+                  <p>Групування викладачів по кафедрам</p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <%= image_tag("admin 4.png", class: "img-fluid") %>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Аудиторії</h5>
+                  <p>Групування по корпусам</p>
+                </div>
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%= render "layouts/footer" %>

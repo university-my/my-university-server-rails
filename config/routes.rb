@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get "/android", to: "pages#android"
   get "/telegram-channels", to: "pages#telegram_channels"
   get "/patreon", to: "pages#patreon"
+  get "/pricing", to: "pages#pricing"
+  get "/admin-panel", to: "pages#admin_panel"
 
   resources :universities, only: [:index, :show], param: :url do
 
