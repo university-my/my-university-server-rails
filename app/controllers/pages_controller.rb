@@ -50,4 +50,12 @@ class PagesController < ApplicationController
   def patreon
     render "pages/patreon"
   end
+  
+  def pricing
+    render "pages/pricing"
+  end
+
+  def admin_panel
+    render "pages/admin-panel"
+  end
 end
