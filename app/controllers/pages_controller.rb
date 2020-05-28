@@ -58,4 +58,8 @@ class PagesController < ApplicationController
   def admin_panel
     render "pages/admin-panel"
   end
+
+  def video_presentation
+    render "pages/video-presentation"
+  end
 end
