@@ -6,6 +6,13 @@
 
 <%= render "layouts/header" %>
 <main class="container" role="main">
+
+  <div class="row">
+    <div class="alert alert-secondary mx-3" role="alert">
+      <a href="/video-presentation" class="alert-link">Відео презентація</a> 📺
+    </div>
+  </div>
+
   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Підключення</h1>
     <p class="lead">Комплексна система для впровадження онлайн розкладу для навчальних закладів</br> Приєднуйтеся, щоб бути сучасними!</p>
@@ -56,131 +63,138 @@
         </div>
       </div>
     </div>
-    <div >
+    <div>
       <table class="table table-hover">
         <caption>
           <hr>
           <span>Систему <b>Мій Університет</b> можна використовувати для шкіл, технікумів, коледжів та ВНЗ</span></caption>
-        <thead>
-          <tr>
-            <th scope="col" width="40%">Опція</th>
-            <th scope="col" width="20%" class="text-center">Сайт</th>
-            <th scope="col" width="20%" class="text-center">Сайт + Додаток</th>
-            <th scope="col" width="20%" class="text-center">Про</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Сайт з адаптивним дизайном <span data-toggle="tooltip" title="Адаптивна верстка для смартфонів, планшетів та ПК"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td><%= link_to 'Панель адміністратора', admin_panel_url %> <span data-toggle="tooltip" title="На базі перевіреного фреймворку ActiveAdmin, без багів та помилок"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td>Резервне збереження даних <span data-toggle="tooltip" title="Відновлення даних у випадку збою"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td><%= link_to 'iOS', ios_url %> Додаток <span data-toggle="tooltip" title="Підтримка iOS 13+"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td><%= link_to 'Android', android_url %> Додаток <span data-toggle="tooltip" title="Підтримка Android 7+"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td>Підтримка в <b>Telegram</b> <span data-toggle="tooltip" title="Швидка відповідь на запитання та безкоштовні консультації"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td>Підтримка по <b>телефону</b> <span data-toggle="tooltip" title="Швидка відповідь на запитання голосом коли вам зручно"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td>Публікація новин у додатку та на сайті <span data-toggle="tooltip" title="Інформування абітурієнтів, студентів та викладацький склад про новини та важливі події"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-          <tr>
-            <td>Реалізація нових функцій на сайті та в додатку за запитом <span data-toggle="tooltip" title="Співпраця для покращення роботи сервісу"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/gray_close" %>
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              <%= render "layouts/green_checkmark" %>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <thead>
+            <tr>
+              <th scope="col" width="40%">Опція</th>
+              <th scope="col" width="20%" class="text-center">Сайт</th>
+              <th scope="col" width="20%" class="text-center">Сайт + Додаток</th>
+              <th scope="col" width="20%" class="text-center">Про</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Сайт з адаптивним дизайном <span data-toggle="tooltip" title="Адаптивна верстка для смартфонів, планшетів та ПК"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= link_to 'Панель адміністратора', admin_panel_url %> <span data-toggle="tooltip" title="На базі перевіреного фреймворку ActiveAdmin, без багів та помилок"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td>Резервне збереження даних <span data-toggle="tooltip" title="Відновлення даних у випадку збою"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= link_to 'iOS', ios_url %> Додаток <span data-toggle="tooltip" title="Підтримка iOS 13+"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td><%= link_to 'Android', android_url %> Додаток <span data-toggle="tooltip" title="Підтримка Android 7+"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td>Підтримка в <b>Telegram</b> <span data-toggle="tooltip" title="Швидка відповідь на запитання та безкоштовні консультації"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td>Підтримка по <b>телефону</b> <span data-toggle="tooltip" title="Швидка відповідь на запитання голосом коли вам зручно"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td>Публікація новин у додатку та на сайті <span data-toggle="tooltip" title="Інформування абітурієнтів, студентів та викладацький склад про новини та важливі події"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+            <tr>
+              <td>Реалізація нових функцій на сайті та в додатку за запитом <span data-toggle="tooltip" title="Співпраця для покращення роботи сервісу"><span style="color: #007bff"><i class="far fa-question-circle fa-sm"></i></span></span></td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/gray_close" %>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <%= render "layouts/green_checkmark" %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <div class="alert alert-secondary mx-3" role="alert">
+          <a href="/My University Presentation.pdf" class="alert-link">Презентація у форматі PDF</a> 📄
+        </div>
+      </div>
+
     </div>
-  </div>
-</main>
-<%= render "layouts/footer" %>
+  </main>
+  <%= render "layouts/footer" %>

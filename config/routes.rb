@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get "/patreon", to: "pages#patreon"
   get "/pricing", to: "pages#pricing"
   get "/admin-panel", to: "pages#admin_panel"
+  get "/video-presentation", to: "pages#video_presentation"
 
   resources :universities, only: [:index, :show], param: :url do
 

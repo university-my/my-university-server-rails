@@ -1,0 +1,24 @@
+<% meta_tag :description, "Відео презентація сервісу Мій Університет" %>
+<% @title = "Відео презентація сервісу Мій Університет" %>
+
+<%= render "layouts/header" %>
+<main class="container" role="main">
+  <div class="container">
+    <div class="row my-3">
+      <div class="col">
+        <h1 class="font-weight-light">Мій Університет - Відео презентація</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <%= video_tag("/My University Presentation.m4v", controls: true, class: "img-fluid", poster: "My University Presentation.001.jpeg") %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="alert alert-secondary mx-3" role="alert">
+        <a href="/My University Presentation.pdf" class="alert-link">Презентація у форматі PDF</a> 📄
+      </div>
+    </div>
+  </div>
+</main>
+<%= render "layouts/footer" %>
