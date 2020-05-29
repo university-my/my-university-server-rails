@@ -62,4 +62,8 @@ class PagesController < ApplicationController
   def video_presentation
     render "pages/video-presentation"
   end
+
+  def ads
+    render "pages/ads"
+  end
 end
