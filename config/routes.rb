@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get "/pricing", to: "pages#pricing"
   get "/admin-panel", to: "pages#admin_panel"
   get "/video-presentation", to: "pages#video_presentation"
+  get "/ads", to: "pages#ads"
 
   resources :universities, only: [:index, :show], param: :url do
 
