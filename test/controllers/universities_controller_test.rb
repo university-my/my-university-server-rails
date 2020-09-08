@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UniversitiesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @university = universities(:one)
+    @university = universities(:sumdu)
   end
 
   test "should get index" do
@@ -11,7 +11,7 @@ class UniversitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show university" do
-    get university_url(@university)
+    get university_url(url: @university.url)
     assert_response :success
   end
 end

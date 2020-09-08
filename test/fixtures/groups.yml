@@ -2,6 +2,10 @@
 
 one:
   name: MyString
+  university: sumdu
+  slug_uk: my-string-one
 
 two:
   name: MyString
+  university: sumdu
+  slug_uk: my-string-two
