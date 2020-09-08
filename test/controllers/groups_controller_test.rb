@@ -3,18 +3,16 @@ require 'test_helper'
 class GroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @group = groups(:one)
+    @university = universities(:sumdu)
   end
 
   test "should get index" do
-    get groups_url
+    get university_groups_url(@university.url)
     assert_response :success
   end
 
   test "should show group" do
-    get group_url(@group)
+    get university_group_url(@university.url, @group)
     assert_response :success
-  end
-
-    assert_redirected_to groups_url
   end
 end
