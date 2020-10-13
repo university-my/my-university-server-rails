@@ -59,7 +59,7 @@ class SumduService
         # Save or update Record
         save_or_update_record(pair_start_date, time, name_string, pair_name, reason, kind, auditorium, teacher, groups, university)
 
-      rescue Exception => e
+      rescue StandardError => e
         Rails.logger.error(e)
         next
       end
