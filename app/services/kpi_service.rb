@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'json'
 
 module KpiService
-
   #
   # Classrooms
   #
 
-  def self.import_classrooms(classrooms, university)
+  def self.import_rooms(classrooms, university)
     auditoriums = []
-    for classroom in classrooms do
+    classrooms.each do |classroom|
       classroom_id = classroom['room_id']
       classroom_name = classroom['room_name']
 
@@ -29,12 +30,10 @@ module KpiService
       end
 
       # Push only unique auditoriums
-      unless auditoriums.include?(auditorium)
-        auditoriums << auditorium
-      end
+      auditoriums << auditorium unless auditoriums.include?(auditorium)
     end
 
-    return auditoriums
+    auditoriums
   end
 
   #
@@ -45,21 +44,20 @@ module KpiService
     # Get current week
     current_week = week_for_selected_date(selected_pair_date)
 
-    # Peform network request and parse JSON
+    # Perform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
 
-    if json.nil?
-      return
-    end
+    return if json.nil?
 
-    data = json["data"]
+    data = json['data']
 
     university = University.kpi
 
-    # Save records
-    for object in data do
+    groups = [group]
 
+    # Save records
+    data.each do |object|
       # Get data from JSON
       time = object['time_start']
       pair_name = object['lesson_number']
@@ -68,7 +66,7 @@ module KpiService
       day_number = object['day_number'].to_i
       lesson_week = object['lesson_week'].to_i
 
-      # Teahcer
+      # Teacher
       teachers = object['teachers']
 
       # Classrooms
@@ -79,17 +77,19 @@ module KpiService
 
         # Teacher
         teacher = nil
-        if teacher_hash = teachers.first
+        if (teacher_hash = teachers.first)
           teacher_id = teacher_hash['teacher_id'].to_i
           teacher = Teacher.find_by(university_id: university.id, server_id: teacher_id)
         end
 
         # Classrooms
-        auditoriums = import_classrooms(classrooms, university)
+        auditoriums = import_rooms(classrooms, university)
 
         # Calculate pair date
         year = selected_pair_date.year
+        week = selected_pair_date.cweek
         day = day_number
+
         if lesson_week == current_week
           week = selected_pair_date.cweek
         elsif lesson_week > current_week
@@ -102,13 +102,11 @@ module KpiService
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date = (start_date.strftime('%F') + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Don't update old records because we don't want to override it
         current_date = Date.today.beginning_of_day
-        if start_date < current_date
-          next
-        end
+        next if start_date < current_date
 
         # Conditions for find existing pair
         conditions = {}
@@ -123,63 +121,34 @@ module KpiService
         record = Record.find_by(conditions)
 
         if record.nil?
-          # Save new record
+          # New record
           record = Record.new
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditoriums.first
-          record.teacher = teacher
-
-          # Push only unique groups
-          unless record.groups.include?(group)
-            record.groups << group
-          end
-
-          # Save or update Discipline
-          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
-          record.discipline = discipline
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-        else
-          # Update record
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.auditorium = auditoriums.first
-          record.teacher = teacher
-
-          # Push only unique groups
-          unless record.groups.include?(group)
-            record.groups << group
-          end
-
-          # Save or update Discipline
-          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
-          record.discipline = discipline
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
         end
 
-      rescue Exception => e
+        record.pair_start_date = pair_start_date
+        record.time = time
+        record.pair_name = pair_name
+        record.name = name_string
+        record.kind = kind
+        record.university = university
+
+        # Associations
+        record.auditorium = auditoriums.first
+        record.teacher = teacher
+
+        # Push only unique groups
+        record.groups << group unless record.groups.include?(group)
+
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+        record.discipline = discipline
+
+        unless record.save
+          # Go to the next iteration if record can't be saved
+          Rails.logger.error(record.errors.full_messages)
+          next
+        end
+      rescue StandardError => e
         Rails.logger.error(e)
         next
       end
@@ -187,9 +156,7 @@ module KpiService
 
     # Update `updated_at` date of Group
     group.touch(:updated_at)
-    unless group.save
-      Rails.logger.error(errors.full_messages)
-    end
+    Rails.logger.error(errors.full_messages) unless group.save
   end
 
   #
@@ -200,21 +167,18 @@ module KpiService
     # Get current week
     current_week = week_for_selected_date(selected_pair_date)
 
-    # Peform network request and parse JSON
+    # Perform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
 
-    if json.nil?
-      return
-    end
+    return if json.nil?
 
-    data = json["data"]
+    data = json['data']
 
     university = University.kpi
 
     # Save records
-    for object in data do
-
+    data.each do |object|
       # Get data from JSON
       time = object['time_start']
       pair_name = object['lesson_number']
@@ -231,20 +195,22 @@ module KpiService
 
       begin
         # Group
-        groupIDs = Array.new
-        for group in groups do
-          if id = group['group_id'].to_i
-            groupIDs.push(id)
+        group_ids = []
+        groups.each do |group|
+          if (id = group['group_id'].to_i)
+            group_ids.push(id)
           end
         end
-        groups = Group.where(university: university, server_id: groupIDs)
+        groups = Group.where(university: university, server_id: group_ids)
 
         # Classrooms
-        auditoriums = import_classrooms(classrooms, university)
+        auditoriums = import_rooms(classrooms, university)
 
         # Calculate pair date
         year = selected_pair_date.year
+        week = selected_pair_date.cweek
         day = day_number
+
         if lesson_week == current_week
           week = selected_pair_date.cweek
         elsif lesson_week > current_week
@@ -257,13 +223,11 @@ module KpiService
 
         # Get pair date and time
         pair_time = time.to_time
-        pair_start_date = (start_date.strftime("%F") + ' ' + pair_time.to_s(:time)).to_datetime
+        pair_start_date = (start_date.strftime('%F') + ' ' + pair_time.to_s(:time)).to_datetime
 
         # Don't update old records because we don't want to override it
         current_date = Date.today.beginning_of_day
-        if start_date < current_date
-          next
-        end
+        next if start_date < current_date
 
         # Conditions for find existing pair
         conditions = {}
@@ -279,67 +243,37 @@ module KpiService
         record = Record.find_by(conditions)
 
         if record.nil?
-          # Save new record
+          # New record
           record = Record.new
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.teacher = teacher
-          record.auditorium = auditoriums.first
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          # Save or update Discipline
-          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
-          record.discipline = discipline
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
-        else
-          # Update record
-          record.pair_start_date = pair_start_date
-          record.time = time
-          record.pair_name = pair_name
-          record.name = name_string
-          record.kind = kind
-          record.university = university
-
-          # Associations
-          record.teacher = teacher
-          record.auditorium = auditoriums.first
-
-          # Push only unique groups
-          for group in groups do
-            unless record.groups.include?(group)
-              record.groups << group
-            end
-          end
-
-          # Save or update Discipline
-          discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
-          record.discipline = discipline
-
-          unless record.save
-            # Go to the next iteration if record can't be saved
-            Rails.logger.error(record.errors.full_messages)
-            next
-          end
         end
 
-      rescue Exception => e
+        # Update record
+        record.pair_start_date = pair_start_date
+        record.time = time
+        record.pair_name = pair_name
+        record.name = name_string
+        record.kind = kind
+        record.university = university
+
+        # Associations
+        record.teacher = teacher
+        record.auditorium = auditoriums.first
+
+        # Push only unique groups
+        groups.each do |group|
+          record.groups << group unless record.groups.include?(group)
+        end
+
+        # Save or update Discipline
+        discipline = save_discipline(name_string, auditoriums.first, groups, teacher)
+        record.discipline = discipline
+
+        unless record.save
+          # Go to the next iteration if record can't be saved
+          Rails.logger.error(record.errors.full_messages)
+          next
+        end
+      rescue StandardError => e
         Rails.logger.error(e)
         next
       end
@@ -347,11 +281,8 @@ module KpiService
 
     # Update `updated_at` date of Teacher
     teacher.touch(:updated_at)
-    unless teacher.save
-      Rails.logger.error(errors.full_messages)
-    end
+    Rails.logger.error(errors.full_messages) unless teacher.save
   end
-
 
   #
   # Import groups from KPI API
@@ -359,7 +290,7 @@ module KpiService
 
   # bin/rails runner 'KpiService.import_groups'
   def self.import_groups
-    groups_total_count = KpiService.get_groups_count
+    groups_total_count = KpiService.groups_count
 
     offset = 0
 
@@ -374,82 +305,70 @@ module KpiService
     end
   end
 
-
   # Make request to API for get total count of all groups
-  def self.get_groups_count
-
-    # Peform network request and parse JSON
-    url = "https://api.rozklad.org.ua/v2/groups"
+  def self.groups_count
+    # Perform network request and parse JSON
+    url = 'https://api.rozklad.org.ua/v2/groups'
     json = ApplicationRecord.perform_request(url)
 
-    if json.nil?
-      return 0
-    end
+    return 0 if json.nil?
 
-    total_count = json["meta"]["total_count"]
+    total_count = json['meta']['total_count']
     teachers_total_count = Integer(total_count)
 
-    return teachers_total_count
+    teachers_total_count
   end
-
 
   # Make request with offset parameter and parse JSON
   def self.get_groups(offset)
-
-    # Peform network request and parse JSON
+    # Perform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/groups/?filter={%27limit%27:100,%27offset%27:#{offset}}"
     json = ApplicationRecord.perform_request(url)
-    return json
+    json
   end
-
 
   # Serialize groups from JSON and save to database
   def self.save_groups_from(json)
-
-    data = json["data"]
+    data = json['data']
 
     # This groups for SumDU
     university = University.kpi
 
-    for object in data do
+    data.each do |object|
+      # Convert before save
+      server_id = Integer(object['group_id'])
+      group_name = String(object['group_full_name'])
 
-      begin
-        # Convert before save
-        server_id = Integer(object["group_id"])
-        group_name = String(object["group_full_name"])
+      # Save new group
+      group = Group.new
+      group.server_id = server_id
+      group.name = group_name
 
+      # Conditions for find existing group
+      conditions = {}
+      conditions[:university_id] = university.id
+      conditions[:server_id] = server_id
+      conditions[:name] = group_name
+
+      # Try to find existing group first
+      group = Group.find_by(conditions)
+
+      if group.nil?
         # Save new group
         group = Group.new
         group.server_id = server_id
         group.name = group_name
+        group.university = university
 
-        # Conditions for find existing group
-        conditions = {}
-        conditions[:university_id] = university.id
-        conditions[:server_id] = server_id
-        conditions[:name] = group_name
-
-        # Try to find existing group first
-        group = Group.find_by(conditions)
-
-        if group.nil?
-          # Save new group
-          group = Group.new
-          group.server_id = server_id
-          group.name = group_name
-          group.university = university
-
-          unless group.save
-            # Go to the next iteration if can't be saved
-            Rails.logger.error(group.errors.full_messages)
-            next
-          end
+        unless group.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error(group.errors.full_messages)
+          next
         end
-
-      rescue Exception => e
-        Rails.logger.error(e)
-        next
       end
+    rescue StandardError => e
+      Rails.logger.error(e)
+      next
     end
   end
 
@@ -458,19 +377,16 @@ module KpiService
   #
 
   # Request current week from KPI API
-  def self.get_current_week
-
-    # Peform network request and parse JSON
-    url = "https://api.rozklad.org.ua/v2/weeks"
+  def self.current_week
+    # Perform network request and parse JSON
+    url = 'https://api.rozklad.org.ua/v2/weeks'
     json = ApplicationRecord.perform_request(url)
 
-    if json.nil?
-      return 1
-    end
+    return 1 if json.nil?
 
     week = json['data']
 
-    return week
+    week
   end
 
   # Week for current date
@@ -478,10 +394,10 @@ module KpiService
   # What we need: Week number for selected date
   def self.week_for_selected_date(selected_pair_date)
     remainder_of_division = selected_pair_date.cweek % 2
-    if remainder_of_division == 0
-      return 1
+    if remainder_of_division.zero?
+      1
     else
-      return 2
+      2
     end
   end
 
@@ -497,7 +413,7 @@ module KpiService
   # Import from KPI
   # bin/rails runner 'KpiService.import_teachers'
   def self.import_teachers
-    teachers_total_count = KpiService.get_teachers_count
+    teachers_total_count = KpiService.teachers_count
 
     offset = 0
 
@@ -512,89 +428,80 @@ module KpiService
     end
   end
 
-
   # Make request to API for get total count of all teachers
-  def self.get_teachers_count
-
-    # Peform network request and parse JSON
-    url = "https://api.rozklad.org.ua/v2/teachers"
+  def self.teachers_count
+    # Perform network request and parse JSON
+    url = 'https://api.rozklad.org.ua/v2/teachers'
     json = ApplicationRecord.perform_request(url)
 
-    if json.nil?
-      return
-    end
+    return if json.nil?
 
-    total_count = json["meta"]["total_count"]
+    total_count = json['meta']['total_count']
     teachers_total_count = Integer(total_count)
 
-    return teachers_total_count
+    teachers_total_count
   end
-
 
   # Make request with offset parameter and parse JSON
   def self.get_teachers(offset)
-    # Peform network request and parse JSON
+    # Perform network request and parse JSON
     url = "https://api.rozklad.org.ua/v2/teachers/?filter={%27limit%27:100,%27offset%27:#{offset}}"
     json = ApplicationRecord.perform_request(url)
 
-    return json
+    json
   end
-
 
   # Serialize teachers from JSON and save to database
   def self.save_teachers_from(json)
-
-    data = json["data"]
+    data = json['data']
 
     # This groups for SumDU
     university = University.kpi
 
-    for object in data do
+    data.each do |object|
+      # Convert before save
+      server_id = Integer(object['teacher_id'])
+      teacher_name = String(object['teacher_name'])
 
-      begin
-        # Convert before save
-        server_id = Integer(object["teacher_id"])
-        teacher_name = String(object["teacher_name"])
+      # Conditions for find existing teacher
+      conditions = {}
+      conditions[:university_id] = university.id
+      conditions[:server_id] = server_id
+      conditions[:name] = teacher_name
 
-        # Conditions for find existing teacher
-        conditions = {}
-        conditions[:university_id] = university.id
-        conditions[:server_id] = server_id
-        conditions[:name] = teacher_name
+      # Try to find existing Teacher first
+      teacher = Teacher.find_by(conditions)
 
-        # Try to find existing teahcer first
-        teacher = Teacher.find_by(conditions)
+      if teacher.nil?
 
-        if teacher.nil?
+        # Save new teacher
+        teacher = Teacher.new
+        teacher.server_id = server_id
+        teacher.name = teacher_name
+        teacher.university = university
 
-          # Save new teacher
-          teacher = Teacher.new
-          teacher.server_id = server_id
-          teacher.name = teacher_name
-          teacher.university = university
-
-          unless teacher.save
-            # Go to the next iteration if can't be saved
-            Rails.logger.error(teacher.errors.full_messages)
-            next
-          end
+        unless teacher.save
+          # Go to the next iteration if can't be saved
+          Rails.logger.error(teacher.errors.full_messages)
+          next
         end
-
-      rescue Exception => e
-        Rails.logger.error(e)
-        next
       end
-
+    rescue StandardError => e
+      Rails.logger.error(e)
+      next
     end
   end
 
   #
   # Import Discipline
   #
+  # @param [String] name
+  # @param [Auditorium] auditorium
+  # @param [Group] groups
+  # @param [Teacher] teacher
   def self.save_discipline(name, auditorium, groups, teacher)
     university = University.kpi
     discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
-    return discipline
+    discipline
   end
-
 end
