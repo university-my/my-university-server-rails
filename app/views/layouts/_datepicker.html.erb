@@ -11,7 +11,7 @@
 			<div class="btn-group mr-3 mb-2" role="group">
 				<form action="" method="get" id="previous_date">
 					<input type="date" id="start" name="pair_date"
-					value="<%= @previousDate %>" hidden>
+                 value="<%= @previous_date %>" hidden>
 					<a onclick="$('#previous_date').submit();" class="btn btn-primary" style="color: white;"><i class="fas fa-chevron-left"></i></a>
 				</form>
 			</div>
@@ -21,7 +21,7 @@
 			<div class="btn-group mr-3 mb-2" role="group">
 				<form action="" method="get" id="next_date">
 					<input type="date" id="start" name="pair_date"
-					value="<%= @nextDate %>" hidden>
+                 value="<%= @next_date %>" hidden>
 					<a onclick="$('#next_date').submit();" class="btn btn-primary" style="color: white;"><i class="fas fa-chevron-right"></i></a>
 				</form>
 			</div>
