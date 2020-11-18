@@ -3,7 +3,6 @@ require 'nokogiri'
 
 # Service for import data from KHNUE
 module KhnueService
-
   def self.base_url
     'http://services.ksue.edu.ua:8081/schedule/xmlmetadata'
   end
@@ -103,7 +102,16 @@ module KhnueService
       end
 
       # Save to DB
-      save_or_update_record(date_string, start_time_string, name_string, pair_name, kind, auditorium_id, teacher_name, groups_ids)
+      save_or_update_record(
+        date_string,
+        start_time_string,
+        name_string,
+        pair_name,
+        kind,
+        auditorium_id,
+        teacher_name,
+        groups_ids
+      )
     end
   end
 
@@ -217,7 +225,6 @@ module KhnueService
 
       # Try to save record
       Rails.logger.error(record.errors.full_messages) unless record.save
-
     rescue StandardError => e
       Rails.logger.error(e)
     end
@@ -256,7 +263,7 @@ module KhnueService
   def self.save_building(server_id, name)
     object = Building.where(server_id: server_id, name: name).first
     object = Building.new if object.nil?
-    save(object, id, name)
+    save(object, server_id, name)
   end
 
   # 2. Iterate through all buildings_ids
@@ -307,7 +314,6 @@ module KhnueService
     auditorium.building = building
 
     Rails.logger.error(auditorium.errors.full_messages) unless auditorium.save
-
   rescue StandardError => e
     Rails.logger.error(e)
 
@@ -349,18 +355,14 @@ module KhnueService
     department = Department.where(server_id: id, name: name).first
     university = University.khnue
 
-    if department.nil?
-      # Save new department
-      department = Department.new
-      department.server_id = id
-      department.name = name
-      department.university = university
+    return unless department.nil?
 
-      unless department.save
-        # Go to the next iteration if can't be saved
-        Rails.logger.error(department.errors.full_messages)
-      end
-    end
+    # Save new department
+    department = Department.new
+    department.server_id = id
+    department.name = name
+    department.university = university
+    department.save
   end
 
   # 2. Iterate through all departments_ids
@@ -408,15 +410,7 @@ module KhnueService
 
     # Update
     teacher.department = department
-
-    unless teacher.save
-      # Go to the next iteration if can't be saved
-      Rails.logger.error(teacher.errors.full_messages)
-    end
-
-  rescue StandardError => e
-    Rails.logger.error(e)
-
+    teacher.save
   end
 
   #
@@ -460,7 +454,6 @@ module KhnueService
   # 2. Request specialities by faculties_ids.
   # And request group by faculty_id and speciality_id.
   def self.request_specialities(faculties_ids)
-
     faculties_ids.each do |faculty_id|
       specialities_ids = request_specialty(faculty_id)
 
@@ -549,15 +542,7 @@ module KhnueService
     # Update
     group.faculty = faculty
     group.speciality = speciality
-
-    unless group.save
-      # Go to the next iteration if can't be saved
-      Rails.logger.error(group.errors.full_messages)
-    end
-
-  rescue StandardError => e
-    Rails.logger.error(e)
-
+    group.save
   end
 
   #
@@ -568,5 +553,4 @@ module KhnueService
     discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
     discipline
   end
-
 end
