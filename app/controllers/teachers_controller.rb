@@ -26,7 +26,7 @@ class TeachersController < ApplicationController
     @pair_date = pair_date_string_from(params)
     @date = @pair_date.to_date
     @next_date = @date + 1.day
-    @previousDate = @date - 1.day
+    @previous_date = @date - 1.day
   end
 
   # GET /teachers/1/records
