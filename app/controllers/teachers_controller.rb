@@ -25,7 +25,7 @@ class TeachersController < ApplicationController
     # Date
     @pair_date = pair_date_string_from(params)
     @date = @pair_date.to_date
-    @nextDate = @date + 1.day
+    @next_date = @date + 1.day
     @previousDate = @date - 1.day
   end
 
@@ -61,11 +61,8 @@ class TeachersController < ApplicationController
     .where(pair_start_date: pair_date.all_day)
     .order(:pair_start_date)
     .order(:pair_name)
-    
-    if @university.url == University.khnue_url
-      render partial: "records/khnue"
 
-    elsif @records.blank?
+    if @records.blank?
       render partial: "records/empty"
     else
       render partial: "records/show", locals: {

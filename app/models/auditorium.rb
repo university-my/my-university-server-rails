@@ -45,8 +45,8 @@ class Auditorium < ApplicationRecord
     when University.sumdu_url
       SumduService.import_records_for_auditorium(self, date)
 
-    # when University.khnue_url
-    #   KhnueService.import_records_for_auditorium(self, date)
+    when University.khnue_url
+      KhnueService.import_records_for_auditorium(self, date)
     end
   end
 

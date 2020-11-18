@@ -1,21 +1,4 @@
 <ul class="list-group list-group-flush">
-
-  <% if university.url == University.khnue_url %>
-  <li class="list-group-item border-0">
-    <i class="fas fa-briefcase align-middle"></i>
-    <span class="align-middle"><%= link_to 'Кафедри', university_departments_url(university.url), class: "align-middle ml-2" %></span>
-  </li>
-  <li class="list-group-item border-0">
-    <i class="fas fa-users align-middle"></i>
-    <span class="align-middle"><%= link_to 'Факультети', university_faculties_url(university.url), class: "align-middle ml-2" %></span>
-  </li>
-  <li class="list-group-item border-0">
-    <%= octicon "saved", height: 24, width: 24, class: "align-middle" %>
-    <span class="align-middle"><%= link_to 'Спеціальності', university_specialities_url(university.url), class: "align-middle ml-2" %></span>
-  </li>
-  <div class="row"><div class="col"><hr></div></div>
-  <% end %>
-
   <li class="list-group-item border-0">
     <i class="fas fa-users align-middle"></i>
     <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
@@ -27,9 +10,22 @@
   </li>
 
   <% if university.url != University.kpi_url %>
-  <li class="list-group-item border-0">
-    <i class="fas fa-door-open align-middle"></i>
-    <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
-  </li>
+    <li class="list-group-item border-0">
+      <i class="fas fa-door-open align-middle"></i>
+      <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
+    </li>
+  <% end %>
+
+  <% if university.url == University.khnue_url %>
+    <div class="row"><div class="col"><hr></div></div>
+    <li class="list-group-item border-0">
+      <span class="align-middle"><%= link_to 'Кафедри', university_departments_url(university.url), class: "align-middle ml-2" %></span>
+    </li>
+    <li class="list-group-item border-0">
+      <span class="align-middle"><%= link_to 'Факультети', university_faculties_url(university.url), class: "align-middle ml-2" %></span>
+    </li>
+    <li class="list-group-item border-0">
+      <span class="align-middle"><%= link_to 'Спеціальності', university_specialities_url(university.url), class: "align-middle ml-2" %></span>
+    </li>
   <% end %>
 </ul>
