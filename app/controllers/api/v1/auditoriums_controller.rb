@@ -14,27 +14,24 @@ class Api::V1::AuditoriumsController < ApplicationController
     # Date
     pair_date = pair_date_from(params)
 
-    @records = Record.where(university: university)
-    .where(auditorium: @auditorium)
-    .where(pair_start_date: pair_date.all_day)
-    .order(:pair_start_date)
-    .order(:pair_name)
+    @records = fetch_records(university, @auditorium, pair_date)
 
     if @records.blank?
       @auditorium.import_records(pair_date)
-
     elsif @auditorium.need_to_update_records
-
-      # Update
       @auditorium.import_records(pair_date)
     end
 
     # Select records one more time
-    @records = Record.where(university: university)
-    .where(auditorium: @auditorium)
-    .where(pair_start_date: pair_date.all_day)
-    .order(:pair_start_date)
-    .order(:pair_name)
+    @records = fetch_records(university, @auditorium, pair_date)
+  end
+
+  def fetch_records(university, auditorium, pair_date)
+    Record.where(university: university)
+          .where(auditorium: auditorium)
+          .where(pair_start_date: pair_date.all_day)
+          .order(:pair_start_date)
+          .order(:pair_name)
   end
 
 end

@@ -47,8 +47,8 @@ class Teacher < ApplicationRecord
     when University.kpi_url
       KpiService.import_records_for_teacher(self, date)
 
-    # when University.khnue_url
-    #   KhnueService.import_records_for_teacher(self, date)
+    when University.khnue_url
+      KhnueService.import_records_for_teacher(self, date)
     end
   end
 
