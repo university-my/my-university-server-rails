@@ -7,7 +7,7 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 		<ul class="navbar-nav mr-auto">
-			<% if @university.url != "kpi" && @university.url != "pnu" %>
+			<% if @university.url != "kpi" && @university.url != "pnu" && @university.url != "znau" %>
 			<li class="nav-item">
 				<%= link_to 'Аудиторії', university_auditoriums_url, class: "nav-link" %>
 			</li>

@@ -59,4 +59,14 @@ class University < ApplicationRecord
     University.find_by(url: University.pnu_url)
   end
 
+  # ZNAU
+
+  def self.znau_url
+    return "znau"
+  end
+
+  def self.znau
+    University.find_by(url: University.znau_url)
+  end
+
 end

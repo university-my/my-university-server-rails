@@ -56,6 +56,9 @@ class Group < ApplicationRecord
 
     when University.pnu_url
       PnuService.import_records_for_group(self, date)
+
+    when University.znau_url
+      ZnauService.import_records_for_group(self, date)
     end
   end
 
