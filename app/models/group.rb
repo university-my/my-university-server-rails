@@ -53,6 +53,9 @@ class Group < ApplicationRecord
 
     when University.nau_url
       NauService.import_records_for_group(self, date)
+
+    when University.pnu_url
+      PnuService.import_records_for_group(self, date)
     end
   end
 
