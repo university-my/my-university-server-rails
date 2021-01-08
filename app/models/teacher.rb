@@ -49,6 +49,9 @@ class Teacher < ApplicationRecord
 
     when University.khnue_url
       KhnueService.import_records_for_teacher(self, date)
+
+    when University.pnu_url
+      PnuService.import_records_for_teacher(self, date)
     end
   end
 

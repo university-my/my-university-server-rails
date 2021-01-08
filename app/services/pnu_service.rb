@@ -114,21 +114,18 @@ class PnuService
     end
   end
 
-  #
-  # Import records for group
-  #
-  def self.import_records_for_group(group, date)
+  def self.load_records_for(record_type, date, object_name)
     start_date = date.strftime('%d.%m.%Y')
     end_date = (date + 7.day).strftime('%d.%m.%Y')
 
     # URI
-    uri = URI.parse("https://ultimate-schedule.fun/v1/schedule/groups")
+    uri = URI.parse("https://ultimate-schedule.fun/v1/schedule/#{record_type}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
     # Params
     params = {
-      'value' => group.name,
+      'value' => object_name,
       'date_from' => start_date,
       'date_to' => end_date
     }
@@ -146,6 +143,47 @@ class PnuService
     # Parse JSON
     json = JSON.parse(response.body)
     data = json['data']
+    return data
+  end
+
+  def self.import_records_for_teacher(teacher, date)
+    data = load_records_for('teachers', date, teacher.name)
+
+    university = University.pnu
+
+    data.each do |object|
+      
+      date_string = object['date']
+      lessons = object['lessons']
+
+      lessons.each do |lesson|
+
+        pair_start_date = (date_string + ' ' + lesson['from']).to_datetime
+
+        self.save_or_update_record(
+          pair_start_date,
+          lesson['number'],
+          lesson['description'].strip,
+          lesson['from'] + '-' + lesson['to'],
+          teacher,
+          [],
+          university
+          )
+      end
+
+    end
+
+
+    # Update `updated_at` date of teacher
+    teacher.touch(:updated_at)
+    Rails.logger.error(errors.full_messages) unless teacher.save
+  end
+
+  #
+  # Import records for group
+  #
+  def self.import_records_for_group(group, date)
+    data = load_records_for('groups', date, group.name)
 
     university = University.pnu
 
