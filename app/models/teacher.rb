@@ -55,6 +55,9 @@ class Teacher < ApplicationRecord
 
     when University.znau_url
       ZnauService.import_records_for_teacher(self, date)
+
+    when University.nuft_url
+      NuftService.import_records_for_teacher(self, date)
     end
   end
 

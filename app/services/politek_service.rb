@@ -167,10 +167,12 @@ class PolitekService
 
         pair_start_date = (date_string + ' ' + lesson['from']).to_datetime
 
+        parsed_data = self.parse_html(lesson['html'])
+
         self.save_or_update_record(
           pair_start_date,
           lesson['number'],
-          lesson['description'].strip,
+          parsed_data.join('; '),
           lesson['from'] + '-' + lesson['to'],
           nil,
           [group],
@@ -183,6 +185,31 @@ class PolitekService
     # Update `updated_at` date of Group
     group.touch(:updated_at)
     Rails.logger.error(errors.full_messages) unless group.save
+  end
+
+  def self.parse_html(html)
+    parsed_data = Nokogiri::HTML.parse(html) do |config|
+      config.options = Nokogiri::XML::ParseOptions::NOBLANKS
+    end
+
+    parsed_data.search('.//img').remove
+    parsed_data.search('.//span').remove
+    parsed_data.search('.//div').remove
+
+    data = []
+
+    parsed_data.xpath('//td').each do |element|
+
+      element.children.each do |children|
+        text = children.text
+
+        unless text.to_s.strip.empty?
+          data << text.strip
+        end
+      end
+    end
+    
+    return data
   end
 
   #
