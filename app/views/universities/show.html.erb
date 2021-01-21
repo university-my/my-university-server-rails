@@ -1,7 +1,7 @@
 <% meta_tag :description, "#{@university.full_name} - зручний розклад занять" %>
 <% meta_tag :keywords, "Розклад,Расписание,#{@university.short_name},#{@university.full_name}" %>
 <%= content_for(:canonical_link, university_url(@university.url)) %>
-<% @title = "Розклад #{@university.short_name}" %>
+<% @title = "Розклад #{@university.short_name} - #{I18n.l(DateTime.now, format: '%B %Y')}" %>
 
 <%= render "layouts/header" %>
 
