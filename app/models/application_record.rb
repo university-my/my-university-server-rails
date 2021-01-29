@@ -6,23 +6,8 @@ class ApplicationRecord < ActiveRecord::Base
     # Init URI
     uri = URI(url)
 
-    if uri.nil?
-      # Add error
-      error_message = "Invalid URI"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
-
     # Perform request
     response = Net::HTTP.get_response(uri)
-    if response.code != '200'
-      # Add error
-      error_message = "Server responded with code #{response.code} for GET #{uri}"
-      # Log invalid URI
-      Rails.logger.error(error_message)
-      return
-    end
 
     # Parse JSON
     json = JSON.parse(response.body)
