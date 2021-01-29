@@ -13,7 +13,7 @@ class SumduService
     start_date = date.strftime('%d.%m.%Y')
     end_date = (date + 1.day).strftime('%d.%m.%Y')
 
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_aud=#{auditorium.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
@@ -77,7 +77,7 @@ class SumduService
     start_date = date.strftime('%d.%m.%Y')
     end_date = (date + 1.day).strftime('%d.%m.%Y')
 
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_grp=#{group.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
@@ -138,7 +138,7 @@ class SumduService
 
     # TODO: Check dates
 
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
     query = "&id_fio=#{teacher.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
@@ -201,7 +201,7 @@ class SumduService
   # # bin/rails runner 'SumduService.import_auditoriums'
   def self.import_auditoriums
     # Perform network request and parse JSON
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getAuditoriums'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getAuditoriums'
     json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
@@ -257,7 +257,7 @@ class SumduService
   # bin/rails runner 'SumduService.import_groups'
   def self.import_groups
     # Perform network request and parse JSON
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getGroups'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getGroups'
     json = ApplicationRecord.perform_request(url)
 
     # This groups for SumDU
@@ -302,7 +302,7 @@ class SumduService
   # bin/rails runner 'SumduService.import_teachers'
   def self.import_teachers
     # Perform network request and parse JSON
-    url = 'http://schedule.sumdu.edu.ua/index/json?method=getTeachers'
+    url = 'https://schedule.sumdu.edu.ua/index/json?method=getTeachers'
     json = ApplicationRecord.perform_request(url)
 
     # This teachers for SumDU
