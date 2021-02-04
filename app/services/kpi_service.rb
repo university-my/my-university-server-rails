@@ -48,9 +48,12 @@ module KpiService
     url = "https://api.rozklad.org.ua/v2/groups/#{group.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
 
+    # JSON may be nil
     return if json.nil?
 
+    # There a may not be any data
     data = json['data']
+    return if data.nil?
 
     university = University.kpi
 
@@ -171,9 +174,12 @@ module KpiService
     url = "https://api.rozklad.org.ua/v2/teachers/#{teacher.server_id}/lessons"
     json = ApplicationRecord.perform_request(url)
 
+    # JSON may be nil
     return if json.nil?
 
+    # There a may not be any data
     data = json['data']
+    return if data.nil?
 
     university = University.kpi
 
