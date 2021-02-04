@@ -1,4 +1,5 @@
 <%= render "layouts/tooltip" %>
+<% counter = 0 %>
 <div class="mx-auto col-md-8">
 
 	<% for record in @records %>
@@ -67,5 +68,13 @@
 			</div>
 		</div>
 	</div>
+
+	<% if @records.count == 1 %>
+		<%= render "ad/first_ad" %>
+	<% elsif @records.count > 1 && counter == 0 %>
+		<%= render "ad/first_ad" %>
+	<% end %>
+
+	<% counter = counter + 1  %>
 	<% end %>
 </div>
