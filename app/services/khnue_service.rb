@@ -65,6 +65,8 @@ module KhnueService
   end
 
   def self.parse_and_save_records(doc)
+    return if doc.nil?
+    
     @doc = doc.xpath('//schedule-element').each do |element|
       # Start date
       start_time_string = element.attributes['start'].value
