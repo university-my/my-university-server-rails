@@ -26,7 +26,7 @@
 				<ul class="list-group list-group-flush">
 					<% if record.reason.present? %>
 					<li class="list-group-item">
-						<span class="align-text-bottom"><i class="far fa-comment-alt align-middle"></i></span><span class="ml-2"><%= record.reason.gsub(';', '<hr><br>').html_safe %></span>
+						<span class="align-text-bottom"><i class="far fa-comment-alt align-middle"></i></span><span class="ml-2"><%= record.reason.gsub(';', '<hr>').html_safe %></span>
 					</li>
 					<% end %>
 

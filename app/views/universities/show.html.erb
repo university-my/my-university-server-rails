@@ -12,7 +12,7 @@
         <div class="media">
           <%= render "universities/university_picture", university: @university %>
           <div class="media-body">
-            <h1 display-3 class="mt-0">Розклад <%= @university.short_name %></h1>
+            <h1 class="mt-0">Розклад <%= @university.short_name %><% if @university.is_beta %><span class="text-warning"> (бета-версія)</span><% end %></h1>
             <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= @university.full_name %></h6>
           </div>
         </div>

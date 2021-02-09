@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
 	<%= link_to(university_url(url: @university.url), class: "navbar-brand") do %>
 	<%= @university.short_name %>
+	<% if @university.is_beta %><span class="text-warning"> (бета-версія)</span><% end %>
 	<% end %>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
