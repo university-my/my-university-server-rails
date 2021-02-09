@@ -1,5 +1,4 @@
 <%= render "layouts/tooltip" %>
-<% counter = 0 %>
 <div class="mx-auto col-md-8">
 
 	<% for record in @records %>
@@ -33,7 +32,7 @@
 
 					<% if record.auditorium %>
 					<li class="list-group-item">
-					<span class="align-text-bottom" data-toggle="tooltip" title="Аудиторія"><i class="fas fa-door-open align-middle"></i></span>
+						<span class="align-text-bottom" data-toggle="tooltip" title="Аудиторія"><i class="fas fa-door-open align-middle"></i></span>
 						<%= link_to university_auditorium_url(university.url, record.auditorium.friendly_id, pair_date: pair_date), rel: 'nofollow' do %>
 						<span class="ml-2"><%= record.auditorium.name %></span>
 						<% end %>
@@ -68,13 +67,8 @@
 			</div>
 		</div>
 	</div>
-
-	<% if @records.count == 1 %>
-		<%= render "ad/first_ad" %>
-	<% elsif @records.count > 1 && counter == 0 %>
-		<%= render "ad/first_ad" %>
 	<% end %>
 
-	<% counter = counter + 1  %>
-	<% end %>
+	<%= render "ad/first_ad" %>
+
 </div>
