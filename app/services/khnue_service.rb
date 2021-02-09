@@ -43,8 +43,8 @@ module KhnueService
     # Date.current.cweek - ('01-09-2020'.to_date.cweek)
 
     # New logic
-    weeks_shift = date.cweek - '01-09-2020'.to_date.cweek
-    weeks_shift + 1
+    weeks_shift = date.cweek + '01-05-2020'.to_date.cweek
+    # weeks_shift + 1
 
     # Old logic
     # weeks_shift = 11
@@ -144,6 +144,10 @@ module KhnueService
 
     url = 'http://services.ksue.edu.ua:8081/schedule/xml'
     query = "?group=#{group.server_id}&week=#{week_number}&#{auth_key}"
+
+    p '*****'
+    p url + query
+    p '*****'
 
     doc = perform_request(url + query)
     parse_and_save_records(doc)
