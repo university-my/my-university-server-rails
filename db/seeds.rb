@@ -21,6 +21,21 @@ if nau.nil?
   University.create(short_name: "НАУ", full_name: 'Національний авіаційний університет',  url: "nau")
 end
 
+pnu = University.pnu
+if pnu.nil?
+  University.create(short_name: "ПНУ", full_name: 'Прикарпатський національний університет імені Василя Стефаника',  url: "pnu")
+end
+
+znau = University.znau
+if znau.nil?
+  University.create(short_name: "ЖНАЕУ", full_name: 'Житомирський національний агроекологічний університет',  url: "znau")
+end
+
+nuft = University.nuft
+if nuft.nil?
+  University.create(short_name: "НУХТ", full_name: 'Національний університет харчових технологій',  url: "nuft")
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },

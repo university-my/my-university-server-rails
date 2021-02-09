@@ -9,9 +9,9 @@
 					<span data-toggle="tooltip" title="<%= l record.pair_start_date, format: "%A, %e %B %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
 				</div>
 
-				<% if record.discipline.name.present? || record.kind.present? %>
+				<% if record.discipline.present? || record.kind.present? %>
 				<div class="card-body">
-					<% if record.discipline.name.present? %>
+					<% if record.discipline.present? %>
 					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.name %></span></h5>
 					<% end %>
 
@@ -26,7 +26,7 @@
 				<ul class="list-group list-group-flush">
 					<% if record.reason.present? %>
 					<li class="list-group-item">
-						<span class="align-text-bottom"><i class="far fa-comment-alt align-middle"></i></span><span class="ml-2" data-toggle="tooltip" title="Коментар"><%= record.reason %></span>
+						<span class="align-text-bottom"><i class="far fa-comment-alt align-middle"></i></span><span class="ml-2"><%= record.reason.gsub(';', '<hr>').html_safe %></span>
 					</li>
 					<% end %>
 

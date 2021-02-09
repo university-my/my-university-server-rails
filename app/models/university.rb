@@ -48,4 +48,35 @@ class University < ApplicationRecord
   def self.nau
     University.find_by(url: University.nau_url)
   end
+
+  # PNU
+
+  def self.pnu_url
+    return "pnu"
+  end
+
+  def self.pnu
+    University.find_by(url: University.pnu_url)
+  end
+
+  # ZNAU
+
+  def self.znau_url
+    return "znau"
+  end
+
+  def self.znau
+    University.find_by(url: University.znau_url)
+  end
+
+  # NUFT
+
+  def self.nuft_url
+    return "nuft"
+  end
+
+  def self.nuft
+    University.find_by(url: University.nuft_url)
+  end
+
 end

@@ -9,7 +9,7 @@
     <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
   </li>
 
-  <% if university.url != University.kpi_url %>
+  <% if university.url != University.kpi_url && university.url != University.pnu_url && university.url != University.znau_url && university.url != University.nuft_url %>
     <li class="list-group-item border-0">
       <i class="fas fa-door-open align-middle"></i>
       <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>

@@ -7,51 +7,51 @@
 <div class="container">
 
   <div class="row">
-    <div class="mx-auto col-md-8">
+    <div class="alert alert-secondary mx-3" role="alert">
+      <i class="fas fa-ad mr-1"></i><a href="/ads" class="alert-link">Спонсорство та реклама</a>
+    </div>
+  </div>
 
-      <div class="row">
-        <div class="alert alert-secondary mx-3" role="alert">
-          <i class="fas fa-ad mr-1"></i><a href="/ads" class="alert-link">Спонсорство та реклама</a>
-        </div>
-      </div>
-
-      <h1 class="mb-4">Університети</h1>
-      <% @universities.each do |university| %>
-      <div class="row mb-3">
-        <div class="col">
-          <div class="card">
-            <div class="card-header">
-              <div class="media">
-                <%= render "universities/university_picture", university: university %>
-                <div class="media-body">
-                  <h1 display-3 class="mt-0"><%= university.short_name %></h1>
-                  <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= university.full_name %></h6>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="card-text">
-                <%= render "universities/university_list", university: university %>
-              </div>
-            </div>
-            <div class="card-footer">
-              <%= render "universities/card_footer", university: university %>
+  <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+    <% @universities.each do |university| %>
+    <div class="col my-2">
+      <div class="card h-100">
+        <div class="card-header">
+          <div class="media">
+            <%= render "universities/university_picture", university: university %>
+            <div class="media-body">
+              <h1 display-3 class="mt-0">
+                <%= link_to(university_url(url: university.url), class: "mt-0") do %>
+                <%= university.short_name %>
+                <% end %>
+              </h1>
             </div>
           </div>
         </div>
-      </div>
-      <% end %>
-      <div class="row mb-3">
-        <div class="col">
-          <div class="jumbotron mb-3">
-            <h1>Маєте ідеї чи побажання?</h1>
-            <p class="lead Text-light">Знаєте як покращити наш сервіс? Залиште відгук!</p>
-            <a class="btn btn-primary btn-lg" href="https://forms.gle/QuLTXgoKMXbDACGD6">Напишіть нам »</a>
-          </div>
+        <div class="card-body">
+          <p class="card-text"><%= university.full_name %></p>
         </div>
       </div>
     </div>
+    <% end %>
   </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <%= link_to 'Всі університети »', universities_url, class: "btn btn-primary btn-lg float-right"%>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <div class="jumbotron mb-3">
+        <h1>Маєте ідеї чи побажання?</h1>
+        <p class="lead Text-light">Знаєте як покращити наш сервіс? Залиште відгук!</p>
+        <a class="btn btn-info btn-lg" href="https://forms.gle/QuLTXgoKMXbDACGD6">Напишіть нам »</a>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <%= render "layouts/footer" %>
