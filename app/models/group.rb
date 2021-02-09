@@ -59,6 +59,9 @@ class Group < ApplicationRecord
 
     when University.znau_url
       ZnauService.import_records_for_group(self, date)
+
+    when University.nuft_url
+      NuftService.import_records_for_group(self, date)
     end
   end
 

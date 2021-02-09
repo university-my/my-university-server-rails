@@ -31,6 +31,11 @@ if znau.nil?
   University.create(short_name: "ЖНАЕУ", full_name: 'Житомирський національний агроекологічний університет',  url: "znau")
 end
 
+nuft = University.nuft
+if nuft.nil?
+  University.create(short_name: "НУХТ", full_name: 'Національний університет харчових технологій',  url: "nuft")
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },

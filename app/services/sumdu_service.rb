@@ -6,6 +6,10 @@ require 'json'
 # Import data for SumDU university
 class SumduService
 
+  def self.sumdu_api_url
+    'https://schedule.sumdu.edu.ua/index/json'
+  end
+
   #
   # Import records for auditorium from SumDU API
   #
@@ -13,11 +17,14 @@ class SumduService
     start_date = date.strftime('%d.%m.%Y')
     end_date = (date + 1.day).strftime('%d.%m.%Y')
 
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = "#{self.sumdu_api_url}?method=getSchedules"
     query = "&id_aud=#{auditorium.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
+
+    # JSON may be nil
+    return if json.nil?
 
     university = University.sumdu
 
@@ -77,11 +84,14 @@ class SumduService
     start_date = date.strftime('%d.%m.%Y')
     end_date = (date + 1.day).strftime('%d.%m.%Y')
 
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = "#{self.sumdu_api_url}?method=getSchedules"
     query = "&id_grp=#{group.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
+
+    # JSON may be nil
+    return if json.nil?
 
     university = University.sumdu
 
@@ -138,11 +148,14 @@ class SumduService
 
     # TODO: Check dates
 
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getSchedules'
+    url = "#{self.sumdu_api_url}?method=getSchedules"
     query = "&id_fio=#{teacher.server_id}&date_beg=#{start_date}&date_end=#{end_date}"
 
     # Perform network request and parse JSON
     json = ApplicationRecord.perform_request(url + query)
+
+    # JSON may be nil
+    return if json.nil?
 
     university = University.sumdu
 
@@ -201,8 +214,11 @@ class SumduService
   # # bin/rails runner 'SumduService.import_auditoriums'
   def self.import_auditoriums
     # Perform network request and parse JSON
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getAuditoriums'
+    url = "#{self.sumdu_api_url}?method=getAuditoriums"
     json = ApplicationRecord.perform_request(url)
+
+    # JSON may be nil
+    return if json.nil?
 
     # This groups for SumDU
     university = University.sumdu
@@ -257,8 +273,11 @@ class SumduService
   # bin/rails runner 'SumduService.import_groups'
   def self.import_groups
     # Perform network request and parse JSON
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getGroups'
+    url = "#{self.sumdu_api_url}?method=getGroups"
     json = ApplicationRecord.perform_request(url)
+
+    # JSON may be nil
+    return if json.nil?
 
     # This groups for SumDU
     university = University.sumdu
@@ -302,8 +321,11 @@ class SumduService
   # bin/rails runner 'SumduService.import_teachers'
   def self.import_teachers
     # Perform network request and parse JSON
-    url = 'https://schedule.sumdu.edu.ua/index/json?method=getTeachers'
+    url = "#{self.sumdu_api_url}?method=getTeachers"
     json = ApplicationRecord.perform_request(url)
+
+    # JSON may be nil
+    return if json.nil?
 
     # This teachers for SumDU
     university = University.sumdu

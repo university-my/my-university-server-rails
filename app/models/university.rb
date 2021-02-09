@@ -69,4 +69,14 @@ class University < ApplicationRecord
     University.find_by(url: University.znau_url)
   end
 
+  # NUFT
+
+  def self.nuft_url
+    return "nuft"
+  end
+
+  def self.nuft
+    University.find_by(url: University.nuft_url)
+  end
+
 end
