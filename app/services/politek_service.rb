@@ -1,12 +1,17 @@
 require 'net/http'
 require 'json'
-require "uri"
+require 'uri'
+require 'nokogiri'
 
 class PolitekService
 
+  def self.api_url
+    "https://ultimate-api.my-university.com.ua"
+  end
+
   def self.load_objects(object_type, url)
     # URI
-    uri = URI.parse("https://ultimate-schedule.fun/v1/#{object_type}")
+    uri = URI.parse("#{self.api_url}/v1/#{object_type}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
@@ -32,7 +37,7 @@ class PolitekService
     end_date = (date + 7.day).strftime('%d.%m.%Y')
 
     # URI
-    uri = URI.parse("https://ultimate-schedule.fun/v1/schedule/#{record_type}")
+    uri = URI.parse("#{self.api_url}/v1/schedule/#{record_type}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
