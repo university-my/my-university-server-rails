@@ -146,14 +146,17 @@ class PolitekService
 
         pair_start_date = (date_string + ' ' + lesson['from']).to_datetime
 
+        parsed_data = self.parse_html(lesson['html'])
+
         self.save_or_update_record(
           pair_start_date,
           lesson['number'],
-          lesson['description'].strip,
+          parsed_data.join('; '),
           lesson['from'] + '-' + lesson['to'],
           teacher,
           [],
-          university)
+          university
+          )
       end
     end
 
