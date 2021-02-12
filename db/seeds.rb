@@ -36,6 +36,16 @@ if nuft.nil?
   University.create(short_name: "НУХТ", full_name: 'Національний університет харчових технологій',  url: "nuft")
 end
 
+if University.sspu.nil?
+  University.create(
+    short_name: "СумДПУ",
+    full_name: 'Сумський державний педагогічний університет імені А.С.Макаренка',
+    url: "sspu",
+    website: 'https://sspu.edu.ua',
+    uid: 8
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
