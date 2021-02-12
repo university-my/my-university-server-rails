@@ -37,28 +37,15 @@ class Teacher < ApplicationRecord
   end
 
 
-  # Import records for teacher for SumDU
+  # Import records for teacher
   def import_records(date)
-    case university.url
+    # Find a class
+    service = University.service_for(university.uid)
+    return if service.nil?
 
-    when University.sumdu_url
-      SumduService.import_records_for_teacher(self, date)
-
-    when University.kpi_url
-      KpiService.import_records_for_teacher(self, date)
-
-    when University.khnue_url
-      KhnueService.import_records_for_teacher(self, date)
-
-    when University.pnu_url
-      PnuService.import_records_for_teacher(self, date)
-
-    when University.znau_url
-      ZnauService.import_records_for_teacher(self, date)
-
-    when University.nuft_url
-      NuftService.import_records_for_teacher(self, date)
-    end
+    # Call static method on class
+    on_class = service
+    on_class.constantize.send("import_records_for_teacher", self, date)
   end
 
 

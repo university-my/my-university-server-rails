@@ -1,11 +1,11 @@
 <picture>
-  <% if university.url == University.sumdu_url %>
+  <% if university.uid == University.sumdu.uid %>
   <source srcset="/sumdu-white.svg" media="(prefers-color-scheme: dark)">
     <img src="/sumdu.svg" height="64" width="64" alt="Логотип СумДУ" class="align-self-center mr-3">
-    <% elsif university.url == University.kpi_url %>
+    <% elsif university.uid == University.kpi.uid %>
     <source srcset="/kpi-white.svg" media="(prefers-color-scheme: dark)">
       <img src="/kpi.svg" height="64" width="64" alt="Логотип КПІ" class="align-self-center mr-3">
-      <% elsif university.url == University.khnue_url %>
+      <% elsif university.uid == University.khnue.uid %>
       <source srcset="/khnue-white.svg" media="(prefers-color-scheme: dark)">
         <img src="/khnue.svg" height="62" width="62" alt="Логотип ХНЕУ" class="align-self-center mr-3">
         <% end %>

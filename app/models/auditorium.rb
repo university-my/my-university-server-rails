@@ -40,14 +40,13 @@ class Auditorium < ApplicationRecord
 
   # Import records for current Auditorium
   def import_records(date)
-    case university.url
+    # Find a class
+    service = University.service_for(university.uid)
+    return if service.nil?
 
-    when University.sumdu_url
-      SumduService.import_records_for_auditorium(self, date)
-
-    when University.khnue_url
-      KhnueService.import_records_for_auditorium(self, date)
-    end
+    # Call static method on class
+    on_class = service
+    on_class.constantize.send("import_records_for_auditorium", self, date)
   end
 
 
