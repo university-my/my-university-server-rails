@@ -46,6 +46,16 @@ if University.sspu.nil?
     )
 end
 
+if University.gpnu.nil?
+  University.create(
+    short_name: "ГНПУ",
+    full_name: 'Глухівський національний педагогічний університет імені Олександра Довженка',
+    url: "gpnu",
+    website: 'http://new.gnpu.edu.ua/uk',
+    uid: 9
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
