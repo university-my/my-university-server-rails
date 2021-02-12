@@ -1,6 +1,6 @@
-<% meta_tag :description, "iOS додаток Мій Університет. Розклад СумДУ, КПІ, ХНЕУ" %>
-<% meta_tag :keywords, "iOS,Розклад,CумДУ,КПІ,ХНЕУ" %>
-<% @title = "iOS - Розклад СумДУ, КПІ, ХНЕУ" %>
+<% meta_tag :description, "Мобільний додаток на iOS з розклад занять для університетів" %>
+<% meta_tag :keywords, "iOS,Розклад,#{@short_names}" %>
+<% @title = "Мій Університет - iOS додаток" %>
 
 <%= render "layouts/header" %>
 <main class="container" role="main">
@@ -31,9 +31,9 @@
         <p><b>Підтримує такі університети:</b></p>
         <p>
           <ul>
-            <li>Сумський державний університет (<a href="https://sumdu.edu.ua/uk/">СумДУ</a>)</li>
-            <li>Національний технічний університет України "Київський політехнічний інститут імені Ігоря Сікорського" (<a href="https://kpi.ua">КПІ</a>)</li>
-            <li>Харківський національний економічний університет (<a href="https://www.hneu.edu.ua">ХНЕУ</a>)</li>
+            <% @universities.each do |university| %>
+            <li><%= university.full_name %> (<a href="<%= university.website %>"><%= university.short_name %></a>)</li>
+            <% end %>
           </ul>
         </p>
       </div>

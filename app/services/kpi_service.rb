@@ -510,4 +510,8 @@ module KpiService
     discipline = Discipline.save_or_update(name, university, auditorium, groups, teacher)
     discipline
   end
+
+  def self.import_records_for_auditorium(auditorium, selected_pair_date)
+    # Do nothing here
+  end
 end

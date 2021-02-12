@@ -9,74 +9,56 @@ class University < ApplicationRecord
   has_many :faculties
   has_many :specialities
 
-  # SumDU
+  def self.all_universities
+   [
+    { uid: 1, service: 'SumduService' },
+    { uid: 2, service: 'KpiService' },
+    { uid: 3, service: 'KhnueService'},
+    { uid: 4, service: 'NauService'},
+    { uid: 5, service: 'PnuService'},
+    { uid: 6, service: 'ZnauService'},
+    { uid: 7, service: 'NuftService'}
+  ]
+end
 
-  def self.sumdu_url
-    "sumdu"
+  def self.service_for(uid)
+    object = University.all_universities.select { |hash| hash[:uid] == uid }.first
+    return if object.nil?
+    return object[:service]
   end
+
+  def self.short_names_array
+    University.where(is_hidden: false).flat_map { |object|  object.short_name }
+  end
+
+  # Universities
 
   def self.sumdu
-    University.find_by(url: University.sumdu_url)
-  end
-
-  # KPI
-
-  def self.kpi_url
-    "kpi"
+    University.find_by(uid: 1)
   end
 
   def self.kpi
-    University.find_by(url: University.kpi_url)
-  end
-
-  # KHNUE
-
-  def self.khnue_url
-    "khnue"
+    University.find_by(uid: 2)
   end
 
   def self.khnue
-    University.find_by(url: University.khnue_url)
-  end
-
-  # NAU
-
-  def self.nau_url
-    return "nau"
+    University.find_by(uid: 3)
   end
 
   def self.nau
-    University.find_by(url: University.nau_url)
-  end
-
-  # PNU
-
-  def self.pnu_url
-    return "pnu"
+    University.find_by(uid: 4)
   end
 
   def self.pnu
-    University.find_by(url: University.pnu_url)
-  end
-
-  # ZNAU
-
-  def self.znau_url
-    return "znau"
+    University.find_by(uid: 5)
   end
 
   def self.znau
-    University.find_by(url: University.znau_url)
-  end
-
-  # NUFT
-
-  def self.nuft_url
-    return "nuft"
+    University.find_by(uid: 6)
   end
 
   def self.nuft
-    University.find_by(url: University.nuft_url)
+    University.find_by(uid: 7)
   end
 
 end

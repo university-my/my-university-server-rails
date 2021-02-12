@@ -21,7 +21,7 @@
 			</li>
 		</ul>
 		<ul class="navbar-nav mr-2">
-			<% if @university.url == University.khnue_url %>
+			<% if @university.uid == University.khnue.uid %>
 			<div class="row"><div class="col"><hr></div></div>
 			<li class="nav-item">
 				<%= link_to 'Кафедри', university_departments_url, class: "nav-link" %>

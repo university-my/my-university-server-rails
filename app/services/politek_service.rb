@@ -260,4 +260,8 @@ class PolitekService
     return if record.save
   end
 
+  def self.import_records_for_auditorium(auditorium, selected_pair_date)
+    # Do nothing here
+  end
+
 end

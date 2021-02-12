@@ -36,10 +36,14 @@ class PagesController < ApplicationController
   end
 
   def ios
+    @short_names = University.short_names_array.join(',')
+    @universities = University.where(is_hidden: false).all
     render "pages/ios"
   end
 
   def android
+    @short_names = University.short_names_array.join(',')
+    @universities = University.where(is_hidden: false).all
     render "pages/android"
   end
 

@@ -1,5 +1,6 @@
-<% meta_tag :description, "Розклад СумДУ, КПІ, ХНЕУ" %>
-<% meta_tag :keywords, "Розклад,СумДУ,КПІ,ХНЕУ" %>
+<% meta_tag :description, "Розклад #{@short_names}" %>
+<% meta_tag :keywords, "Розклад,#{@short_names}" %>
+<% @title = "Мій Університет - Всі університети" %>
 <%= content_for(:canonical_link, universities_url) %>
 <% no_index %>
 
@@ -8,6 +9,20 @@
 <main class="container" role="main">
   <div class="mx-auto col-md-8">
     <h1 class="mb-4">Університети</h1>
+
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <form method="get" id="previous_date" class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Абревіатура уніветситету" aria-label="Пошук" name="query" value="<%= @query %>">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Шукати</button>
+        </form>
+      </div>
+    </div>
+
+    <% if @universities.empty? %>
+    <p>Нічого не знайдено</p>
+    <% else %>
+
     <% @universities.each do |university| %>
     <div class="row mb-3">
       <div class="col">
@@ -33,6 +48,11 @@
       </div>
     </div>
     <% end %>
+
+    <% end %>
+
+    <div class="mt-4"><%= will_paginate @universities, :page_links => false, renderer: WillPaginate::ActionView::BootstrapLinkRenderer, list_classes: %w(pagination justify-content-center) %></div>
+
   </div>
 </main>
 <%= render "layouts/footer" %>

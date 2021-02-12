@@ -57,6 +57,30 @@ every 1.day, at: ['9:35 am', '9:35 pm'] do
   runner 'KhnueService.import_groups'
 end
 
+# NUFT
+every 1.day, at: ['10:00 am', '10:00 pm'] do
+  runner 'NuftService.import_groups'
+end
+every 1.day, at: ['10:01 am', '10:01 pm'] do
+  runner 'NuftService.import_teachers'
+end
+
+# PNU
+every 1.day, at: ['10:02 am', '10:02 pm'] do
+  runner 'PnuService.import_groups'
+end
+every 1.day, at: ['10:03 am', '10:03 pm'] do
+  runner 'PnuService.import_teachers'
+end
+
+# ZNAU
+every 1.day, at: ['10:04 am', '10:04 pm'] do
+  runner 'ZnauService.import_groups'
+end
+every 1.day, at: ['10:05 am', '10:05 pm'] do
+  runner 'ZnauService.import_teachers'
+end
+
 # Sitemap refresh
 every 1.day, at: '12:00 pm' do
   rake 'sitemap:refresh'
