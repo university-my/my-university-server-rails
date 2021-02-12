@@ -1,39 +1,74 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 
-sumdu = University.sumdu
-if sumdu.nil?
-  University.create(short_name: "СумДУ", full_name: "Сумський державний університет",  url: "sumdu")
+if University.sumdu.nil?
+  University.create(
+    short_name: "СумДУ",
+    full_name: "Сумський державний університет",  
+    url: "sumdu",
+    website: 'https://sumdu.edu.ua/uk',
+    uid: 1
+    )
 end
 
-kpi = University.kpi
-if kpi.nil?
-  University.create(short_name: "КПІ", full_name: 'Національний технічний університет України "Київський політехнічний інститут імені Ігоря Сікорського"',  url: "kpi")
+if University.kpi.nil?
+  University.create(
+    short_name: "КПІ",
+    full_name: 'Національний технічний університет України "Київський політехнічний інститут імені Ігоря Сікорського"',
+    url: "kpi",
+    website: 'https://kpi.ua',
+    uid: 2
+    )
 end
 
-khnue = University.khnue
-if khnue.nil?
-  University.create(short_name: "ХНЕУ", full_name: 'Харківський національний економічний університет',  url: "khnue")
+if University.khnue.nil?
+  University.create(
+    short_name: "ХНЕУ",
+    full_name: 'Харківський національний економічний університет',  
+    url: "khnue",
+    website: 'https://www.hneu.edu.ua',
+    uid: 3
+    )
 end
 
-nau = University.nau
-if nau.nil?
-  University.create(short_name: "НАУ", full_name: 'Національний авіаційний університет',  url: "nau")
+if University.nau.nil?
+  University.create(
+    short_name: "НАУ",
+    full_name: 'Національний авіаційний університет', 
+    url: "nau",
+    website: '',
+    uid: 4
+    )
 end
 
-pnu = University.pnu
-if pnu.nil?
-  University.create(short_name: "ПНУ", full_name: 'Прикарпатський національний університет імені Василя Стефаника',  url: "pnu")
+if University.pnu.nil?
+  University.create(
+    short_name: "ПНУ",
+    full_name: 'Прикарпатський національний університет імені Василя Стефаника', 
+    url: "pnu",
+    website: 'https://pnu.edu.ua',
+    uid: 5
+    )
 end
 
-znau = University.znau
-if znau.nil?
-  University.create(short_name: "ЖНАЕУ", full_name: 'Житомирський національний агроекологічний університет',  url: "znau")
+if University.znau.nil?
+  University.create(
+    short_name: "ПНУ",
+    full_name: 'Поліський національний університет', 
+    url: 'polissya-national-university',
+    website: 'http://znau.edu.ua',
+    uid: 6
+    )
 end
 
-nuft = University.nuft
-if nuft.nil?
-  University.create(short_name: "НУХТ", full_name: 'Національний університет харчових технологій',  url: "nuft")
+if University.nuft.nil?
+  University.create(
+    short_name: "НУХТ",
+    full_name: 'Національний університет харчових технологій', 
+    url: "nuft",
+    website: 'https://nuft.edu.ua',
+    uid: 7
+    )
 end
 
 if University.sspu.nil?
