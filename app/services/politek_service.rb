@@ -6,7 +6,7 @@ require 'nokogiri'
 class PolitekService
 
   def self.api_url
-    "https://ultimate-api.my-university.com.ua"
+    "https://ultimate-schedule-api-26hfd.ondigitalocean.app"
   end
 
   def self.load_objects(object_type, url)
