@@ -3,7 +3,7 @@ class Api::V1::AuditoriumsController < ApplicationController
   # GET /api/v1/universities/:university_url/auditoriums
   def index
     university = University.find_by!(url: params[:university_url])
-    @auditoriums = university.auditorium
+    @auditoriums = university.auditorium.where(is_hidden: false)
   end
 
   # GET /api/v1/universities/:university_url/auditoriums/:id/records

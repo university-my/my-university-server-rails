@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_12_145630) do
+ActiveRecord::Schema.define(version: 2021_02_17_131145) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_145630) do
     t.string "slug_uk"
     t.integer "building_id"
     t.string "lowercase_name"
+    t.boolean "is_hidden", default: false
     t.index ["building_id"], name: "index_auditoriums_on_building_id"
     t.index ["slug"], name: "index_auditoriums_on_slug", unique: true
     t.index ["slug_en"], name: "index_auditoriums_on_slug_en"
@@ -141,6 +142,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_145630) do
     t.integer "speciality_id"
     t.integer "course"
     t.integer "stream"
+    t.boolean "is_hidden", default: false
     t.index ["faculty_id"], name: "index_groups_on_faculty_id"
     t.index ["slug"], name: "index_groups_on_slug"
     t.index ["slug_en"], name: "index_groups_on_slug_en"
@@ -201,6 +203,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_145630) do
     t.string "slug_uk"
     t.string "lowercase_name"
     t.integer "department_id"
+    t.boolean "is_hidden", default: false
     t.index ["department_id"], name: "index_teachers_on_department_id"
     t.index ["slug"], name: "index_teachers_on_slug", unique: true
     t.index ["slug_en"], name: "index_teachers_on_slug_en"
@@ -218,6 +221,12 @@ ActiveRecord::Schema.define(version: 2021_02_12_145630) do
     t.boolean "is_beta", default: false
     t.string "website", default: ""
     t.integer "uid", default: 0
+    t.text "description", default: ""
+    t.string "picture_white", default: ""
+    t.string "picture_dark", default: ""
+    t.boolean "show_classrooms", default: false
+    t.boolean "show_groups", default: false
+    t.boolean "show_teachers", default: false
   end
 
   create_table "users", force: :cascade do |t|

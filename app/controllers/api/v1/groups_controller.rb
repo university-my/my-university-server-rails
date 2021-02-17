@@ -3,7 +3,7 @@ class Api::V1::GroupsController < ApplicationController
   # GET /api/v1/universities/:university_url/groups
   def index
     university = University.find_by!(url: params[:university_url])
-    @groups = university.groups
+    @groups = university.groups.where(is_hidden: false)
   end
 
   # GET /api/v1/universities/:university_url/groups/:id/records

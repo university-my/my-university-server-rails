@@ -1,15 +1,20 @@
 <ul class="list-group list-group-flush">
-  <li class="list-group-item border-0">
+
+  <% if university.show_groups %>
+    <li class="list-group-item border-0">
     <i class="fas fa-users align-middle"></i>
     <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
-  </li>
+  </li>  
+  <% end %>
 
-  <li class="list-group-item border-0">
+  <% if university.show_teachers %>
+    <li class="list-group-item border-0">
     <i class="fas fa-briefcase align-middle"></i>
     <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
   </li>
+  <% end %>
 
-  <% if university.uid == University.sumdu.uid || university.uid == University.khnue.uid %>
+  <% if university.show_classrooms %>
     <li class="list-group-item border-0">
       <i class="fas fa-door-open align-middle"></i>
       <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>

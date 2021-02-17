@@ -8,10 +8,12 @@ class TeachersController < ApplicationController
     @query = params["query"]
     if @query.present?
       @teachers = @university.teachers
+        .where(is_hidden: false)
         .where("lowercase_name LIKE ?", "%#{@query.downcase}%")
         .paginate(page: params[:page], per_page: per_page)
     else
       @teachers = @university.teachers
+        .where(is_hidden: false)
         .paginate(page: params[:page], per_page: per_page)
     end
   end

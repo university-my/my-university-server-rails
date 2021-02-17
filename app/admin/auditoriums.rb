@@ -1,6 +1,6 @@
 ActiveAdmin.register Auditorium do
 
-  permit_params :name, :server_id, :university_id, :building_id
+  permit_params :name, :server_id, :university_id, :building_id, :is_hidden
 
   actions :all
 
@@ -30,6 +30,8 @@ ActiveAdmin.register Auditorium do
       column :updated_at
     end
 
+    column :is_hidden
+
     actions
   end
 
@@ -48,6 +50,8 @@ ActiveAdmin.register Auditorium do
         f.input :university, as: :select, collection: [current_admin_user.university], include_blank: false
       end
 
+      f.input :is_hidden
+
     end
     f.actions
   end
@@ -64,6 +68,7 @@ ActiveAdmin.register Auditorium do
       row :created_at
       row :updated_at
       row :building
+      row :is_hidden
     end
   end
 
