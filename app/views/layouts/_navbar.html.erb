@@ -8,17 +8,25 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 		<ul class="navbar-nav mr-auto">
-			<% if @university.uid == University.sumdu.uid || @university.uid == University.khnue.uid %>
-			<li class="nav-item">
+
+			<% if @university.show_classrooms %>
+				<li class="nav-item">
 				<%= link_to 'Аудиторії', university_auditoriums_url, class: "nav-link" %>
-			</li>
+			</li>	
 			<% end %>
-			<li class="nav-item">
+
+			<% if @university.show_teachers %>
+				<li class="nav-item">
 				<%= link_to 'Викладачі', university_teachers_url, class: "nav-link" %>
-			</li>
-			<li class="nav-item">
+			</li>	
+			<% end %>
+
+			<% if @university.show_groups %>
+				<li class="nav-item">
 				<%= link_to 'Групи', university_groups_url, class: "nav-link" %>
-			</li>
+			</li>	
+			<% end %>
+			
 		</ul>
 		<ul class="navbar-nav mr-2">
 			<% if @university.uid == University.khnue.uid %>

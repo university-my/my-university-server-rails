@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_122931) do
+ActiveRecord::Schema.define(version: 2021_02_17_125243) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -221,6 +221,9 @@ ActiveRecord::Schema.define(version: 2021_02_17_122931) do
     t.text "description", default: ""
     t.string "picture_white", default: ""
     t.string "picture_dark", default: ""
+    t.boolean "show_classrooms", default: false
+    t.boolean "show_groups", default: false
+    t.boolean "show_teachers", default: false
   end
 
   create_table "users", force: :cascade do |t|
