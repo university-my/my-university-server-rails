@@ -3,7 +3,7 @@ class Api::V1::TeachersController < ApplicationController
   # GET /api/v1/universities/:university_url/teachers
   def index
     university = University.find_by!(url: params[:university_url])
-    @teachers = university.teachers
+    @teachers = university.teachers.where(is_hidden: false)
   end
 
   # GET /api/v1/universities/:university_url/teachers/:id/records

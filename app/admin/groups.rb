@@ -1,6 +1,6 @@
 ActiveAdmin.register Group do
 
-  permit_params :name, :server_id, :university_id
+  permit_params :name, :server_id, :university_id, :is_hidden
 
   actions :all
 
@@ -26,6 +26,7 @@ ActiveAdmin.register Group do
       column :slug_uk
       column :created_at
       column :updated_at
+      column :is_hidden
     end
 
     actions
@@ -42,6 +43,8 @@ ActiveAdmin.register Group do
       elsif current_admin_user.is_editor?
         f.input :university, as: :select, collection: [current_admin_user.university], include_blank: false
       end
+
+      f.input :is_hidden
     end
     f.actions
   end
@@ -57,6 +60,7 @@ ActiveAdmin.register Group do
       row :university
       row :created_at
       row :updated_at
+      row :is_hidden
     end
   end
 

@@ -1,6 +1,6 @@
 ActiveAdmin.register Teacher do
 
-  permit_params :name, :server_id, :university_id, :department_id
+  permit_params :name, :server_id, :university_id, :department_id, :is_hidden
 
   actions :all
 
@@ -31,6 +31,7 @@ ActiveAdmin.register Teacher do
       column :slug_uk
       column :created_at
       column :updated_at
+      column :is_hidden
     end
 
     actions
@@ -51,6 +52,8 @@ ActiveAdmin.register Teacher do
       f.input :department, as: :select,
         collection: Department.where(university: current_admin_user.university)
                       .collect { |a| [ a.name, a.id ] }
+
+      f.input :is_hidden
     end
     f.actions
   end
@@ -70,6 +73,7 @@ ActiveAdmin.register Teacher do
         row :lowercase_name
         row :department
       end
+      row :is_hidden
     end
   end
 
