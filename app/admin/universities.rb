@@ -1,6 +1,6 @@
 ActiveAdmin.register University do
 
-  permit_params :short_name, :full_name, :url, :is_hidden, :is_beta, :website, :uid
+  permit_params :short_name, :full_name, :url, :is_hidden, :is_beta, :website, :uid, :description, :picture_white, :picture_dark 
 
   actions :index, :show, :edit, :update
 
