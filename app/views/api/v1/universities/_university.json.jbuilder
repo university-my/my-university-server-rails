@@ -1,1 +1,12 @@
-json.extract! university, :id, :full_name, :short_name, :url
+json.extract! university, 
+:id,
+:full_name,
+:short_name,
+:url,
+:is_hidden, 
+:is_beta,
+:picture_white,
+:picture_dark,
+:show_classrooms,
+:show_groups,
+:show_teachers
