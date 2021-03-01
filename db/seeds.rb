@@ -151,9 +151,9 @@ sumdu_buildings = [
   { name: "клМП", description: "" },
 ]
 sumdu_buildings.each do |item|
-  building = Building.find_by(university: sumdu, name: item[:name])
+  building = Building.find_by(university: University.sumdu, name: item[:name])
   building = Building.new unless building
-  building.university = sumdu
+  building.university = University.sumdu
   building.name = item[:name]
   building.description = item[:description]
   building.save
