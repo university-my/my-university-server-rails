@@ -131,6 +131,16 @@ if University.ldubgd.nil?
     )
 end
 
+if University.nung.nil?
+  University.create(
+    short_name: "ІФНТУНГ",
+    full_name: 'Івано-Франківський національний технічний університет нафти і газу',
+    url: "nung",
+    website: 'https://nung.edu.ua',
+    uid: 14
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
