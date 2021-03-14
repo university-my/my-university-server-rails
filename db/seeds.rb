@@ -111,6 +111,16 @@ if University.nuwm.nil?
     )
 end
 
+if University.ubs.nil?
+  University.create(
+    short_name: "УБС",
+    full_name: 'Університет банківської справи',
+    url: "ubs",
+    website: 'https://ubs.edu.ua',
+    uid: 12
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
