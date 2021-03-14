@@ -19,7 +19,12 @@ class University < ApplicationRecord
     { uid: 6, service: 'ZnauService'},
     { uid: 7, service: 'NuftService'},
     { uid: 8, service: 'SspuService'},
-    { uid: 9, service: 'GpnuService'}
+    { uid: 9, service: 'GpnuService'},
+    { uid: 10, service: 'LnuService'},
+    { uid: 11, service: 'NuwmService'},
+    { uid: 12, service: 'UbsService'},
+    { uid: 13, service: 'LdubgdService'},
+    { uid: 14, service: 'NungService'}
   ]
 end
 
@@ -69,6 +74,26 @@ end
 
   def self.gpnu
     University.find_by(uid: 9)
+  end
+
+  def self.lnu
+    University.find_by(uid: 10)
+  end
+
+  def self.nuwm
+    University.find_by(uid: 11)
+  end
+
+  def self.ubs
+    University.find_by(uid: 12)
+  end
+
+  def self.ldubgd
+    University.find_by(uid: 13)
+  end
+
+  def self.nung
+    University.find_by(uid: 14)
   end
 
 end
