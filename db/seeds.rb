@@ -91,6 +91,16 @@ if University.gpnu.nil?
     )
 end
 
+if University.lnu.nil?
+  University.create(
+    short_name: "ЛНУ",
+    full_name: 'Львівський національний університет імені Івана Франка',
+    url: "lnu",
+    website: 'https://lnu.edu.ua/',
+    uid: 10
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
