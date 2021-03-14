@@ -121,6 +121,16 @@ if University.ubs.nil?
     )
 end
 
+if University.ldubgd.nil?
+  University.create(
+    short_name: "ЛДУ БЖД",
+    full_name: 'Львівський державний університет безпеки життєдіяльності',
+    url: "ldubgd",
+    website: 'https://ldubgd.edu.ua',
+    uid: 13
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
