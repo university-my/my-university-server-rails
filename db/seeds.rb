@@ -91,6 +91,56 @@ if University.gpnu.nil?
     )
 end
 
+if University.lnu.nil?
+  University.create(
+    short_name: "ЛНУ",
+    full_name: 'Львівський національний університет імені Івана Франка',
+    url: "lnu",
+    website: 'https://lnu.edu.ua',
+    uid: 10
+    )
+end
+
+if University.nuwm.nil?
+  University.create(
+    short_name: "НУВГП",
+    full_name: 'Національний університет водного господарства та природокористування',
+    url: "nuwm",
+    website: 'https://nuwm.edu.ua',
+    uid: 11
+    )
+end
+
+if University.ubs.nil?
+  University.create(
+    short_name: "УБС",
+    full_name: 'Університет банківської справи',
+    url: "ubs",
+    website: 'https://ubs.edu.ua',
+    uid: 12
+    )
+end
+
+if University.ldubgd.nil?
+  University.create(
+    short_name: "ЛДУ БЖД",
+    full_name: 'Львівський державний університет безпеки життєдіяльності',
+    url: "ldubgd",
+    website: 'https://ldubgd.edu.ua',
+    uid: 13
+    )
+end
+
+if University.nung.nil?
+  University.create(
+    short_name: "ІФНТУНГ",
+    full_name: 'Івано-Франківський національний технічний університет нафти і газу',
+    url: "nung",
+    website: 'https://nung.edu.ua',
+    uid: 14
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
