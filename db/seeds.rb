@@ -96,8 +96,18 @@ if University.lnu.nil?
     short_name: "ЛНУ",
     full_name: 'Львівський національний університет імені Івана Франка',
     url: "lnu",
-    website: 'https://lnu.edu.ua/',
+    website: 'https://lnu.edu.ua',
     uid: 10
+    )
+end
+
+if University.nuwm.nil?
+  University.create(
+    short_name: "НУВГП",
+    full_name: 'Національний університет водного господарства та природокористування',
+    url: "nuwm",
+    website: 'https://nuwm.edu.ua',
+    uid: 11
     )
 end
 
