@@ -81,6 +81,54 @@ every 1.day, at: ['10:05 am', '10:05 pm'] do
   runner 'ZnauService.import_teachers'
 end
 
+# SSPU
+every 1.day, at: ['10:06 am', '10:06 pm'] do
+  runner 'SspuService.import_groups'
+end
+every 1.day, at: ['10:07 am', '10:07 pm'] do
+  runner 'SspuService.import_teachers'
+end
+
+# LNU
+every 1.day, at: ['10:08 am', '10:08 pm'] do
+  runner 'LnuService.import_groups'
+end
+every 1.day, at: ['10:09 am', '10:09 pm'] do
+  runner 'LnuService.import_teachers'
+end
+
+# NUWM
+every 1.day, at: ['10:10 am', '10:10 pm'] do
+  runner 'NuwmService.import_groups'
+end
+every 1.day, at: ['10:11 am', '10:11 pm'] do
+  runner 'NuwmService.import_teachers'
+end
+
+# UBS
+every 1.day, at: ['10:12 am', '10:12 pm'] do
+  runner 'UbsService.import_groups'
+end
+every 1.day, at: ['10:13 am', '10:13 pm'] do
+  runner 'UbsService.import_teachers'
+end
+
+# LDUBGD
+every 1.day, at: ['10:14 am', '10:14 pm'] do
+  runner 'LdubgdService.import_groups'
+end
+every 1.day, at: ['10:15 am', '10:15 pm'] do
+  runner 'LdubgdService.import_teachers'
+end
+
+# NUNG
+every 1.day, at: ['10:16 am', '10:16 pm'] do
+  runner 'NungService.import_groups'
+end
+every 1.day, at: ['10:17 am', '10:17 pm'] do
+  runner 'NungService.import_teachers'
+end
+
 # Sitemap refresh
 every 1.day, at: '12:00 pm' do
   rake 'sitemap:refresh'
