@@ -22,7 +22,10 @@ class TeachersController < ApplicationController
   # GET /teachers/1.json
   def show
     @university = University.find_by!(url: params[:university_url])
-    @teacher = @university.teachers.friendly.find(params[:id])
+    @teacher = @university.teachers
+    .where(is_hidden: false)
+    .friendly
+    .find(params[:id])
 
     # Date
     @pair_date = pair_date_string_from(params)
