@@ -58,6 +58,9 @@ Rails.application.routes.draw do
 
     # Specialities
     resources :specialities, only: [:index, :show], param: :id
+
+    # Disciplines
+    resources :disciplines, only: [:index, :show], param: :id
   end
 
   # API v1

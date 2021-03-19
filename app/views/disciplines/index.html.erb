@@ -1,0 +1,39 @@
+<% meta_tag :description, "Всі дисципліни #{@university.short_name}" %>
+<% meta_tag :keywords, "дисципліни, #{@university.short_name}" %>
+<% @title = "#{@university.short_name} - Дисципліни" %>
+<%= content_for(:canonical_link, university_disciplines_url(@university.url)) %>
+<% no_index %>
+
+<%= render "layouts/navbar" %>
+
+<main class="container" role="main">
+  <div class="mx-auto col-md-8">
+    <h1 class="my-4">Дисципліни</h1>
+
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <form method="get" id="search" class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Назва дисципліни" aria-label="Пошук" name="query" value="<%= @query %>">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Шукати</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <% @disciplines.each do |discipline| %>
+            <li class="list-group-item">
+              <span><%= link_to discipline.name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
+              <p><small><%= discipline.description %></small></p>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="mt-4"><%= will_paginate @disciplines, :page_links => false, renderer: WillPaginate::ActionView::BootstrapLinkRenderer, list_classes: %w(pagination justify-content-center) %></div>
+      </div>
+    </div>
+  </div>
+</main>
+<%= render "layouts/footer" %>

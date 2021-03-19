@@ -208,3 +208,53 @@ sumdu_buildings.each do |item|
   building.description = item[:description]
   building.save
 end
+
+# Add visible name
+Discipline.all.each do |discipline|
+  if discipline.visible_name == ""
+    discipline.visible_name = discipline.name.downcase
+    discipline.save
+  end
+end
+
+# Names of disciplines to improve
+impoved_names = [
+  { name: "Інвестиційна діяльність в банк", visible_name: "інвестиційна діяльність в банківській сфері" },
+  { name: "теор.нечіт.сист.прийняття ріш.", visible_name: "теорія нечітких систем прийняття рішень" },
+  { name: "психотерапія та соціотерапія в", visible_name: "психотерапія та соціотерапія" },
+  { name: "осн.проект.інтел.систем - КР", visible_name: "основи проектування інтелектуальних систем - курсова робота" },
+  { name: "наук.осн.виб.мат.і прогр.зміцн", visible_name: "наукова основа вибіркової математики і програмного зміцнення" },
+  { name: "внутрішньогосп К", visible_name: "внутрішньогосп" },
+  { name: "Чисельні мет.в мех.", visible_name: "чисельні методи в механіці" },
+  { name: "Цифрові автомат.", visible_name: "цифрові автоматати" },
+  { name: "Хірургічна стомат.", visible_name: "хірургічна стоматологія" },
+  { name: "Хірург. хв. з дидяч. хірург.", visible_name: "хірургічні хвороби з дитячої хірургії" },
+  { name: "Фінанс. менеджм.", visible_name: "фінансовий менеджмент" },
+  { name: "Фін.діял.суб'єктів підприємн.", visible_name: "фінансова діяльність суб'єктів підприємництва" },
+  { name: "Фін. контролінг", visible_name: "фінансовий контролінг" },
+  { name: "Фін. діяльність суб. господар.", visible_name: "фінансова діяльність суб. господарств" },
+  { name: "Фін. глобалізація", visible_name: "фінансова глобалізація" },
+  { name: "Фізична реабіл., спорт. мед", visible_name: "фізична реабілітація, спортивна медицина" },
+  { name: "Фізика елек. процесів", visible_name: "фізика електричних процесів" },
+  { name: "Фіз. складних сит.", visible_name: "фізика складних систем" },
+  { name: "Фіз. люд.", visible_name: "фізіологія людини" },
+  { name: "Функ. програм.", visible_name: "функіональне програмування" },
+  { name: "Функц. електроніка", visible_name: "функціональна електроніка" },
+  { name: "", visible_name: "" },
+]
+
+Discipline.all.each do |discipline|
+
+  impoved_names.each do |impoved_name|
+
+    if discipline.name == impoved_name[:name]
+
+      discipline.visible_name = impoved_name[:visible_name]
+      discipline.save
+
+      p ''
+      p "#{discipline.name} -> #{discipline.visible_name}"
+
+    end
+  end
+end

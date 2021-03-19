@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_131145) do
+ActiveRecord::Schema.define(version: 2021_03_19_122640) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -85,6 +85,13 @@ ActiveRecord::Schema.define(version: 2021_02_17_131145) do
     t.string "name"
     t.string "description"
     t.integer "university_id"
+    t.string "visible_name", default: ""
+    t.string "slug"
+    t.string "slug_en"
+    t.string "slug_uk"
+    t.index ["slug"], name: "index_disciplines_on_slug"
+    t.index ["slug_en"], name: "index_disciplines_on_slug_en"
+    t.index ["slug_uk"], name: "index_disciplines_on_slug_uk"
     t.index ["university_id"], name: "index_disciplines_on_university_id"
   end
 

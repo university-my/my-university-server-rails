@@ -12,7 +12,10 @@
 				<% if record.discipline.present? || record.kind.present? %>
 				<div class="card-body">
 					<% if record.discipline.present? %>
-					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.name %></span></h5>
+					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.visible_name %></span></h5>
+
+					
+
 					<% end %>
 
 					<% if record.kind.present? %>
