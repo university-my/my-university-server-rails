@@ -12,10 +12,9 @@
 				<% if record.discipline.present? || record.kind.present? %>
 				<div class="card-body">
 					<% if record.discipline.present? %>
-					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.visible_name %></span></h5>
-
-					
-
+					<%= link_to university_discipline_url(university.url, record.discipline.friendly_id), rel: 'nofollow' do %>
+					<h5><%= record.discipline.name %></h5>
+					<% end %>
 					<% end %>
 
 					<% if record.kind.present? %>
@@ -71,7 +70,5 @@
 		</div>
 	</div>
 	<% end %>
-
-	<%= render "ad/first_ad" %>
 
 </div>

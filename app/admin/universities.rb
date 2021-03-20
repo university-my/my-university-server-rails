@@ -12,7 +12,8 @@ ActiveAdmin.register University do
   :picture_dark,
   :show_classrooms,
   :show_groups,
-  :show_teachers
+  :show_teachers,
+  :show_disciplines
 
   actions :index, :show, :edit, :update
 
