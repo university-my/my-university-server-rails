@@ -1,6 +1,6 @@
-<% meta_tag :description, "#{@university.short_name}, #{@discipline.name}" %>
-<% meta_tag :keywords, "#{@university.short_name}, #{@discipline.name}" %>
-<% @title = "#{@university.short_name} - #{@discipline.name}" %>
+<% meta_tag :description, "#{@university.short_name}, #{@discipline.visible_name}" %>
+<% meta_tag :keywords, "#{@university.short_name}, #{@discipline.visible_name}" %>
+<% @title = "#{@university.short_name} - #{@discipline.visible_name}" %>
 <%= content_for(:canonical_link, university_discipline_url(@university.url, @discipline)) %>
 <% no_index %>
 
@@ -10,11 +10,12 @@
   <div class="mx-auto col-md-8">
     <div class="my-4">
       <h3><span class="text-warning">(бета-версія)*</span></h3>
-      <h1><%= @discipline.name %></h1>
+      <h1><%= @discipline.visible_name %></h1>
 
       <span class="text-muted">(дисципліна)</span>
     </div>
 
+    <% if @discipline.teachers && @discipline.teachers.count > 0 %>
     <div class="row">
       <div class="col mb-4 mr-0 ml-0">
         <div class="card">
@@ -33,7 +34,9 @@
         </div>
       </div>
     </div>
+    <% end %>
 
+    <% if @discipline.groups && @discipline.groups.count > 0 %>
     <div class="row">
       <div class="col mb-4 mr-0 ml-0">
         <div class="card">
@@ -52,7 +55,9 @@
         </div>
       </div>
     </div>
+    <% end %>
 
+    <% if @discipline.auditoriums && @discipline.auditoriums.count > 0 %>
     <div class="row">
       <div class="col mb-4 mr-0 ml-0">
         <div class="card">
@@ -69,6 +74,15 @@
             <% end %>
           </ul>
         </div>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col">
+        <p class="text-muted font-italic">
+          Дані про викладачів, групи та аудиторії збираються автоматично, та можуть доповнюватися або змінюватися з часом.
+        </p>
       </div>
     </div>
 

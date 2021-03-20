@@ -25,7 +25,7 @@
           <ul class="list-group list-group-flush">
             <% @disciplines.each do |discipline| %>
             <li class="list-group-item">
-              <span><%= link_to discipline.name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
+              <span><%= link_to discipline.visible_name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
               <p><small><%= discipline.description %></small></p>
             </li>
             <% end %>

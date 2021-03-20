@@ -13,7 +13,7 @@
 				<div class="card-body">
 					<% if record.discipline.present? %>
 					<%= link_to university_discipline_url(university.url, record.discipline.friendly_id), rel: 'nofollow' do %>
-					<h5><%= record.discipline.name %></h5>
+					<h5><%= record.discipline.visible_name %></h5>
 					<% end %>
 					<% end %>
 
