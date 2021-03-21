@@ -4,12 +4,14 @@ ActiveAdmin.register Discipline do
 
   # Filterable attributes on the index screen
   filter :name
+  filter :visible_name
   filter :university, if: proc { current_admin_user.is_admin? }
   filter :slug_uk, if: proc { current_admin_user.is_admin? }
 
   # Index
   index do
     column :name
+    column :visible_name
 
     # University
     if current_admin_user.is_admin?
@@ -34,6 +36,7 @@ ActiveAdmin.register Discipline do
   form do |f|
     f.inputs do
       f.input :name
+      column :visible_name
 
       # University
       if current_admin_user.is_admin?
@@ -49,6 +52,7 @@ ActiveAdmin.register Discipline do
   show do
     attributes_table do
       row :name
+      row :visible_name
       row :university
       row :created_at
       row :updated_at

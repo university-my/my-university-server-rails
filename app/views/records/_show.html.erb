@@ -6,13 +6,15 @@
 		<div class="col mb-4 mr-0 ml-0">
 			<div class="card">
 				<div class="card-header">
-					<span data-toggle="tooltip" title="<%= l record.pair_start_date, format: "%A, %e %B %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
+					<span data-toggle="tooltip" title="<%= l record.pair_start_date, format: "%A, %e %b %Y" %>"><%= record.pair_name %> (<%= record.time %>)</span>
 				</div>
 
 				<% if record.discipline.present? || record.kind.present? %>
 				<div class="card-body">
 					<% if record.discipline.present? %>
-					<h5 class="card-title"><span data-toggle="tooltip" title="Назва пари"><%= record.discipline.name %></span></h5>
+					<%= link_to university_discipline_url(university.url, record.discipline.friendly_id), rel: 'nofollow' do %>
+					<h5><%= record.discipline.visible_name %></h5>
+					<% end %>
 					<% end %>
 
 					<% if record.kind.present? %>
@@ -68,7 +70,5 @@
 		</div>
 	</div>
 	<% end %>
-
-	<%= render "ad/first_ad" %>
 
 </div>

@@ -54,7 +54,18 @@ class AuditoriumsController < ApplicationController
                      .order(:pair_name)
 
     if @records.blank?
-      render partial: 'records/empty'
+
+      # Try to find records on the next days
+      next_records = Record.where(university: @university)
+      .where(auditorium: @auditorium)
+      .where("pair_start_date >= :date", date: pair_date.tomorrow.beginning_of_day)
+      .order(:pair_start_date)
+      .order(:pair_name)
+      .limit(1)
+      
+      render partial: 'records/empty', locals: {
+        next_records: next_records
+      }
     else
       render partial: 'records/show', locals: {
         records: @records,

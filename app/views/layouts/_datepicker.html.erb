@@ -1,6 +1,6 @@
 <div class="mx-auto col-md-8 mt-4">
 	<div class="mb-4">
-		<h4><span class="font-weight-bold"><%= l @date, format: "%A, %e %B %Y" %></span></h4>
+		<h4><span class="font-weight-bold"><%= l @date, format: "%A, %e %b %Y" %></span></h4>
 		<% if @university.url == 'kpi' %>
 		<span>Тиждень <%= KpiService.week_for_selected_date(@date) %></span>
 		<% end %>
