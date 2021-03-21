@@ -28,8 +28,7 @@
 				<p>Підписуйтеся на <b>Мій Університет</b> в <a target="_blank" href="https://www.instagram.com/university.my/">Instagram</a> та <a target="_blank" href="https://t.me/university_my">Telegram</a></p>
 				<p>Або читайте нас на <a target="_blank" href="https://www.facebook.com/myuniversityservice">Facebook</a> та <a target="_blank" href="https://twitter.com/my_university1">Twitter</a></p>
 
-				<%
-				images = [
+				<% images = [
 					"4 Multitasking.png",
 					"6 Working at desk.png",
 					"1 Working remotely.png",
@@ -37,8 +36,7 @@
 					"8 Work and life balance.png",
 					"13 Walking the dog.png"
 				]
-				@randomImage = images.sample
-				%>
+				@randomImage = images.sample %>
 				<%= image_tag(@randomImage, class: "img-fluid", size: "250x250") %>
 			</div>
 		</div>
