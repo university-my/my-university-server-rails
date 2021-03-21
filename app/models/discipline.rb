@@ -57,6 +57,7 @@ class Discipline < ApplicationRecord
       # Save new
       discipline = Discipline.new
       discipline.name = name
+      discipline.visible_name = name.downcase
       discipline.university = university
 
       # Auditorium, Groups, Teacher

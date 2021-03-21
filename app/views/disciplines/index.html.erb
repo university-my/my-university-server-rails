@@ -8,12 +8,12 @@
 
 <main class="container" role="main">
   <div class="mx-auto col-md-8">
-    <h1 class="my-4">Дисципліни</h1>
-
+    <h1 class="mt-4">Дисципліни</h1>
+    <h3><span class="text-warning">(бета-версія)*</span></h3>
     <div class="row">
       <div class="col mb-4 mr-0 ml-0">
         <form method="get" id="search" class="form-inline mt-2 mt-md-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Назва дисципліни" aria-label="Пошук" name="query" value="<%= @query %>">
+          <input class="form-control mr-sm-2" type="text" placeholder="Назва" aria-label="Пошук" name="query" value="<%= @query %>">
           <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Шукати</button>
         </form>
       </div>
@@ -25,7 +25,7 @@
           <ul class="list-group list-group-flush">
             <% @disciplines.each do |discipline| %>
             <li class="list-group-item">
-              <span><%= link_to discipline.name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
+              <span><%= link_to discipline.visible_name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
               <p><small><%= discipline.description %></small></p>
             </li>
             <% end %>
@@ -34,6 +34,9 @@
         <div class="mt-4"><%= will_paginate @disciplines, :page_links => false, renderer: WillPaginate::ActionView::BootstrapLinkRenderer, list_classes: %w(pagination justify-content-center) %></div>
       </div>
     </div>
+
+    <%= render "layouts/beta" %>
+    
   </div>
 </main>
 <%= render "layouts/footer" %>

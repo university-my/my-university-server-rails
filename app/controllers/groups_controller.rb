@@ -5,15 +5,15 @@ class GroupsController < ApplicationController
     @university = University.find_by!(url: params[:university_url])
     @query = params['query']
     @groups = if @query.present?
-                @university.groups
-                           .where(is_hidden: false)
-                           .where('lowercase_name LIKE ?', "%#{@query.downcase}%")
-                           .paginate(page: params[:page], per_page: 6)
-              else
-                @university.groups
-                           .where(is_hidden: false)
-                           .paginate(page: params[:page], per_page: 6)
-              end
+      @university.groups
+      .where(is_hidden: false)
+      .where('lowercase_name LIKE ?', "%#{@query.downcase}%")
+      .paginate(page: params[:page], per_page: 6)
+    else
+      @university.groups
+      .where(is_hidden: false)
+      .paginate(page: params[:page], per_page: 6)
+    end
   end
 
   # GET /groups/1
@@ -51,7 +51,11 @@ class GroupsController < ApplicationController
     @records = RecordsHelper.fetch_records(@university, @group, pair_date)
 
     if @records.blank?
-      render partial: 'records/empty'
+      # Try to find records on the next days
+      next_records = RecordsHelper.next_records(@university, @group, pair_date)
+      render partial: 'records/empty', locals: {
+        next_records: next_records
+      }
     else
       render partial: 'records/show', locals: {
         records: @records,

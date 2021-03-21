@@ -1,0 +1,93 @@
+<% meta_tag :description, "#{@university.short_name}, #{@discipline.visible_name}" %>
+<% meta_tag :keywords, "#{@university.short_name}, #{@discipline.visible_name}" %>
+<% @title = "#{@university.short_name} - #{@discipline.visible_name}" %>
+<%= content_for(:canonical_link, university_discipline_url(@university.url, @discipline)) %>
+<% no_index %>
+
+<%= render "layouts/navbar", university: @university %>
+
+<main class="container" role="main">
+  <div class="mx-auto col-md-8">
+    <div class="my-4">
+      <h3><span class="text-warning">(бета-версія)*</span></h3>
+      <h1><%= @discipline.visible_name %></h1>
+
+      <span class="text-muted">(дисципліна)</span>
+    </div>
+
+    <% if @discipline.teachers && @discipline.teachers.count > 0 %>
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-briefcase"></i>
+            <span class="ml-2">Викладачі</span>
+            <span class="text-muted">(які викладають цю дисципліну)</span>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% @discipline.teachers.each do |teacher| %>
+            <li class="list-group-item">
+              <%= link_to teacher.name, university_teacher_url(@university.url, teacher.friendly_id) %>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <% if @discipline.groups && @discipline.groups.count > 0 %>
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-users align-middle"></i>
+            <span class="ml-2">Групи</span>
+            <span class="text-muted">(в яких викладається ця дисципліна)</span>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% @discipline.groups.each do |group| %>
+            <li class="list-group-item">
+              <%= link_to group.name, university_group_url(@university.url, group.friendly_id) %>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <% if @discipline.auditoriums && @discipline.auditoriums.count > 0 %>
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-door-open"></i>
+            <span class="ml-2">Аудиторії</span>
+            <span class="text-muted">(в яких викладається ця дисципліна)</span>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% @discipline.auditoriums.each do |auditorium| %>
+            <li class="list-group-item">
+              <%= link_to auditorium.name, university_auditorium_url(@university.url, auditorium.friendly_id) %>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col">
+        <p class="text-muted font-italic">
+          Дані про викладачів, групи та аудиторії збираються автоматично, та можуть доповнюватися або змінюватися з часом.
+        </p>
+      </div>
+    </div>
+
+    <%= render "layouts/beta" %>
+
+  </div>
+</main>
+<%= render "layouts/footer" %>
