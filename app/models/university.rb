@@ -8,6 +8,7 @@ class University < ApplicationRecord
   has_many :departments
   has_many :faculties
   has_many :specialities
+  has_many :disciplines
 
   def self.all_universities
    [

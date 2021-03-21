@@ -1,19 +1,43 @@
-<p>
-	<div class="px-3 py-3 mx-auto text-center">
-		<h2 class="h1-responsive font-weight-bold text-center my-5">Пар немає</h2>
-		<p>Підписуйтеся на <b>Мій Університет</b> в <a target="_blank" href="https://www.instagram.com/university.my/">Instagram</a> та <a target="_blank" href="https://t.me/university_my">Telegram</a></p>
-		<p>Або читайте нас на <a target="_blank" href="https://www.facebook.com/myuniversityservice">Facebook</a> та <a target="_blank" href="https://twitter.com/my_university1">Twitter</a></p>
-		<%
-			images = [
-				"4 Multitasking.png",
-				"6 Working at desk.png",
-				"1 Working remotely.png",
-				"7 Social Media.png",
-				"8 Work and life balance.png",
-				"13 Walking the dog.png"
-			]
-			@randomImage = images.sample
-		  %>
-		<%= image_tag(@randomImage, class: "img-fluid") %>
+<div class="px-3 py-3 mx-auto text-center col-md-6">
+
+	<div class="row mb-4">
+		<div class="col">
+			<h5>Схоже, що на сьогодні <span class="font-weight-bold">пар немає</span></h5>
+		</div>
 	</div>
-</p>
+
+	<% if defined?(next_records) && next_records.count > 0 %>
+	<div class="row mb-4">
+		<div class="col">
+			<div class="alert alert-secondary" role="alert">
+				<p><span class="font-weight-light">Знайдено розклад на іншу дату:</span>
+					<span class="font-weight-bold"><%= l next_records.first.pair_start_date, format: "%A, %e %b %Y" %></span></p>
+					<div class="btn-group mr-3 mb-2" role="group">
+						<form action="" method="get">
+							<input type="hidden" id="start" name="pair_date" value="<%= next_records.first.pair_start_date %>">
+							<input type="submit" class="btn btn-primary" value="Дивитися">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<% end %>
+
+		<div class="row">
+			<div class="col">
+				<p>Підписуйтеся на <b>Мій Університет</b> в <a target="_blank" href="https://www.instagram.com/university.my/">Instagram</a> та <a target="_blank" href="https://t.me/university_my">Telegram</a></p>
+				<p>Або читайте нас на <a target="_blank" href="https://www.facebook.com/myuniversityservice">Facebook</a> та <a target="_blank" href="https://twitter.com/my_university1">Twitter</a></p>
+
+				<% images = [
+					"4 Multitasking.png",
+					"6 Working at desk.png",
+					"1 Working remotely.png",
+					"7 Social Media.png",
+					"8 Work and life balance.png",
+					"13 Walking the dog.png"
+				]
+				@randomImage = images.sample %>
+				<%= image_tag(@randomImage, class: "img-fluid", size: "250x250") %>
+			</div>
+		</div>
+	</div>

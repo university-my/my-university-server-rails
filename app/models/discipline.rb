@@ -1,5 +1,17 @@
 class Discipline < ApplicationRecord
 
+  extend FriendlyId
+  friendly_id :slug_candidates, :use => [:slugged, :simple_i18n]
+
+  # Try building a slug based on the following fields in
+  # increasing order of specificity.
+  def slug_candidates
+    [
+      :name,
+      [:name, :id]
+    ]
+  end
+
   # Associations
   belongs_to :university, optional: true
   has_and_belongs_to_many :auditoriums, optional: true
@@ -45,6 +57,7 @@ class Discipline < ApplicationRecord
       # Save new
       discipline = Discipline.new
       discipline.name = name
+      discipline.visible_name = name.downcase
       discipline.university = university
 
       # Auditorium, Groups, Teacher

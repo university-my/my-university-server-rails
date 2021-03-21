@@ -10,21 +10,29 @@
 		<ul class="navbar-nav mr-auto">
 
 			<% if @university.show_classrooms %>
-				<li class="nav-item">
-				<%= link_to 'Аудиторії', university_auditoriums_url, class: "nav-link" %>
+			<li class="nav-item">
+				<%= link_to 'Аудиторії', university_auditoriums_url, rel: 'nofollow', class: "nav-link" %>
 			</li>	
 			<% end %>
 
 			<% if @university.show_teachers %>
-				<li class="nav-item">
-				<%= link_to 'Викладачі', university_teachers_url, class: "nav-link" %>
+			<li class="nav-item">
+				<%= link_to 'Викладачі', university_teachers_url, rel: 'nofollow', class: "nav-link" %>
 			</li>	
 			<% end %>
 
 			<% if @university.show_groups %>
-				<li class="nav-item">
-				<%= link_to 'Групи', university_groups_url, class: "nav-link" %>
-			</li>	
+			<li class="nav-item">
+				<%= link_to 'Групи', university_groups_url, rel: 'nofollow', class: "nav-link" %>
+			</li>
+			<% end %>
+
+			<% if @university.show_disciplines %>
+			<li class="nav-item">
+				<%= link_to university_disciplines_url, rel: 'nofollow', class: "nav-link" do %>
+				<span>Дисципліни</span><span class="text-warning"> (бета)</span>
+				<% end %>
+			</li>
 			<% end %>
 			
 		</ul>
@@ -32,13 +40,13 @@
 			<% if @university.uid == University.khnue.uid %>
 			<div class="row"><div class="col"><hr></div></div>
 			<li class="nav-item">
-				<%= link_to 'Кафедри', university_departments_url, class: "nav-link" %>
+				<%= link_to 'Кафедри', university_departments_url, rel: 'nofollow', class: "nav-link" %>
 			</li>
 			<li class="nav-item">
-				<%= link_to 'Факультети', university_faculties_url, class: "nav-link" %>
+				<%= link_to 'Факультети', university_faculties_url, rel: 'nofollow', class: "nav-link" %>
 			</li>
 			<li class="nav-item">
-				<%= link_to 'Спеціальності', university_specialities_url, class: "nav-link" %>
+				<%= link_to 'Спеціальності', university_specialities_url, rel: 'nofollow', class: "nav-link" %>
 			</li>
 			<% end %>
 		</ul>

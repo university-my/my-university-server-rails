@@ -6,6 +6,7 @@ json.pair_name record.pair_name
 json.reason record.reason
 json.kind record.kind
 json.time record.time
+json.discipline record.discipline
 
 if record.auditorium.present?
 	json.auditorium do
