@@ -1,6 +1,6 @@
 ActiveAdmin.register Discipline do
 
-  permit_params :name, :university_id
+  permit_params :name, :university_id, :visible_name
 
   # Filterable attributes on the index screen
   filter :name
@@ -36,7 +36,7 @@ ActiveAdmin.register Discipline do
   form do |f|
     f.inputs do
       f.input :name
-      column :visible_name
+      f.input :visible_name
 
       # University
       if current_admin_user.is_admin?

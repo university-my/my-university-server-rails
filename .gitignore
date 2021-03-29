@@ -39,3 +39,4 @@ sitemap.xml.gz
 
 # RubyMine
 .idea/*
+exported_disciplines.json
