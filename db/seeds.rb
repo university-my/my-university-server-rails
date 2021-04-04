@@ -153,6 +153,16 @@ if University.npu.nil?
     )
 end
 
+if University.ktepc_knute.nil?
+  University.create(
+    short_name: "ТЕК КНТЕУ",
+    full_name: 'ВСП `Київський торговельно-економічний фаховий коледж КНТЕУ`',
+    url: "ktepc_knute",
+    website: 'https://ktepcknute.kyiv.ua',
+    uid: 17
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
