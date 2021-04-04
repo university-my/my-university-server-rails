@@ -143,6 +143,16 @@ if University.nung.nil?
     )
 end
 
+if University.vnu.nil?
+  University.create(
+    short_name: "ВНУ",
+    full_name: 'Волинський національний університет імені Лесі Українки',
+    url: "vnu",
+    website: 'https://vnu.edu.ua/uk',
+    uid: 15
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
