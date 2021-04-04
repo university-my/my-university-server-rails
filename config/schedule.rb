@@ -129,6 +129,14 @@ every 1.day, at: ['10:17 am', '10:17 pm'] do
   runner 'NungService.import_teachers'
 end
 
+# NPU
+every 1.day, at: ['10:20 am', '10:20 pm'] do
+  runner 'NpuService.import_groups'
+end
+every 1.day, at: ['10:21 am', '10:21 pm'] do
+  runner 'NpuService.import_teachers'
+end
+
 # Sitemap refresh
 every 1.day, at: '12:00 pm' do
   rake 'sitemap:refresh'

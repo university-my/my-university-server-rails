@@ -143,6 +143,16 @@ if University.nung.nil?
     )
 end
 
+if University.npu.nil?
+  University.create(
+    short_name: "НПУ",
+    full_name: 'Національний педагогічний університет імені М.П. Драгоманова',
+    url: "npu",
+    website: 'https://npu.edu.ua',
+    uid: 16
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
