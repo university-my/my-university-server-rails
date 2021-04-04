@@ -173,6 +173,16 @@ if University.ugi.nil?
     )
 end
 
+if University.kneu.nil?
+  University.create(
+    short_name: "КНЕУ",
+    full_name: 'ДВНЗ `Київський національний економічний університет імені Вадима Гетьмана`',
+    url: "kneu",
+    website: 'https://kneu.edu.ua',
+    uid: 19
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
