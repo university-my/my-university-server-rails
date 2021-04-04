@@ -163,6 +163,16 @@ if University.ktepc_knute.nil?
     )
 end
 
+if University.ugi.nil?
+  University.create(
+    short_name: "УГІ",
+    full_name: 'Український гуманітарний інститут',
+    url: "ugi",
+    website: 'https://ugi.edu.ua',
+    uid: 18
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },
