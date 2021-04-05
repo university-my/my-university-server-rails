@@ -143,6 +143,46 @@ if University.nung.nil?
     )
 end
 
+if University.npu.nil?
+  University.create(
+    short_name: "НПУ",
+    full_name: 'Національний педагогічний університет імені М.П. Драгоманова',
+    url: "npu",
+    website: 'https://npu.edu.ua',
+    uid: 16
+    )
+end
+
+if University.ktepc_knute.nil?
+  University.create(
+    short_name: "ТЕК КНТЕУ",
+    full_name: 'ВСП `Київський торговельно-економічний фаховий коледж КНТЕУ`',
+    url: "ktepc_knute",
+    website: 'https://ktepcknute.kyiv.ua',
+    uid: 17
+    )
+end
+
+if University.ugi.nil?
+  University.create(
+    short_name: "УГІ",
+    full_name: 'Український гуманітарний інститут',
+    url: "ugi",
+    website: 'https://ugi.edu.ua',
+    uid: 18
+    )
+end
+
+if University.kneu.nil?
+  University.create(
+    short_name: "КНЕУ",
+    full_name: 'ДВНЗ `Київський національний економічний університет імені Вадима Гетьмана`',
+    url: "kneu",
+    website: 'https://kneu.edu.ua',
+    uid: 19
+    )
+end
+
 # Buildings for SumDU
 sumdu_buildings = [
   { name: "АК", description: "" },

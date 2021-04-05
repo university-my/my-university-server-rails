@@ -25,7 +25,11 @@ class University < ApplicationRecord
     { uid: 11, service: 'NuwmService'},
     { uid: 12, service: 'UbsService'},
     { uid: 13, service: 'LdubgdService'},
-    { uid: 14, service: 'NungService'}
+    { uid: 14, service: 'NungService'},
+    { uid: 16, service: 'NpuService'},
+    { uid: 17, service: 'KtepcKnuteService'},
+    { uid: 18, service: 'UgiService'},
+    { uid: 19, service: 'KneuService'}
   ]
 end
 
@@ -95,6 +99,22 @@ end
 
   def self.nung
     University.find_by(uid: 14)
+  end
+
+  def self.npu
+    University.find_by(uid: 16)
+  end
+
+  def self.ktepc_knute
+    University.find_by(uid: 17)
+  end
+
+  def self.ugi
+    University.find_by(uid: 18)
+  end
+
+  def self.kneu
+    University.find_by(uid: 19)
   end
 
 end

@@ -2,28 +2,28 @@ require 'net/http'
 require 'json'
 require "uri"
 
-class NuftService
+class NpuService
 
   def self.timetable_url
-    'https://nmu.nuft.edu.ua/cgi-bin/timetable.cgi'
+    'http://nmu.npu.edu.ua/cgi-bin/timetable.cgi'
   end
 
   def self.server_id
-    103
+    112
   end
 
   def self.university
-    University.nuft
+    University.npu
   end
 
-  # bin/rails runner 'NuftService.import_groups'
+  # rails runner 'NpuService.import_groups'
   def self.import_groups
     groups = PolitekService.load_objects('groups', self.timetable_url)
 
     PolitekService.save_groups(groups, self.university, self.server_id)
   end
 
-  # bin/rails runner 'NuftService.import_teachers'
+  # rails runner 'NpuService.import_teachers'
   def self.import_teachers
     teachers = PolitekService.load_objects('teachers', self.timetable_url)
 
