@@ -129,6 +129,38 @@ every 1.day, at: ['10:17 am', '10:17 pm'] do
   runner 'NungService.import_teachers'
 end
 
+# NPU
+every 1.day, at: ['10:20 am', '10:20 pm'] do
+  runner 'NpuService.import_groups'
+end
+every 1.day, at: ['10:21 am', '10:21 pm'] do
+  runner 'NpuService.import_teachers'
+end
+
+# KTEPC KNUTE
+every 1.day, at: ['10:22 am', '10:22 pm'] do
+  runner 'KtepcKnuteService.import_groups'
+end
+every 1.day, at: ['10:23 am', '10:23 pm'] do
+  runner 'KtepcKnuteService.import_teachers'
+end
+
+# UGI
+every 1.day, at: ['10:24 am', '10:24 pm'] do
+  runner 'UgiService.import_groups'
+end
+every 1.day, at: ['10:25 am', '10:25 pm'] do
+  runner 'UgiService.import_teachers'
+end
+
+# KNEU
+every 1.day, at: ['10:26 am', '10:26 pm'] do
+  runner 'KneuService.import_groups'
+end
+every 1.day, at: ['10:27 am', '10:27 pm'] do
+  runner 'KneuService.import_teachers'
+end
+
 # Sitemap refresh
 every 1.day, at: '12:00 pm' do
   rake 'sitemap:refresh'
