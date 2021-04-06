@@ -13,32 +13,38 @@
   </div>
 
   <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
-    <% @universities.each do |university| %>
-    <div class="col my-2">
-      <div class="card h-100">
-        <div class="card-header">
-          <div class="media">
-            <%= render "universities/university_picture", university: university %>
-            <div class="media-body">
-              <h1 display-3 class="mt-0">
-                <%= link_to(university_url(url: university.url), class: "mt-0") do %>
-                <%= university.short_name %>
-                <% end %>
-              </h1>
+
+    <div class="container py-4">
+    <div class="card-deck-wrapper">
+        <div class="card-deck">
+          <% @universities.each do |university| %>
+            <div class="card">
+
+              <div class="card-header">
+                <div class="media">
+                  <%= render "universities/university_picture", university: university %>
+                  <div class="media-body">
+                  <h2 class="mt-0"><%= university.short_name %></h2>
+                  </div>
+                </div>
+              </div>
+
+                <a class="card-block stretched-link text-decoration-none" href="<%= university_url(url: university.url)%>">
+                <div class="card-body">
+                  <p class="card-text text-muted"><%= university.full_name %></p>
+                </div>
+                </a>
+
             </div>
+            <% end %>
           </div>
-        </div>
-        <div class="card-body">
-          <p class="card-text"><%= university.full_name %></p>
         </div>
       </div>
     </div>
-    <% end %>
-  </div>
 
   <div class="row mb-3">
     <div class="col">
-      <%= link_to 'Всі університети »', universities_url, class: "btn btn-primary btn-lg float-right"%>
+      <a class="btn btn-primary btn-lg float-right" href="/universities/list">Всі університети »</a>
     </div>
   </div>
 

@@ -1,0 +1,102 @@
+<% meta_tag :description, "Список всіх університетів" %>
+<% meta_tag :keywords, "Мій Університет,Розклад,Університети" %>
+<% @title = "Мій Університет - Список всіх університетів" %>
+<% no_index %>
+
+<%= render "layouts/header" %>
+
+<main class="container" role="main">
+  <div class="mx-auto col-md-8">
+    <h1 class="mb-4">Університети</h1>
+
+    <% @universities.each do |university| %>
+    <div class="row mb-3">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <div class="media">
+              <%= render "universities/university_picture", university: university %>
+              <div class="media-body">
+                <h5 class="mt-0"><%= university.full_name %></h1>
+                  <h6 class="card-subtitle mb-2 Text-light font-weight-light"><%= university.short_name %></h6>
+                  <% if university.is_beta %><p><span class="text-warning"> (бета-версія)</span></p><% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="card-text">
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                      <% if university.show_groups %>
+                      <li class="list-group-item border-0">
+                        <i class="fas fa-users align-middle"></i>
+                        <span class="align-middle"><%= link_to 'Групи', university_groups_url(university.url), class: "align-middle ml-2" %></span>
+                      </li>
+                      <% end %>
+
+                      <% if university.show_teachers %>
+                      <li class="list-group-item border-0">
+                        <i class="fas fa-briefcase align-middle"></i>
+                        <%= link_to 'Викладачі', university_teachers_url(university.url), class: "align-middle ml-2" %>
+                      </li>
+                      <% end %>
+                    </ul>
+                  </div>
+
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+
+                      <% if university.show_classrooms %>
+                      <li class="list-group-item border-0">
+                        <i class="fas fa-door-open align-middle"></i>
+                        <%= link_to 'Аудиторії', university_auditoriums_url(university.url), class: "align-middle ml-2" %>
+                      </li>
+                      <% end %>
+
+                      <% if university.show_disciplines %>
+                      <li class="list-group-item border-0">
+                        <i class="fas fa-pen"></i>
+                        <%= link_to university_disciplines_url(university.url), rel: 'nofollow', class: "align-middle ml-2" do %>
+                        <span>Дисципліни</span><span class="text-warning"> (бета)</span>
+                        <% end %>
+                      </li>
+                      <% end %>
+                    </ul>  
+                  </div>
+                </div>
+
+                <% if university.uid == University.khnue.uid %>
+                <div class="row"><div class="col"><hr></div></div>
+                <div class="row">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0">
+                      <span class="align-middle"><%= link_to 'Кафедри', university_departments_url(university.url), class: "align-middle ml-2" %></span>
+                    </li>
+                    <li class="list-group-item border-0">
+                      <span class="align-middle"><%= link_to 'Факультети', university_faculties_url(university.url), class: "align-middle ml-2" %></span>
+                    </li>
+                    <li class="list-group-item border-0">
+                      <span class="align-middle"><%= link_to 'Спеціальності', university_specialities_url(university.url), class: "align-middle ml-2" %></span>
+                    </li>
+                  </ul>
+                </div>
+                <% end %>
+
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <p class="text-muted font-weight-lighter"><small><%= university.description %></small></p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <% end %>
+
+    </div>
+  </main>
+  <%= render "layouts/footer" %>

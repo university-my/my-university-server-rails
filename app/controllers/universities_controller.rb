@@ -22,4 +22,8 @@ class UniversitiesController < ApplicationController
   def show
     @university = University.find_by!(url: params[:url])
   end
+
+  def list
+    @universities = University.where(is_hidden: false).all
+  end
 end
