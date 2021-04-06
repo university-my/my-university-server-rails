@@ -5,7 +5,7 @@ class UniversitiesController < ApplicationController
   def index
     @short_names = University.short_names_array.join(',')
 
-    per_page = 3
+    per_page = 4
     @query = params["query"]
     if @query.present?
       @universities = University.where(is_hidden: false)
