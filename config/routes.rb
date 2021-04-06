@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   get "/video-presentation", to: "pages#video_presentation"
   get "/ads", to: "pages#ads"
 
+  # All universities on single page
+  get "universities/list", to: "universities#list"
+
   resources :universities, only: [:index, :show], param: :url do
 
     # Teachers
