@@ -14,9 +14,22 @@
 <p id="notice"><%= notice %></p>
 
 <main class="container" role="main">
-	<div class="mb-3">
-		<h1><%= @auditorium.name %></h1>
+
+	<div class="mx-auto col-md-8 mt-4">
+		<table>
+			<tbody>
+				<tr>
+					<td class="align-baseline"><h1><%= @auditorium.name %></h1></td>
+					<td class="align-top">
+						<%= link_to info_university_auditorium_url(@university.url, @auditorium), rel: 'nofollow' do %>
+						<i class="fas fa-info-circle align-middle"></i>
+						<% end %>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
+	
 	<%= render "layouts/datepicker", pair_date: @pair_date %>
 	<div id="spinner" class="d-flex justify-content-center min-vh-100">
 		<div class="spinner-border text-primary" role="status">

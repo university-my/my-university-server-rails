@@ -65,4 +65,10 @@ class GroupsController < ApplicationController
     end
   end
 
+  # GET /universities/:university_url/groups/:friendly_id/info
+  def info
+    @university = University.find_by!(url: params[:university_url])
+    @group = @university.groups.friendly.find(params[:id])
+  end
+
 end

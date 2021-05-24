@@ -1,0 +1,48 @@
+<% meta_tag :description, "Інформація про групу - " + @group.name %>
+<% @title = "Інформація - #{@group.name}" %>
+<% no_index %>
+
+<%= render "layouts/navbar", university: @university %>
+
+<main class="container" role="main">
+  <div class="mx-auto col-md-8">
+    <div class="my-4">
+      <h3><span class="text-warning">(бета-версія)*</span></h3>
+      <h1><%= @group.name %></h1>
+      <span class="text-muted">(група)</span>
+    </div>
+
+    <% if @group.disciplines && @group.disciplines.count > 0 %>
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-briefcase"></i>
+            <span class="ml-2">Дисципліни</span>
+            <span class="text-muted">(які викладаються в цій групі)</span>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% @group.disciplines.each do |discipline| %>
+            <li class="list-group-item">
+              <%= link_to discipline.visible_name, university_discipline_url(@university.url, discipline.friendly_id) %>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col">
+        <p class="text-muted font-italic">
+          Дані про дисципліни збираються автоматично, та можуть доповнюватися або змінюватися з часом.
+        </p>
+      </div>
+    </div>
+
+    <%= render "layouts/beta" %>
+
+  </div>
+</main>
+<%= render "layouts/footer" %>

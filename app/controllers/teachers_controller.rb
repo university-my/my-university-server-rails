@@ -88,4 +88,14 @@ class TeachersController < ApplicationController
       }
     end
   end
+
+  # GET /universities/:university_url/teachers/:friendly_id/info
+  def info
+    @university = University.find_by!(url: params[:university_url])
+    @teacher = @university.teachers
+    .where(is_hidden: false)
+    .friendly
+    .find(params[:id])
+  end
+
 end

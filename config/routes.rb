@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :teachers, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
@@ -40,6 +41,7 @@ Rails.application.routes.draw do
     resources :auditoriums, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
@@ -47,6 +49,7 @@ Rails.application.routes.draw do
     resources :groups, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
