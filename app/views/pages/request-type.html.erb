@@ -1,0 +1,43 @@
+<% meta_tag :description, "Підключення до сервісу Мій Університет" %>
+<% meta_tag :keywords, "Онлайн,Розклад,iOS,Android,Додаток,Система,Сервіс,Підключення,Школа,Технікум,Університет,ВНЗ" %>
+<% @title = "Додати навчальний заклад" %>
+
+<%= render "layouts/header" %>
+<main class="container" role="main">
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+      <div class="col">
+        <div class="card mb-3" style="max-width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Представник навчального закладу</h5>
+            <p class="card-text">Інформація про підключення</p>
+            <a href="/pricing" class="btn btn-primary" rel="nofollow">Переглянути</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-3" style="max-width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Студент</h5>
+            <p class="card-text">Запропонувати навчальний заклад</p>
+            <a href="https://forms.gle/xTnzESDapHfnW1a38" class="btn btn-primary" rel="nofollow">Додати</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-3" style="max-width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Інше</h5>
+            <p class="card-text">Маєте ідеї чи побажання? Напишіть нам</p>
+            <a href="/contacts" class="btn btn-primary" rel="nofollow">Контакти</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+    <%= image_tag("8 Work and life balance.png", class: "img-fluid mx-auto d-block", size: "350x350") %>
+  </div>
+
+</main>
+<%= render "layouts/footer" %>
