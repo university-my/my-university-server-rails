@@ -70,4 +70,9 @@ class PagesController < ApplicationController
   def ads
     render "pages/ads"
   end
+
+  def hello
+    render "pages/request-type"
+  end
+
 end

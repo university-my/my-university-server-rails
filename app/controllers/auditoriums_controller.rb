@@ -75,4 +75,10 @@ class AuditoriumsController < ApplicationController
     end
   end
 
+  # GET /universities/:university_url/auditoriums/:friendly_id/info
+  def info
+    @university = University.find_by!(url: params[:university_url])
+    @auditorium = @university.auditorium.friendly.find(params[:id])
+  end
+
 end

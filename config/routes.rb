@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get "/admin-panel", to: "pages#admin_panel"
   get "/video-presentation", to: "pages#video_presentation"
   get "/ads", to: "pages#ads"
+  get "/hello", to: "pages#hello"
 
   # All universities on single page
   get "universities/list", to: "universities#list"
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
     resources :teachers, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
@@ -40,6 +42,7 @@ Rails.application.routes.draw do
     resources :auditoriums, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
@@ -47,6 +50,7 @@ Rails.application.routes.draw do
     resources :groups, only: [:index, :show], param: :id do
       member do
         get :records
+        get :info
       end
     end
 
