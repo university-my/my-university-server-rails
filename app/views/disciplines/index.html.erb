@@ -26,6 +26,7 @@
             <li class="list-group-item">
               <span><%= link_to discipline.visible_name, university_discipline_url(@university.url, discipline.friendly_id) %></span>
               <p><small><%= discipline.description %></small></p>
+              <p><small><%= link_to "(Редагувати)", new_university_discipline_name_suggestion_url(@university.url, discipline), "class" => "text-primary" %></small></p>
             </li>
             <% end %>
           </ul>

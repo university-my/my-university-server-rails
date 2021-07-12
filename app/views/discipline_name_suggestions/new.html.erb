@@ -1,0 +1,26 @@
+<% @title = "#{@university.short_name} - #{@discipline.visible_name}" %>
+<% no_index %>
+
+<%= render "layouts/navbar", university: @university %>
+
+<main class="container" role="main">
+  <div class="mx-auto col-md-8">
+    <div class="my-4">
+      <h2>Нова назва для дисципліни:</h2>
+      <h5><%= @discipline.visible_name %></h5>
+    </div>
+
+    <div class="row">
+      <div class="col mb-4 mr-0 ml-0">
+        <%= form_with model: [:university, discipline_name] do |form| %>
+        <%= form.text_field :name, placeholder: "Нова назва", class: "form-control" %>
+        <div class="mt-3">
+          <%= form.submit "Запропонувати", class: "btn btn-primary" %>  
+        </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</main>
+<%= render "layouts/footer" %>

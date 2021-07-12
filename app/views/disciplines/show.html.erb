@@ -10,7 +10,7 @@
   <div class="mx-auto col-md-8">
     <div class="my-4">
       <h1><%= @discipline.visible_name %></h1>
-      <span class="text-muted">(дисципліна)</span>
+      <p><small><%= link_to "(Редагувати)", new_university_discipline_name_suggestion_url(@university.url, @discipline), "class" => "text-primary" %></small></p>
     </div>
 
     <% if @discipline.teachers && @discipline.teachers.count > 0 %>
