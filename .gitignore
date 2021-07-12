@@ -40,3 +40,10 @@ sitemap.xml.gz
 # RubyMine
 .idea/*
 exported_disciplines.json
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
